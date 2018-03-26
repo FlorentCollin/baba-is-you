@@ -2,6 +2,7 @@ package game.element;
 
 /**
  * Classe abstraite servant de base à tous les éléments du jeu.
+ * 
  */
 abstract class Item {
 	
@@ -17,6 +18,7 @@ abstract class Item {
 	/**
 	 * Méthode booléenne qui indique si un Item est poussable
 	 * @return true si l'objet est poussable false sinon
+	 * 
 	 */
 	public boolean isPushable()
 	{
@@ -26,6 +28,7 @@ abstract class Item {
 	/**
 	 * Méthode booléenne qui indique si un Item "stop" les autres Items
 	 * @return true si l'objet est "stop" false sinon
+	 * 
 	 */
 	public boolean isStop()
 	{
@@ -35,6 +38,7 @@ abstract class Item {
 	/**
 	 * Méthode booléenne qui indique si un Item signifie la victoire
 	 * @return true si l'objet est "win" false sinon
+	 * 
 	 */
 	public boolean isWin()
 	{

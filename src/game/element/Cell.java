@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 /**
  * Classe qui contient une liste d'Item et qui permettra d'organiser l'affichage graphique.
+ * 
  */
 public class Cell {
 
 	private ArrayList<Item> list;
-	/**
-	 *
-	 */
+
 	public Cell()
 	{
 		list = new ArrayList<>();
