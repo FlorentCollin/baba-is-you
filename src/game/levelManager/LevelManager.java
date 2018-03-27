@@ -10,6 +10,6 @@ public class LevelManager {
 	
 	public Board readLevel(String nameLevel) // Pour une POO on va sûrement changer le type String par un type Level ou autre à voir...
 	{
-		return new Board();
+		return new Board(5,5);
 	}
 }

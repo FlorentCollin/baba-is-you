@@ -1,4 +1,7 @@
 package game.element;
+// Note : lors de l'implémentation de la fonction qui change les règles on peut s'arrêter après le dernier objet de type.
+// Genre si on veut modifier tous les rochers si le prochaine objet n'est pas un objet ou arrête l'ittération ? 
+
 
 import java.util.ArrayList;
 

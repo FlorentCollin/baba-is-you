@@ -6,5 +6,12 @@ package game.element;
  */
 public class Board {
 	
-	public Board() {}
+	private Cell[][] board;
+
+	
+	public Board(int cols, int rows)
+	{
+		board = new Cell[rows][cols];
+		
+	}
 }
