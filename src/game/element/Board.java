@@ -9,9 +9,12 @@ public class Board {
 	private Cell[][] board;
 
 	
-	public Board(int cols, int rows)
+	public Cell[][] getBoard() {
+		return board;
+	}
+
+	public Board(Cell[][] board)
 	{
-		board = new Cell[rows][cols];
-		
+		this.board = board;
 	}
 }

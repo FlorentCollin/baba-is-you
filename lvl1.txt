@@ -1,0 +1,32 @@
+9 11
+text_wall 1 1
+is 2 1
+stop 3 1
+text_rock 5 1
+is 6 1
+push 7 1
+wall 1 3
+wall 2 3
+wall 3 3
+wall 4 3
+wall 5 3
+wall 6 3
+wall 7 3
+rock 4 4 0
+rock 4 5 2
+rock 4 6 1
+baba 2 5 3
+flag 6 5 1
+wall 1 7
+wall 2 7
+wall 3 7
+wall 4 7
+wall 5 7
+wall 6 7
+wall 7 7
+text_baba 1 9
+is 2 9
+you 3 9
+text_flag 5 9
+is 6 9
+win 7 9

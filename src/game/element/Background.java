@@ -9,6 +9,6 @@ public class Background extends Item {
 	
 	public Background()
 	{
-		priority = 0;
+		setPriority(0);
 	}
 }

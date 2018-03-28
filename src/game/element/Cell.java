@@ -16,16 +16,38 @@ public class Cell {
 	public Cell()
 	{
 		list = new ArrayList<>();
-		// Background back = new Background();
-		// list.add(back);
+		Background back = new Background();
+		list.add(back);
 	}
 	
-	public void move(Item element)
+	public Cell(Item itemtoAdd)
+	{
+		this(); // Appel le constructor sans arguments
+		list.add(itemtoAdd);
+		
+		
+	}
+	
+	public Item getItem(int index)
+	{
+		return list.get(index);
+	}
+	
+	public void changeCell(Item element)
 	{
 		//TODO
 	}
-	public void add(Item element)
+	public void add(Item itemToAdd)
 	{
-		//TODO
+		for(int i = 0; i < list.size(); i++) // Place l'item en fonction de sa priorité d'affichage
+		{
+			if(list.get(i).getPriority() > itemToAdd.getPriority())
+				list.set(i, itemToAdd);
+		}
+	}
+	
+	public void remove(Item element)
+	{
+		
 	}
 }
