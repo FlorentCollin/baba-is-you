@@ -10,8 +10,12 @@ public abstract class Item {
 	private int x;
 	private int y;
 	private int priority; //Ordre de priorité utilisé pour l'affichage (0 = fond, 0>> = baba)
+	private String name;
 	
-	public Item() {}
+	public Item(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 	
 	public int getX() {
 		return x;
@@ -31,6 +35,14 @@ public abstract class Item {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * Méthode booléenne qui indique si un Item est poussable
 	 * @return true si l'objet est poussable false sinon
@@ -68,5 +80,10 @@ public abstract class Item {
 	public void move(int direction)
 	{
 		//TODO
+	}
+	
+	public String toString()
+	{
+		return getClass().toString();
 	}
 }

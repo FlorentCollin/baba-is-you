@@ -13,19 +13,29 @@ public class Cell {
 
 	private ArrayList<Item> list;
 
-	public Cell()
+	public Cell(int x, int y)
 	{
 		list = new ArrayList<>();
-		Background back = new Background();
+		Background back = new Background(x, y);
 		list.add(back);
 	}
 	
-	public Cell(Item itemtoAdd)
+	public Cell(int x, int y, Item itemtoAdd)
 	{
-		this(); // Appel le constructor sans arguments
+		this(x, y); // Appel le constructor sans arguments
 		list.add(itemtoAdd);
 		
 		
+	}
+	
+	public void addItem(Item itemtoAdd)
+	{
+		list.add(itemtoAdd);
+	}
+	
+	public ArrayList<Item> getList()
+	{
+		return list;
 	}
 	
 	public Item getItem(int index)

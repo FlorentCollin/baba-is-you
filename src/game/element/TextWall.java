@@ -5,10 +5,12 @@ package game.element;
  */
 public class TextWall extends RuleItem {
 
-	public TextWall()
+	public TextWall(int x, int y)
 	{
+		super(x,y);
 		setPriority(3);
 		setOrderInRule(0);
+		setName("WALL");
 	}
 }
 

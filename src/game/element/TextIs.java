@@ -5,9 +5,11 @@ package game.element;
  */
 public class TextIs extends RuleItem {
 
-	public TextIs()
+	public TextIs(int x, int y)
 	{
+		super(x,y);
 		setPriority(3);
 		setOrderInRule(1);
+		setName(" IS ");
 	}
 }

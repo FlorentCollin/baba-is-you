@@ -5,9 +5,11 @@ package game.element;
  */
 public class TextGoop extends RuleItem {
 
-	public TextGoop()
+	public TextGoop(int x, int y)
 	{
+		super(x,y);
 		setPriority(3);
 		setOrderInRule(0);
+		setName("GOOP");
 	}
 }

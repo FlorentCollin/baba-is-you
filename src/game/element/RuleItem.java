@@ -8,7 +8,11 @@ public abstract class RuleItem extends Item {
 	
 	private int orderInRule;
 	
-
+	public RuleItem(int x, int y)
+	{
+		super(x,y);
+	}
+	
 	public int getOrderInRule() {
 		return orderInRule;
 	}

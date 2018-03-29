@@ -5,9 +5,11 @@ package game.element;
  */
 public class TextYou extends RuleItem {
 
-	public TextYou()
+	public TextYou(int x, int y)
 	{
+		super(x,y);
 		setPriority(3);
 		setOrderInRule(2);
+		setName("YOU ");
 	}
 }
