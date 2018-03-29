@@ -67,6 +67,6 @@ public abstract class Item {
  */
 	public void move(int direction)
 	{
-		
+		//TODO
 	}
 }

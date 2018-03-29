@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "YOU"
+ * Mot Règle "YOU"
  */
 public class TextYou extends RuleItem {
 

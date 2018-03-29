@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "WALL"
+ * Mot Règle "WALL"
  */
 public class TextWall extends RuleItem {
 

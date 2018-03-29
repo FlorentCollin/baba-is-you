@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "FLAG"
+ *  Règle "FLAG"
  */
 public class TextFlag extends RuleItem {
 

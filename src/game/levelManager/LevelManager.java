@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import game.element.Cell;
+import game.element.Flag;
 import game.element.Item;
+import game.element.Rock;
 import game.element.TextBaba;
 import game.element.TextGoop;
 import game.element.TextIs;
@@ -18,6 +19,7 @@ import game.element.TextStop;
 import game.element.TextWall;
 import game.element.TextWin;
 import game.element.TextYou;
+import game.element.Wall;
 
 /**
  * Classe qui va s'occuper de l'importation des niveaux et de l'édition
@@ -38,6 +40,7 @@ public class LevelManager {
 		String line;
 		String word;
 		String[] list;
+		Cell cellToChange;
 		Item itemToAdd = null;
 		int rows; //Lignes
 		int cols; //Colonnes
@@ -74,9 +77,9 @@ public class LevelManager {
                 case "text_baba" : itemToAdd = new TextBaba(); break;
                 case "you" : itemToAdd = new TextYou(); break;
                 case "win" : itemToAdd = new TextWin(); break;
-//                case "wall" : itemToAdd = new Wall(); break;
-//                case "rock" : itemToAdd = new Rock(); break;
-//                case "flag" : itemToAdd = new Flag(); break;
+                case "wall" : itemToAdd = new Wall(); break;
+                case "rock" : itemToAdd = new Rock(); break;
+                case "flag" : itemToAdd = new Flag(); break;
                 case "text_goop" : itemToAdd = new TextGoop(); break;
                 case "sink" : itemToAdd = new TextSink(); break;
                 }
@@ -85,7 +88,9 @@ public class LevelManager {
                 	array[rows][cols] = new Cell(itemToAdd);
                 }
                 else {
-                	array[rows][cols] = array[rows][cols].add(itemToAdd);
+                	cellToChange = array[rows][cols];
+                	cellToChange.add(itemToAdd);
+                	array[rows][cols] = cellToChange;
                 }
                 
             }

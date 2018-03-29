@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "SINK"
+ * Mot Règle "SINK"
  */
 public class TextSink extends RuleItem {
 

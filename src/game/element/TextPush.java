@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "PUSH"
+ * Mot Règle "PUSH"
  */
 public class TextPush extends RuleItem {
 

@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "GOOP"
+ * Mot Règle "GOOP"
  */
 public class TextGoop extends RuleItem {
 

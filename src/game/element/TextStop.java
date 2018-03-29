@@ -1,7 +1,7 @@
 package game.element;
 
 /**
- * Objet Règle "STOP"
+ * Mot Règle "STOP"
  */
 public class TextStop extends RuleItem {
 
