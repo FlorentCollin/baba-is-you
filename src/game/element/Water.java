@@ -1,18 +1,18 @@
 package game.element;
 
 /**
- * Objet "ROCK"
+ * Objet "WATER"
  *
  */
-public class Rock extends Item implements IRealItem {
+public class Water extends Item implements IRealItem {
 
 	Class typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextWall)
 	
-	public Rock(Class typeText)
+	public Water(Class typeText)
 	{
 		this.typeText = typeText;
 		setPriority(1);
-		setName("rock");
+		setName("wter");
 	}
 	
 	/**

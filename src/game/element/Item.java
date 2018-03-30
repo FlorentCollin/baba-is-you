@@ -53,15 +53,11 @@ public abstract class Item {
 		//TODO
 		return false;
 	}
-/**
- * Méthode qui bouge un objet dans une direction
- * @param direction Entier représentant la direction UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3
- */
-	public void move(int direction)
-	{
-		//TODO
-	}
-	
+
+//	public boolean isRepresentedBy(IRule wordInRule)
+//	{
+//		return false;
+//	}
 	public String toString()
 	{
 		return getClass().toString();

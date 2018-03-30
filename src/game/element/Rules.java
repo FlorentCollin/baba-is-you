@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Classe gérant l'entiereté des règles du jeu
  * Se base sur ce principe : Une méthode qui analalyse tout le plateau et ajoute toutes les règles en cours dans une liste 
- * Ensuite la classe item va s'occuper de définir une méthode ex isStop{return name+"isStop" is in liste)
+ * Ensuite la classe item va s'occuper de définir une méthode ex: isStop qui va regarder dans la liste de règle si l'Item "STOP"
  */
 public class Rules {
 	
@@ -57,6 +57,7 @@ public class Rules {
 			}
 		}
 	}
+	//TODO Regrouper les méthodes scanRight et scanDown en une seule méthode avec un switch
 	/**
 	 * Méthode qui va analyser les cellules à droite de la cellule RuleItem
 	 * Si la première cellule à sa droite est un verbe, la méthode va analyser la cellule qui suit pour savoir
@@ -77,10 +78,10 @@ public class Rules {
 				{
 					for(Item element2 : array[y][x+2].getList())
 					{
-						if(element2 instanceof IRule)
+						if(element2 instanceof IRule)// Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 						{
 							IRule iRuleElement2 = (IRule) element2;
-							if(iRuleElement2.isWord())
+							if(iRuleElement2.isWord()) // Si l'élement est un mot on a une nouvelle règle
 							{
 								ruleToAdd[1] = iRuleElement1;
 								ruleToAdd[2] = iRuleElement2;
@@ -113,10 +114,10 @@ public class Rules {
 				{
 					for(Item element2 : array[y+2][x].getList())
 					{
-						if(element2 instanceof IRule)
+						if(element2 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 						{
 							IRule iRuleElement2 = (IRule) element2;
-							if(iRuleElement2.isWord())
+							if(iRuleElement2.isWord()) // Si l'élement est un mot on a une nouvelle règle
 							{
 								ruleToAdd[1] = iRuleElement1;
 								ruleToAdd[2] = iRuleElement2;

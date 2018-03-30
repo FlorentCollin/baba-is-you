@@ -25,6 +25,7 @@ import game.element.TextWall;
 import game.element.TextWin;
 import game.element.TextYou;
 import game.element.Wall;
+import game.element.Water;
 
 /**
  * Classe qui va s'occuper de l'importation des niveaux et de l'édition
@@ -89,13 +90,18 @@ public class LevelManager {
                 rows = Integer.parseInt(list[1])+1;
                 cols = Integer.parseInt(list[2])+1;
                 word = list[0];
-                // Choix de l'Item à ajouter en fonction du mot 
+                
+
+                
+                // Choix de l'Item à ajouter en fonction du mot
+                //  Note : Il est possible d'améliorer le switch pour le remplacer par un constructeur dynamique (en utilisant le principe de refléction)
                 switch(word)
                 {
-                case "wall" : itemToAdd = new Wall(); break;
-                case "rock" : itemToAdd = new Rock(); break;
+                case "wall" : itemToAdd = new Wall(TextWall.class); break;
+                case "rock" : itemToAdd = new Rock(TextRock.class); break;
                 case "is" : itemToAdd = new TextIs(); break;
-                case "flag" : itemToAdd = new Flag(); break;
+                case "flag" : itemToAdd = new Flag(TextFlag.class); break;
+                case "water" : itemToAdd = new Water(TextGoop.class); break;
                 case "text_wall" : itemToAdd = new TextWall(); break;
                 case "text_rock" : itemToAdd = new TextRock(); break;
                 case "text_baba" : itemToAdd = new TextBaba(); break;
@@ -105,7 +111,7 @@ public class LevelManager {
                 case "push" : itemToAdd = new TextPush(); break;
                 case "stop" : itemToAdd = new TextStop(); break;
                 case "you" : itemToAdd = new TextYou(); break;
-                case "baba" : itemToAdd = new Baba(); break;
+                case "baba" : itemToAdd = new Baba(TextBaba.class); break;
                 case "sink" : itemToAdd = new TextSink(); break;
                 }
                 

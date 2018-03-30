@@ -1,26 +1,30 @@
 package game.element;
 
+/**
+ * Objet "BABA"
+ *
+ */
+public class Baba extends Item implements IRealItem{
 
-public class Baba extends Item{
+	Class typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextWall)
 	
-	public Baba()
+	public Baba(Class typeText)
 	{
-		setPriority(3);
+		this.typeText = typeText;
+		setPriority(4);
 		setName("baba");
 	}
-	// A MODIFIER TODO car baba réagit aussi au règles
-	public boolean isPushable()
+	
+	/**
+	 * Méthode qui regarde si l'Item correspond à sa comparaison en RuleItem (ex: Rock == TextRock retourne true)
+	 * @param wordInRule Mot d'une Règle
+	 */
+	@Override
+	public boolean isRepresentedBy(IRule wordInRule)
 	{
-		return true;
+		
+		return wordInRule.getClass().equals(typeText);
+		
 	}
 	
-	public boolean isStop()
-	{
-		return false;
-	}
-	
-	public boolean isWin()
-	{
-		return false;
-	}
 }

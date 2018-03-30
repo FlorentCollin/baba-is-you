@@ -1,9 +1,12 @@
 package console;
 
+import java.util.ArrayList;
+
 import game.element.Board;
 import game.element.IRule;
 import game.element.Rules;
 import game.levelManager.LevelManager;
+import game.levelManager.Tuple;
 
 /**
  * Classe principale qui va gérer le jeu en mode console 
@@ -23,5 +26,8 @@ public class Main {
 			}
 			System.out.println();
 		}
+		System.out.println("-------------------------------------------------------------------------------");
+		board.searchPlayers();
+		System.out.println(board.getPlayers());
 	}
 }

@@ -4,11 +4,27 @@ package game.element;
  * Objet "FLAG"
  *
  */
-public class Flag extends Item {
+public class Flag extends Item implements IRealItem {
 
-	public Flag()
+	Class typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextWall)
+	
+	public Flag(Class typeText)
 	{
+		this.typeText = typeText;
 		setPriority(1);
 		setName("flag");
 	}
+	
+	/**
+	 * Méthode qui regarde si l'Item correspond à sa comparaison en RuleItem (ex: Rock == TextRock retourne true)
+	 * @param wordInRule Mot d'une Règle
+	 */
+	@Override
+	public boolean isRepresentedBy(IRule wordInRule)
+	{
+		
+		return wordInRule.getClass().equals(typeText);
+		
+	}
+	
 }
