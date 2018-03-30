@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextSink extends RuleItem {
 
-	public TextSink(int x, int y)
+	public TextSink()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(2);
 		setName("SINK");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

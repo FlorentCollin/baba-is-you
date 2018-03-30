@@ -6,9 +6,8 @@ package game.element;
  */
 public class Rock extends Item {
 
-	public Rock(int x, int y)
+	public Rock()
 	{
-		super(x,y);
 		setPriority(1);
 		setName("rock");
 	}

@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextRock extends RuleItem {
 
-	public TextRock(int x, int y)
+	public TextRock()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(0);
 		setName("ROCK");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextYou extends RuleItem {
 
-	public TextYou(int x, int y)
+	public TextYou()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(2);
 		setName("YOU ");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

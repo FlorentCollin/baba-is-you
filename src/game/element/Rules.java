@@ -8,18 +8,125 @@ import java.util.ArrayList;
  */
 public class Rules {
 	
-	private static ArrayList<RuleItem[]> listOfRulesActives;
+	private static ArrayList<IRule[]> listOfRulesActives = new ArrayList<>();
+	private static IRule[] ruleToAdd;
 	
-	public static ArrayList<RuleItem[]> getListOfRulesActives() {
+	public static ArrayList<IRule[]> getListOfRulesActives() {
 		return listOfRulesActives;
 	}
 
 	/**
-	 * Méthode qui va analyser le plateau de jeu pour sortir les règles actives.
-	 * @param board Le plateau à l'état actuel.
+	 * Méthode qui va analyser la map pour sortir les règles actives.
+	 * @param board La map.
 	 */
 	public static void scanRules(Board board)
 	{
-		//TODO
+		int rows = board.getRows(); // On récupère le nombre de lignes et de colonnes de la map
+		int cols = board.getCols(); 
+		Cell[][] array = board.getBoard();
+		/*
+		 * Itération sur chaque Cellule du tableau
+		 */
+		for(int i = 0; i < cols; i++)
+		{
+			for(int j = 0; j < rows; j++)
+			{
+				// Chaque cellule est composé d'une liste d'Item
+				ArrayList<Item> list = array[i][j].getList(); // On récupère la liste d'Item
+				// Itération sur la liste d'Item
+				for(Item element : list) 
+				{
+					if(element instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
+					{
+						IRule iRuleElement = (IRule) element;
+						if(iRuleElement.isWord()) // Si l'élement est un nom commun alors c'est peut être le début d'une règle
+						{
+							ruleToAdd = new IRule[3];
+							ruleToAdd[0] = iRuleElement;
+							if(i <= cols-2)
+							{
+								scanRight(array, j, i); // Ajout de la règle horizontal si elle existe
+							}
+							if(j <= rows-2)
+							{
+								scanDown(array, j, i);	// Ajout de la règle vertical si elle existe
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	/**
+	 * Méthode qui va analyser les cellules à droite de la cellule RuleItem
+	 * Si la première cellule à sa droite est un verbe, la méthode va analyser la cellule qui suit pour savoir
+	 * si cette cellule est un mot.
+	 * @param array tableau de cellule
+	 * @param x	position x du RuleItem
+	 * @param y position y du RuleItem
+	 */
+	public static void scanRight(Cell[][] array, int x, int y)
+	{
+		// Itération sur la liste d'Item de la cellule à droite 
+		for(Item element1 : array[y][x+1].getList())
+		{
+			if(element1 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
+			{
+				IRule iRuleElement1 = (IRule) element1;
+				if(iRuleElement1.isVerb()) // Si l'élement est un verbe on regarde si la cellule à droite est un mot pour finir la règle
+				{
+					for(Item element2 : array[y][x+2].getList())
+					{
+						if(element2 instanceof IRule)
+						{
+							IRule iRuleElement2 = (IRule) element2;
+							if(iRuleElement2.isWord())
+							{
+								ruleToAdd[1] = iRuleElement1;
+								ruleToAdd[2] = iRuleElement2;
+								listOfRulesActives.add(ruleToAdd);								
+							}
+						}
+					}
+				}
+				}
+					
+		}
+	}
+	/**
+	 * Méthode qui va analyser les cellules en dessous de la cellule RuleItem
+	 * Si la première cellule en dessous est un verbe, la méthode va analyser la cellule qui suit pour savoir
+	 * si cette cellule est un mot.
+	 * @param array tableau de cellule
+	 * @param x	position x du RuleItem
+	 * @param y position y du RuleItem
+	 */
+	public static void scanDown(Cell[][] array, int x, int y)
+	{
+		// Itération sur la liste d'Item de la cellule en dessous 
+		for(Item element1 : array[y+1][x].getList())
+		{
+			if(element1 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
+			{
+				IRule iRuleElement1 = (IRule) element1;
+				if(iRuleElement1.isVerb()) // Si l'élement est un verbe on regarde si la cellule en dessous est un mot pour finir la règle
+				{
+					for(Item element2 : array[y+2][x].getList())
+					{
+						if(element2 instanceof IRule)
+						{
+							IRule iRuleElement2 = (IRule) element2;
+							if(iRuleElement2.isWord())
+							{
+								ruleToAdd[1] = iRuleElement1;
+								ruleToAdd[2] = iRuleElement2;
+								listOfRulesActives.add(ruleToAdd);								
+							}
+						}
+					}
+				}
+				}
+					
+		}
 	}
 }

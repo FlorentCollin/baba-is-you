@@ -10,22 +10,38 @@ import java.util.ArrayList;
  * 
  */
 public class Cell {
-
+	//Liste de tous les Item qui sont sur la même cellule
 	private ArrayList<Item> list;
+	//Position
+	private int x;
+	private int y;
 
 	public Cell(int x, int y)
 	{
+		this.x = x;
+		this.y = y;
 		list = new ArrayList<>();
-		Background back = new Background(x, y);
+		Background back = new Background();
 		list.add(back);
 	}
 	
 	public Cell(int x, int y, Item itemtoAdd)
 	{
 		this(x, y); // Appel le constructor sans arguments
-		list.add(itemtoAdd);
-		
-		
+		list.add(itemtoAdd);		
+	}
+	/**
+	 * Création d'une cellule frontière (limite) de la map
+	 * @param x position en x
+	 * @param y position en y
+	 * @param boundarytoAdd frontière à ajouter
+	 */
+	public Cell(int x, int y, Boundary boundarytoAdd)
+	{
+		this.x = x;
+		this.y = y;
+		list = new ArrayList<>();
+		list.add(boundarytoAdd);
 	}
 	
 	public void addItem(Item itemtoAdd)
@@ -58,6 +74,6 @@ public class Cell {
 	
 	public void remove(Item element)
 	{
-		
+		//TODO
 	}
 }

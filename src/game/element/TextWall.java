@@ -5,12 +5,20 @@ package game.element;
  */
 public class TextWall extends RuleItem {
 
-	public TextWall(int x, int y)
+	public TextWall()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(0);
 		setName("WALL");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }
 

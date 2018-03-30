@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextGoop extends RuleItem {
 
-	public TextGoop(int x, int y)
+	public TextGoop()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(0);
 		setName("GOOP");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

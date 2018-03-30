@@ -5,11 +5,20 @@ package game.element;
  */
 public class TextBaba extends RuleItem {
 
-	public TextBaba(int x, int y)
+	public TextBaba()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(0);
 		setName("BABA");
 	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
+	}
+	
 }

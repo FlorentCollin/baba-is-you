@@ -7,14 +7,39 @@ package game.element;
 public class Board {
 	
 	private Cell[][] board;
+	private int rows;
+	private int cols;
 
+	
+
+	public Board(Cell[][] board, int rows, int cols)
+	{
+		this.board = board;
+		this.rows = rows;
+		this.cols = cols;
+	}
+	
 	
 	public Cell[][] getBoard() {
 		return board;
 	}
+	
+	public int getRows() {
+		return rows;
+	}
 
-	public Board(Cell[][] board)
+	public int getCols() {
+		return cols;
+	}
+
+
+	public Cell getCell(int x, int y)
 	{
-		this.board = board;
+		return board[y][x];
+	}
+	
+	public void setCell(int x, int y, Cell c)
+	{
+		board[y][x] = c; 
 	}
 }

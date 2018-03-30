@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextIs extends RuleItem {
 
-	public TextIs(int x, int y)
+	public TextIs()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(1);
 		setName(" IS ");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return true;
+	}
+
+	@Override
+	public boolean isWord() {
+		return false;
 	}
 }

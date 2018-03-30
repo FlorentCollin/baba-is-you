@@ -6,9 +6,8 @@ package game.element;
  */
 public class Flag extends Item {
 
-	public Flag(int x, int y)
+	public Flag()
 	{
-		super(x,y);
 		setPriority(1);
 		setName("flag");
 	}

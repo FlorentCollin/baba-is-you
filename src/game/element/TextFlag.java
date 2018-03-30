@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextFlag extends RuleItem {
 
-	public TextFlag(int x, int y)
+	public TextFlag()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(0);
 		setName("FLAG");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

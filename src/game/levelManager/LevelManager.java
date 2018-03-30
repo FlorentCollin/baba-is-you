@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import game.element.Baba;
+import game.element.Board;
+import game.element.Boundary;
 import game.element.Cell;
 import game.element.Flag;
 import game.element.Item;
@@ -35,7 +37,7 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static Cell[][] readLevel(String nameLevel) // Pour une POO on va sûrement changer le type String par un type Level ou autre à voir...
+	public static Board readLevel(String nameLevel) // Pour une POO on va sûrement changer le type String par un type Level ou autre à voir...
 	{
 		
 		BufferedReader br = null;
@@ -47,6 +49,8 @@ public class LevelManager {
 		Item itemToAdd = null;
 		int rows; //Lignes
 		int cols; //Colonnes
+		int rowsOfBoard = 0; //Nombre de lignes de la map
+		int colsOfBoard = 0; //Nombre de colonnes de la map
 		
 		// Ouverture du fichier
         try{
@@ -58,16 +62,23 @@ public class LevelManager {
         }
         
         // Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
+        // Et pré remplissage de la map
         try {
         	line = br.readLine();
-        	rows = Integer.parseInt(line.split(" ")[0]);
-        	cols = Integer.parseInt(line.split(" ")[1]);
-        	array = new Cell[cols][rows];
-        	for(int i = 0; i < cols; i++)
+        	rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières
+        	colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
+        	array = new Cell[colsOfBoard][rowsOfBoard];
+        	//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background)
+        	for(int i = 0; i < colsOfBoard; i++)
         	{
-        		for(int j = 0; j< rows; j++)
+        		for(int j = 0; j< rowsOfBoard; j++)
         		{
-        			if(array[i][j] == null)
+        			// Remplissage des frontières
+        			if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
+        			{
+        				array[i][j] = new Cell(i,j, new Boundary());
+        			}
+        			else if(array[i][j] == null)
         				array[i][j] = new Cell(i,j);
         		}
         	}
@@ -75,27 +86,27 @@ public class LevelManager {
             while((line = br.readLine()) != null)
             {
                 list = line.split(" ");
-                rows = Integer.parseInt(list[1]);
-                cols = Integer.parseInt(list[2]);
+                rows = Integer.parseInt(list[1])+1;
+                cols = Integer.parseInt(list[2])+1;
                 word = list[0];
                 // Choix de l'Item à ajouter en fonction du mot 
                 switch(word)
                 {
-                case "wall" : itemToAdd = new Wall(rows, cols); break;
-                case "rock" : itemToAdd = new Rock(rows, cols); break;
-                case "is" : itemToAdd = new TextIs(rows, cols); break;
-                case "flag" : itemToAdd = new Flag(rows, cols); break;
-                case "text_wall" : itemToAdd = new TextWall(rows, cols); break;
-                case "text_rock" : itemToAdd = new TextRock(rows, cols); break;
-                case "text_baba" : itemToAdd = new TextBaba(rows, cols); break;
-                case "text_goop" : itemToAdd = new TextGoop(rows, cols); break;
-                case "text_flag" : itemToAdd = new TextFlag(rows, cols); break;
-                case "win" : itemToAdd = new TextWin(rows, cols); break;
-                case "push" : itemToAdd = new TextPush(rows, cols); break;
-                case "stop" : itemToAdd = new TextStop(rows, cols); break;
-                case "you" : itemToAdd = new TextYou(rows, cols); break;
-                case "baba" : itemToAdd = new Baba(rows, cols); break;
-                case "sink" : itemToAdd = new TextSink(rows, cols); break;
+                case "wall" : itemToAdd = new Wall(); break;
+                case "rock" : itemToAdd = new Rock(); break;
+                case "is" : itemToAdd = new TextIs(); break;
+                case "flag" : itemToAdd = new Flag(); break;
+                case "text_wall" : itemToAdd = new TextWall(); break;
+                case "text_rock" : itemToAdd = new TextRock(); break;
+                case "text_baba" : itemToAdd = new TextBaba(); break;
+                case "text_goop" : itemToAdd = new TextGoop(); break;
+                case "text_flag" : itemToAdd = new TextFlag(); break;
+                case "win" : itemToAdd = new TextWin(); break;
+                case "push" : itemToAdd = new TextPush(); break;
+                case "stop" : itemToAdd = new TextStop(); break;
+                case "you" : itemToAdd = new TextYou(); break;
+                case "baba" : itemToAdd = new Baba(); break;
+                case "sink" : itemToAdd = new TextSink(); break;
                 }
                 
              	cellToChange = array[cols][rows];
@@ -107,6 +118,6 @@ public class LevelManager {
             System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
         } 
         
-		return array;
+		return new Board(array, rowsOfBoard, colsOfBoard);
 	}
 }

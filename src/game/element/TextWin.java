@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextWin extends RuleItem {
 
-	public TextWin(int x, int y)
+	public TextWin()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(2);
 		setName("WIN ");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextStop extends RuleItem {
 
-	public TextStop(int x, int y)
+	public TextStop()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(2);
 		setName("STOP");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

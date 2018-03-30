@@ -3,13 +3,12 @@ package game.element;
 
 public class Baba extends Item{
 	
-	public Baba(int x, int y)
+	public Baba()
 	{
-		super(x,y);
 		setPriority(3);
 		setName("baba");
 	}
-	
+	// A MODIFIER TODO car baba réagit aussi au règles
 	public boolean isPushable()
 	{
 		return true;

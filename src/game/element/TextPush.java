@@ -5,11 +5,19 @@ package game.element;
  */
 public class TextPush extends RuleItem {
 
-	public TextPush(int x, int y)
+	public TextPush()
 	{
-		super(x,y);
 		setPriority(3);
-		setOrderInRule(2);
 		setName("PUSH");
+	}
+
+	@Override
+	public boolean isVerb() {
+		return false;
+	}
+
+	@Override
+	public boolean isWord() {
+		return true;
 	}
 }

@@ -6,9 +6,8 @@ package game.element;
  */
 public class Wall extends Item {
 
-	public Wall(int x, int y)
+	public Wall()
 	{
-		super(x,y);
 		setPriority(1);
 		setName("wall");
 	}
