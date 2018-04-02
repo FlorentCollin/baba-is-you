@@ -10,6 +10,6 @@ public class Background extends Item {
 	public Background()
 	{
 		setPriority(0);
-		setName("----");
+		setName("    ");
 	}
 }

@@ -40,7 +40,7 @@ public class Main {
 
 				int direction;				
 				line = keyInput();
-				switch(line)
+				switch(line.split("")[0])
 				{
 				case "z" : direction = 0; break;
 				case "d" : direction = 1; break;
@@ -52,6 +52,7 @@ public class Main {
 				{
 					System.out.println("Something move ? " + board.move(player.getX(), player.getY(), player.getZ(), direction));
 				}
+				
 			}
 		}		
 

@@ -34,7 +34,7 @@ import game.element.Water;
  */
 public class LevelManager {
 	
-	private static String[] listOfLevels = {"lvl1", "lvl2"} ;
+	private static String[] listOfLevels = {"lvl1","lvl2"} ;
 	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
