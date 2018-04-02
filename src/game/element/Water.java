@@ -27,4 +27,12 @@ public class Water extends Item implements IRealItem {
 		
 	}
 	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other instanceof Water)
+			return true;
+		return false;
+	}
+	
 }

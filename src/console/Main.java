@@ -1,10 +1,13 @@
 package console;
 
-import java.util.ArrayList;
+import java.util.Scanner;
 
 import game.element.Board;
-import game.element.IRule;
+import game.element.Item;
+import game.element.Rock;
 import game.element.Rules;
+import game.element.TextRock;
+import game.element.Wall;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
@@ -15,19 +18,54 @@ import game.levelManager.Tuple;
 public class Main {
 
 	public static void main(String[] args) {
-		Board board = LevelManager.readLevel("lvl1");
-		DisplayBoard.display(board);
-		Rules.scanRules(board);
-		for(IRule[] element : Rules.getListOfRulesActives())
+		Scanner in = new Scanner(System.in);
+		String[] listOfLevels = LevelManager.getListOfLevels();
+		Board board = null;
+		String line;
+		int i=0;
+		while(i<listOfLevels.length)
 		{
-			for(IRule element1 : element)
+			board = LevelManager.readLevel(listOfLevels[i]);
+
+			while(true)
 			{
-				System.out.print(element1);
+				Rules.scanRules(board);
+				board.searchPlayers();
+				DisplayBoard.display(board);
+				if(board.isWin())
+				{
+					i++;
+					break;
+				}
+
+				int direction;				
+				line = keyInput();
+				switch(line)
+				{
+				case "z" : direction = 0; break;
+				case "d" : direction = 1; break;
+				case "s" : direction = 2; break;
+				case "q" : direction = 3; break;
+				default : direction = 1; break;
+				}
+				for(Tuple player : board.getPlayers())
+				{
+					System.out.println("Something move ? " + board.move(player.getX(), player.getY(), player.getZ(), direction));
+				}
 			}
-			System.out.println();
-		}
-		System.out.println("-------------------------------------------------------------------------------");
-		board.searchPlayers();
-		System.out.println(board.getPlayers());
+		}		
+
+
 	}
+    /**
+     * Methode qui les lit les input en mode console
+     * @return L'input
+     */
+    public static String keyInput()
+    {
+        Scanner in = new Scanner(System.in);
+        String line = in.next();
+        
+        return line;
+    }
 }

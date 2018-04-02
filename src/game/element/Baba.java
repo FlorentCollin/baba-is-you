@@ -27,4 +27,12 @@ public class Baba extends Item implements IRealItem{
 		
 	}
 	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other instanceof Baba)
+			return true;
+		return false;
+	}
+	
 }

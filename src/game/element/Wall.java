@@ -27,4 +27,12 @@ public class Wall extends Item implements IRealItem {
 		
 	}
 	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other instanceof Wall)
+			return true;
+		return false;
+	}
+	
 }

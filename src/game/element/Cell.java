@@ -30,24 +30,6 @@ public class Cell {
 		this(x, y); // Appel le constructor sans arguments
 		list.add(itemtoAdd);		
 	}
-	/**
-	 * Création d'une cellule frontière (limite) de la map
-	 * @param x position en x
-	 * @param y position en y
-	 * @param boundarytoAdd frontière à ajouter
-	 */
-	public Cell(int x, int y, Boundary boundarytoAdd)
-	{
-		this.x = x;
-		this.y = y;
-		list = new ArrayList<>();
-		list.add(boundarytoAdd);
-	}
-	
-	public void addItem(Item itemtoAdd)
-	{
-		list.add(itemtoAdd);
-	}
 	
 	public ArrayList<Item> getList()
 	{
@@ -59,21 +41,40 @@ public class Cell {
 		return list.get(index);
 	}
 	
-	public void changeCell(Item element)
+	public boolean add(Item itemToAdd)
 	{
-		//TODO
-	}
-	public void add(Item itemToAdd)
-	{
+		Item itemOfIndex;
 		for(int i = 0; i < list.size(); i++) // Place l'item en fonction de sa priorité d'affichage
 		{
-			if(list.get(i).getPriority() > itemToAdd.getPriority())
-				list.set(i, itemToAdd);
+			itemOfIndex = list.get(i);
+			if(itemToAdd.equals(itemOfIndex))
+			{
+				return false;
+			}
+			if(itemOfIndex.getPriority() > itemToAdd.getPriority())
+			{
+				list.add(i, itemToAdd);;
+				return true;
+			}
 		}
+		list.add(itemToAdd);
+		return true;
+		
+		
 	}
 	
-	public void remove(Item element)
+	public Item remove(int index)
 	{
-		//TODO
+		return list.remove(index);
+	}
+	
+	public boolean isEmpty()
+	{
+		return list.size()<=1;
+	}
+	
+	public Item lastItem()
+	{
+		return list.get(list.size()-1);
 	}
 }

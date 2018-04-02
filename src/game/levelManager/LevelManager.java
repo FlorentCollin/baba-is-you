@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import game.element.Baba;
 import game.element.Board;
@@ -32,6 +33,9 @@ import game.element.Water;
  * 
  */
 public class LevelManager {
+	
+	private static String[] listOfLevels = {"lvl1", "lvl2"} ;
+	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
 	 * @param nameLevel le nom du fichier .txt où se trouve la description du niveau
@@ -116,7 +120,7 @@ public class LevelManager {
                 }
                 
              	cellToChange = array[cols][rows];
-             	cellToChange.addItem(itemToAdd);
+             	cellToChange.add(itemToAdd);
                	array[cols][rows] = cellToChange;
                  
             }
@@ -125,5 +129,10 @@ public class LevelManager {
         } 
         
 		return new Board(array, rowsOfBoard, colsOfBoard);
+	}
+	
+	public static String[] getListOfLevels()
+	{
+		return listOfLevels;
 	}
 }

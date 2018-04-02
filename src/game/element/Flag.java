@@ -27,4 +27,11 @@ public class Flag extends Item implements IRealItem {
 		
 	}
 	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other instanceof Flag)
+			return true;
+		return false;
+	}
 }

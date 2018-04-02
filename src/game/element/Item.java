@@ -29,9 +29,15 @@ public abstract class Item {
 	 * 
 	 */
 	public boolean isPushable()
-	{
-		//TODO
-		return true;
+	{ 
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextPush && isRepresentedBy(element[0]))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	/**
 	 * Méthode booléenne qui indique si un Item "stop" les autres Items
@@ -40,7 +46,13 @@ public abstract class Item {
 	 */
 	public boolean isStop()
 	{
-		//TODO
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextStop && isRepresentedBy(element[0]))
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 	/**
@@ -50,16 +62,46 @@ public abstract class Item {
 	 */
 	public boolean isWin()
 	{
-		//TODO
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextWin && isRepresentedBy(element[0]))
+			{
+				return true;
+			}
+		}
 		return false;
 	}
-
-//	public boolean isRepresentedBy(IRule wordInRule)
+	/**
+	 * Méthode qui indique si un Item signifie la mort de cette Item (ie quand l'Item va sur la case il disparrait)
+	 * @return true si l'Item est mortelle false sinon
+	 */
+	public boolean isDeadly()
+	{
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextSink && isRepresentedBy(element[0]))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isRepresentedBy(IRule wordInRule)
+	{
+		return false;
+	}
+	
+//	@Override
+//	public boolean equals(Object other)
 //	{
 //		return false;
 //	}
+	
 	public String toString()
 	{
 		return getClass().toString();
 	}
+	
+	
 }

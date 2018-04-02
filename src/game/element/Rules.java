@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Rules {
 	
-	private static ArrayList<IRule[]> listOfRulesActives = new ArrayList<>();
+	private static ArrayList<IRule[]> listOfRulesActives;
 	private static IRule[] ruleToAdd;
 	
 	public static ArrayList<IRule[]> getListOfRulesActives() {
@@ -21,6 +21,7 @@ public class Rules {
 	 */
 	public static void scanRules(Board board)
 	{
+		listOfRulesActives = new ArrayList<>();
 		int rows = board.getRows(); // On récupère le nombre de lignes et de colonnes de la map
 		int cols = board.getCols(); 
 		Cell[][] array = board.getBoard();

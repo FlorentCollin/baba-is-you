@@ -27,4 +27,12 @@ public class Rock extends Item implements IRealItem {
 		
 	}
 	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other instanceof Rock)
+			return true;
+		return false;
+	}
+	
 }
