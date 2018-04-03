@@ -68,6 +68,11 @@ public class Cell {
 		return list.remove(index);
 	}
 	
+	public boolean removeItem(Item itemToRemove)
+	{
+		return list.remove(itemToRemove);
+	}
+	
 	public boolean isEmpty()
 	{
 		return list.size()<=1;

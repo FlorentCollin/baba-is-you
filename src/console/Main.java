@@ -3,11 +3,7 @@ package console;
 import java.util.Scanner;
 
 import game.element.Board;
-import game.element.Item;
-import game.element.Rock;
 import game.element.Rules;
-import game.element.TextRock;
-import game.element.Wall;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
@@ -26,7 +22,6 @@ public class Main {
 		while(i<listOfLevels.length)
 		{
 			board = LevelManager.readLevel(listOfLevels[i]);
-
 			while(true)
 			{
 				Rules.scanRules(board);
@@ -46,7 +41,24 @@ public class Main {
 				case "d" : direction = 1; break;
 				case "s" : direction = 2; break;
 				case "q" : direction = 3; break;
+				case "n" : direction = -1; break;
+				case "p" : direction = -2; break;
+				case "r" : direction = -3; break;
 				default : direction = 1; break;
+				}
+				if(direction == -1 && i<listOfLevels.length-1)
+				{
+					i++;
+					break;
+				}
+				if(direction == -2 && i>=1)
+				{
+					i--;
+					break;
+				}
+				if(direction == -3)
+				{
+					break;
 				}
 				for(Tuple player : board.getPlayers())
 				{
@@ -55,8 +67,7 @@ public class Main {
 				
 			}
 		}		
-
-
+		System.out.println("FINISH !");
 	}
     /**
      * Methode qui les lit les input en mode console

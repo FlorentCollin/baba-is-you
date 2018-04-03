@@ -92,12 +92,6 @@ public abstract class Item {
 		return false;
 	}
 	
-//	@Override
-//	public boolean equals(Object other)
-//	{
-//		return false;
-//	}
-	
 	public String toString()
 	{
 		return getClass().toString();

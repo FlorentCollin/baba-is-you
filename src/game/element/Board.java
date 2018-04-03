@@ -121,6 +121,12 @@ public class Board {
 			{
 				return false;
 			}
+			else if(nextCell.lastItem().isDeadly())
+			{
+				cellToMove.remove(z);
+				nextCell.removeItem(nextCell.lastItem());
+				return true;
+			}
 			else if(nextCell.lastItem().isPushable())
 			{
 				if(move(x2, y2, -1, direction))
