@@ -29,4 +29,10 @@ public abstract class RuleItem extends Item implements IRule {
 	{
 		return false; 
 	}
+	// Retourne "false" car un objet "règle" n'est pas un objet qui peut mourir
+	@Override
+	public boolean isDeadly()
+	{
+		return false; 
+	}
 }

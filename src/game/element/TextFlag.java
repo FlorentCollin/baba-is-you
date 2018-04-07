@@ -9,6 +9,7 @@ public class TextFlag extends RuleItem {
 	{
 		setPriority(3);
 		setName("FLAG");
+		setGraphicsName("TextFlag");
 	}
 
 	@Override

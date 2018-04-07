@@ -9,8 +9,9 @@ public class TextBaba extends RuleItem {
 	{
 		setPriority(3);
 		setName("BABA");
+		setGraphicsName("TextBaba");
 	}
-
+	
 	@Override
 	public boolean isVerb() {
 		return false;

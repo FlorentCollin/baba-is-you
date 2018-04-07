@@ -16,6 +16,14 @@ public class Cell {
 	private int x;
 	private int y;
 
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+
 	public Cell(int x, int y)
 	{
 		this.x = x;
@@ -47,11 +55,11 @@ public class Cell {
 		for(int i = 0; i < list.size(); i++) // Place l'item en fonction de sa priorité d'affichage
 		{
 			itemOfIndex = list.get(i);
-			if(itemToAdd.equals(itemOfIndex))
-			{
-				return false;
-			}
-			if(itemOfIndex.getPriority() > itemToAdd.getPriority())
+//			if(itemToAdd.equals(itemOfIndex))
+//			{
+//				return false;
+//			}
+			if (itemOfIndex.getPriority() > itemToAdd.getPriority())
 			{
 				list.add(i, itemToAdd);;
 				return true;

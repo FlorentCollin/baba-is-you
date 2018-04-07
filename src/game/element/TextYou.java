@@ -9,6 +9,7 @@ public class TextYou extends RuleItem {
 	{
 		setPriority(3);
 		setName("YOU ");
+		setGraphicsName("TextYou");
 	}
 
 	@Override

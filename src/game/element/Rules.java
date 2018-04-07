@@ -19,12 +19,11 @@ public class Rules {
 	 * Méthode qui va analyser la map pour sortir les règles actives.
 	 * @param board La map.
 	 */
-	public static void scanRules(Board board)
+	public static ArrayList<IRule[]> scanRules(Cell[][] array)
 	{
 		listOfRulesActives = new ArrayList<>();
-		int rows = board.getRows(); // On récupère le nombre de lignes et de colonnes de la map
-		int cols = board.getCols(); 
-		Cell[][] array = board.getBoard();
+		int rows = array.length; // On récupère le nombre de lignes et de colonnes de la map
+		int cols = array[0].length;
 		/*
 		 * Itération sur chaque Cellule du tableau
 		 */
@@ -57,6 +56,7 @@ public class Rules {
 				}
 			}
 		}
+		return listOfRulesActives;
 	}
 	//TODO Regrouper les méthodes scanRight et scanDown en une seule méthode avec un switch
 	/**
@@ -127,7 +127,7 @@ public class Rules {
 						}
 					}
 				}
-				}
+			}
 					
 		}
 	}

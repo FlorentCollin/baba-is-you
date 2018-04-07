@@ -34,7 +34,8 @@ import game.element.Water;
  */
 public class LevelManager {
 	
-	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"} ;
+	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
+	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"} ; 
 	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
@@ -42,7 +43,7 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static Board readLevel(String nameLevel) // Pour une POO on va sûrement changer le type String par un type Level ou autre à voir...
+	public static Board readLevel(String nameLevel) 
 	{
 		
 		BufferedReader br = null;
@@ -51,7 +52,7 @@ public class LevelManager {
 		String word;
 		String[] list;
 		Cell cellToChange;
-		Item itemToAdd = null;
+		Item itemToAdd = null; // on l'initialise car on l'utilise dans un try catch donc il est possible qu'il ne soit pas initialisé après
 		int rows; //Lignes
 		int cols; //Colonnes
 		int rowsOfBoard = 0; //Nombre de lignes de la map
@@ -61,7 +62,7 @@ public class LevelManager {
         try{
             File file = new File(nameLevel);
             System.out.println(file.getAbsolutePath());
-            br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt"));
+            br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
         } catch (FileNotFoundException fnfex) {
             System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
         }
@@ -70,15 +71,16 @@ public class LevelManager {
         // Et pré remplissage de la map
         try {
         	line = br.readLine();
-        	rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières
+        	rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
         	colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
-        	array = new Cell[colsOfBoard][rowsOfBoard];
-        	//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background)
+        	array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
+        	//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
+        	//Itération sur toutes les cellules de la map
         	for(int i = 0; i < colsOfBoard; i++)
         	{
         		for(int j = 0; j< rowsOfBoard; j++)
         		{
-        			// Remplissage des frontières
+        			// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
         			if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
         			{
         				array[i][j] = new Cell(i,j, new Boundary());
@@ -94,8 +96,6 @@ public class LevelManager {
                 rows = Integer.parseInt(list[1])+1;
                 cols = Integer.parseInt(list[2])+1;
                 word = list[0];
-                
-
                 
                 // Choix de l'Item à ajouter en fonction du mot
                 //  Note : Il est possible d'améliorer le switch pour le remplacer par un constructeur dynamique (en utilisant le principe de refléction)
@@ -118,7 +118,7 @@ public class LevelManager {
                 case "baba" : itemToAdd = new Baba(TextBaba.class); break;
                 case "sink" : itemToAdd = new TextSink(); break;
                 }
-                
+                //Ajout de l'item dans sa cellule
              	cellToChange = array[cols][rows];
              	cellToChange.add(itemToAdd);
                	array[cols][rows] = cellToChange;

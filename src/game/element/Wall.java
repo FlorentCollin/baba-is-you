@@ -13,6 +13,7 @@ public class Wall extends Item implements IRealItem {
 		this.typeText = typeText;
 		setPriority(1);
 		setName("wall");
+		setGraphicsName("wall");
 	}
 	
 	/**

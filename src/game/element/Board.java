@@ -14,6 +14,7 @@ public class Board {
 	private ArrayList<Tuple> players;
 	private int rows; // nombre de lignes
 	private int cols; // nombre de colonnes
+	private ArrayList<Tuple> changedCells = new ArrayList<>();
 	
 
 	
@@ -54,18 +55,70 @@ public class Board {
 		return players;
 	}
 	
+	public ArrayList<Tuple> getAndResetChangedCells() {
+		ArrayList<Tuple> temp = changedCells;
+		changedCells = new ArrayList<>();
+		return temp;
+	}
+
+
+	/**
+	 * Méthode qui va scanner les règles et ajuster le plateau en fonction
+	 * 
+	 */
+	public void scanRules()
+	{
+		ArrayList<IRule[]> listOfActivesRules = Rules.scanRules(board);
+		IRule element1;
+		IRule element2;
+		for(IRule[] element : listOfActivesRules)
+		{
+			element1 = element[0];
+			element2 = element[2];
+			if(element1 instanceof IRealItem && element2 instanceof IRealItem)
+			{
+				changeAllItemsforAnOtherItem(element1, element2);
+			}
+		}
+	}
+	
+	private void changeAllItemsforAnOtherItem(IRule baseItem, IRule endItem) 
+	{
+		for(int i = 0; i < cols; i++)
+		{
+			for(int j = 0; j < rows; j++)
+			{
+				ArrayList<Item> list = board[i][j].getList();
+				for(int k = 1; k < list.size(); k++)
+				{
+					if(list.get(k).isRepresentedBy(baseItem))
+					{
+						//TODO ?????????? Petit problème d'implémentation
+					}
+				}
+			}
+		}
+		
+	}
+
+
+	/**
+	 * Méthode qui va regarder la map et retourner true si le joueur est sur l'objet qui permet de réussir le niveau
+	 * @return true si le niveau est gagné, false sinon
+	 */
 	public boolean isWin()
 	{
-		IRule wordInRule = whoIsWin();
+		IRule wordInRule = whoIsWin(); //Récupération de l'item gagnant
 		if(wordInRule == null)
 		{
 			return false;
 		}
 		for(Tuple player : players)
 		{
+			//Itération sur chaque cellule contenant un joueur pour voir si le joueur est sur l'item qui permet de réussir le niveau
 			for(Item element : board[player.getY()][player.getX()].getList())
 			{
-				if(element.isRepresentedBy(wordInRule))
+				if(element.isRepresentedBy(wordInRule)) //Regarde si l'item correspond à l'Item permettant de réussir le niveau
 				{
 					return true;
 				}
@@ -77,7 +130,7 @@ public class Board {
 	/**
 	 * Méthode qui va rechercher dans la liste de règles actives quel Item "is WIN".
 	 */
-	public IRule whoIsWin()
+	private IRule whoIsWin()
 	{
 		for(IRule[] element : Rules.getListOfRulesActives())
 		{
@@ -88,12 +141,82 @@ public class Board {
 		}
 		return null;
 	}
-	public void changeItemCell(int x1, int y1, int x2, int y2, int z)
+	
+	/**
+	 * Méthode qui va scanner la map et rechercher les différents joueurs en fonction des règles actives
+	 * 
+	 */
+	public void searchPlayers()
 	{
-		Item itemChange =  board[y1][x1].remove(z);
-		board[y2][x2].add(itemChange);
+		players = new ArrayList<>();
+		ArrayList<IRule> playerIs = whoIsPlayer();
+		if(playerIs.size() == 0)
+		{
+			return;
+		}
+		for(int y = 0; y < cols; y++)
+		{
+			for(int x = 0; x < rows; x++)
+			{
+				ArrayList<Item> list = board[y][x].getList();
+				for(int z = 0; z < list.size(); z++)
+				{
+					for(IRule OnePlayer : playerIs)
+					{
+						if(list.get(z) instanceof IRealItem && ((IRealItem) list.get(z)).isRepresentedBy(OnePlayer))
+						{
+							players.add(new Tuple(x,y,z));
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
+	/**
+	 * Méthode qui va rechercher dans la liste de règles actives quel Item "is YOU".
+	 */
+	public ArrayList<IRule> whoIsPlayer()
+	{
+		ArrayList<IRule> playerIs = new ArrayList<>();
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextYou)
+			{
+				playerIs.add(element[0]);
+			}
+		}
+		return playerIs;
+	}
+	
+	/**
+	 * Méthode qui va changer de cellule un item
+	 * @param x1 position en x de l'item à changer de cellule
+	 * @param y1 position en y de l'item à changer de cellule
+	 * @param x2 nouvelle position en x de l'item
+	 * @param y2 nouvelle position en y de l'item
+	 * @param z position de l'item dans la liste
+	 */
+	public void changeItemCell(int x1, int y1, int x2, int y2, int z)
+	{
+		changedCells.add(new Tuple(x1,y1,0)); //On rajoute les cellules modifiées pour les repeintre en mode GUI
+		changedCells.add(new Tuple(x2,y2,0));
+		Item itemChange =  board[y1][x1].remove(z);
+		board[y2][x2].add(itemChange);
+		if(itemChange instanceof IRule)
+			Rules.scanRules(board);
+	}
+	
+		
+	/**
+	 * Méthode récursive qui va bouger un item dans une direction
+	 * @param x1 position en x de l'item
+	 * @param y1 position en y de l'item
+	 * @param z position dans la liste de la cellule[y][x] (si z == -1 alors z = le dernier item de la liste de la cellule[y][x])
+	 * @param direction direction dans laquelle l'item sera déplacer (0 == UP, 1 == RIGHT, 2 == DOWN, 3 == LEFT)
+	 * @return true si l'objet à été bougé, false sinon
+	 */
 	public boolean move(int x1, int y1, int z, int direction)
 	{
 		int x2 = x1;
@@ -103,7 +226,7 @@ public class Board {
 		{
 			return true;
 		}
-		if(z == -1)
+		if(z == -1 || z > cellToMove.getList().size()-1)
 		{
 			z = cellToMove.getList().size()-1;
 		}
@@ -123,6 +246,9 @@ public class Board {
 			}
 			else if(nextCell.lastItem().isDeadly())
 			{
+				//Ajout des cellules qui doivent être repeinte par la partie graphique
+				changedCells.add(new Tuple(x1,y1,0));
+				changedCells.add(new Tuple(x2,y2,0));
 				cellToMove.remove(z);
 				nextCell.removeItem(nextCell.lastItem());
 				return true;
@@ -147,48 +273,5 @@ public class Board {
 			return true;
 		}
 		return false;
-	}
-	/**
-	 * Méthode qui va scanner la map et rechercher les différents joueurs en fonction des règles actives
-	 * 
-	 */
-	public void searchPlayers()
-	{
-		players = new ArrayList<>();
-		IRule playerIs = whoIsPlayer();
-		if(playerIs == null)
-		{
-			return;
-		}
-		for(int y = 0; y < cols; y++)
-		{
-			for(int x = 0; x < rows; x++)
-			{
-				ArrayList<Item> list = board[y][x].getList();
-				for(int z = 0; z < list.size(); z++)
-				{
-					if(list.get(z) instanceof IRealItem && ((IRealItem) list.get(z)).isRepresentedBy(playerIs))
-					{
-						players.add(new Tuple(x,y,z));
-					}
-				}
-			}
-		}
-		
-	}
-	
-	/**
-	 * Méthode qui va rechercher dans la liste de règles actives quel Item "is YOU".
-	 */
-	public IRule whoIsPlayer()
-	{
-		for(IRule[] element : Rules.getListOfRulesActives())
-		{
-			if(element[2] instanceof TextYou)
-			{
-				return element[0];
-			}
-		}
-		return null;
 	}
 }

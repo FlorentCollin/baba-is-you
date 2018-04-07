@@ -13,6 +13,7 @@ public class Rock extends Item implements IRealItem {
 		this.typeText = typeText;
 		setPriority(1);
 		setName("rock");
+		setGraphicsName("rock");
 	}
 	
 	/**

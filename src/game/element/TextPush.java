@@ -9,6 +9,7 @@ public class TextPush extends RuleItem {
 	{
 		setPriority(3);
 		setName("PUSH");
+		setGraphicsName("TextPush");
 	}
 
 	@Override

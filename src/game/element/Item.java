@@ -8,19 +8,30 @@ public abstract class Item {
 	
 	private int priority; //Ordre de priorité utilisé pour l'affichage (0 = fond, 0>> = baba)
 	private String name;
+	private String GName;
 	
 	public int getPriority() {
 		return priority;
 	}
+	
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setGraphicsName(String name) {
+		this.GName = name;
+	}
+	
+	public String getGraphicName() {
+		return GName;
 	}
 
 	/**
@@ -39,6 +50,7 @@ public abstract class Item {
 		}
 		return false;
 	}
+	
 	/**
 	 * Méthode booléenne qui indique si un Item "stop" les autres Items
 	 * @return true si l'objet est "stop" false sinon
@@ -55,6 +67,7 @@ public abstract class Item {
 		}
 		return false;
 	}
+	
 	/**
 	 * Méthode booléenne qui indique si un Item signifie la victoire
 	 * @return true si l'objet est "win" false sinon
@@ -71,6 +84,7 @@ public abstract class Item {
 		}
 		return false;
 	}
+	
 	/**
 	 * Méthode qui indique si un Item signifie la mort de cette Item (ie quand l'Item va sur la case il disparrait)
 	 * @return true si l'Item est mortelle false sinon

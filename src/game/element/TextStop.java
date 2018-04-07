@@ -9,6 +9,7 @@ public class TextStop extends RuleItem {
 	{
 		setPriority(3);
 		setName("STOP");
+		setGraphicsName("TextStop");
 	}
 
 	@Override

@@ -9,6 +9,7 @@ public class TextWall extends RuleItem {
 	{
 		setPriority(3);
 		setName("WALL");
+		setGraphicsName("TextWall");
 	}
 
 	@Override

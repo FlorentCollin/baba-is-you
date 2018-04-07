@@ -15,16 +15,16 @@ public class DisplayBoard {
 		ArrayList<Item> list;
 		Item lastElement;
 		Cell[][] array = board.getBoard();
+		//Itération sur tous les éléments de la map
 		for(Cell[] element1 : array)
 		{
 			for(Cell element2 : element1)
 			{
 				list = element2.getList();
 				lastElement = list.get(list.size()-1);
-				System.out.print(lastElement.getName());
-			//System.out.print(list.size());
+				System.out.print(lastElement.getName()); //Affichage du dernier élément en fonction de l'ordre de priorité d'affichage
 			}
-			System.out.println();
+			System.out.println(); //Passage à la ligne suivante
 		}
 	}
 }

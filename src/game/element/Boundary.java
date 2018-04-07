@@ -8,8 +8,9 @@ public class Boundary extends Item {
 
 	public Boundary()
 	{
-		setName("####");
 		setPriority(0);
+		setName("####");
+		setGraphicsName("boundary");
 	}
 	
 	public boolean isPushable()
@@ -19,6 +20,6 @@ public class Boundary extends Item {
 	
 	public boolean isStop()
 	{
-		return true;
+		return true; // Les bordures stop toujours les Item pour les empêcher de sortir de la map
 	}
 }

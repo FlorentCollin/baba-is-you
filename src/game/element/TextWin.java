@@ -9,6 +9,7 @@ public class TextWin extends RuleItem {
 	{
 		setPriority(3);
 		setName("WIN ");
+		setGraphicsName("TextWin");
 	}
 
 	@Override

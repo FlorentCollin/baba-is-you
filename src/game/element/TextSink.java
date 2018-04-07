@@ -9,6 +9,7 @@ public class TextSink extends RuleItem {
 	{
 		setPriority(3);
 		setName("SINK");
+		setGraphicsName("TextSink");
 	}
 
 	@Override

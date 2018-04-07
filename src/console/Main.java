@@ -1,5 +1,21 @@
 package console;
 
+/* Ce qu'il faut modifier :
+ * Le jeu ne gère pas la règle ROCK IS WALL
+ * Test unitaires
+ * rapport
+ * commentaires
+ * Changer les whoiswin et whoisyou par des listes car on peut avoir la règle WALL is YOU et BABA is you simultanément
+ * Bug connu : Lorsque les règles Wall is you et Baba is you sont Activées et qu'il y a baba et un wall sur une même cellule
+ * On a une erreur Array out of bands
+ * Bug connu : Premier niveau lorsque la règle wall is you est activée quand on move vers la droite les murs se réduisent 
+ * Bug connu : Lorsqu'il y a la règle baba is push et baba is you en même temps la liste des règles est incorrecte
+ */
+
+/* A AJOUTER
+ *  Les Téléporteurs (idée méga intéressante !)
+ */
+
 import java.util.Scanner;
 
 import game.element.Board;
@@ -24,7 +40,7 @@ public class Main {
 			board = LevelManager.readLevel(listOfLevels[i]);
 			while(true)
 			{
-				Rules.scanRules(board);
+				Rules.scanRules(board.getBoard());
 				board.searchPlayers();
 				DisplayBoard.display(board);
 				if(board.isWin())
@@ -68,6 +84,7 @@ public class Main {
 			}
 		}		
 		System.out.println("FINISH !");
+		in.close();
 	}
     /**
      * Methode qui les lit les input en mode console

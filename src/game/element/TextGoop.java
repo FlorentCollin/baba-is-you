@@ -9,6 +9,7 @@ public class TextGoop extends RuleItem {
 	{
 		setPriority(3);
 		setName("GOOP");
+		setGraphicsName("TextGoop");
 	}
 
 	@Override

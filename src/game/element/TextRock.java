@@ -9,6 +9,7 @@ public class TextRock extends RuleItem {
 	{
 		setPriority(3);
 		setName("ROCK");
+		setGraphicsName("TextRock");
 	}
 
 	@Override
