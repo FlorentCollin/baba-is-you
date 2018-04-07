@@ -1,12 +1,12 @@
 package game.levelManager;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import game.element.Baba;
 import game.element.Board;
 import game.element.Boundary;
@@ -35,7 +35,8 @@ import game.element.Water;
 public class LevelManager {
 	
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"} ; 
+	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"};
+//	private static String[] listOfLevels = {"saveLvl"};
 	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
@@ -93,8 +94,8 @@ public class LevelManager {
             while((line = br.readLine()) != null)
             {
                 list = line.split(" ");
-                rows = Integer.parseInt(list[1])+1;
-                cols = Integer.parseInt(list[2])+1;
+                rows = Integer.parseInt(list[1]);
+                cols = Integer.parseInt(list[2]);
                 word = list[0];
                 
                 // Choix de l'Item à ajouter en fonction du mot
@@ -129,6 +130,45 @@ public class LevelManager {
         } 
         
 		return new Board(array, rowsOfBoard, colsOfBoard);
+	}
+	
+	/**
+	 * Méthode qui va sauvegarder le niveau en cours dans un fichier externe et qui permettra de le recharger
+	 * @param board la map a sauvegarder
+	 */
+	public static void saveLvl(Board board)
+	{
+		BufferedWriter bw = null;
+		
+		try {
+			File save = new File("saveLvl.txt"); //Nom du fichier dans lequel on va faire la savegarde
+			bw = new BufferedWriter(new FileWriter(save));
+			bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la première ligne qui désigne le nombre de lignes et de colonnes de la map
+			bw.newLine();
+			//Itération sur toute la map pour récupérer les Items
+			for(Cell[] element1 : board.getBoard())
+			{
+				for(Cell element2 : element1)
+				{
+					for(Item element3 : element2.getList())
+					{
+						if(! element3.getName().equals("####"))
+						{
+							bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
+							bw.newLine();
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				bw.close();
+			}
+			catch (Exception e) {}
+		}
+		
 	}
 	
 	public static String[] getListOfLevels()

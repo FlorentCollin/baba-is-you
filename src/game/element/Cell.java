@@ -29,13 +29,13 @@ public class Cell {
 		this.x = x;
 		this.y = y;
 		list = new ArrayList<>();
-		Background back = new Background();
-		list.add(back);
+//		Background back = new Background();
+//		list.add(back);
 	}
 	
 	public Cell(int x, int y, Item itemtoAdd)
 	{
-		this(x, y); // Appel le constructor sans arguments
+		this(x, y); // Appel le constructeur sans arguments
 		list.add(itemtoAdd);		
 	}
 	
@@ -55,10 +55,6 @@ public class Cell {
 		for(int i = 0; i < list.size(); i++) // Place l'item en fonction de sa priorité d'affichage
 		{
 			itemOfIndex = list.get(i);
-//			if(itemToAdd.equals(itemOfIndex))
-//			{
-//				return false;
-//			}
 			if (itemOfIndex.getPriority() > itemToAdd.getPriority())
 			{
 				list.add(i, itemToAdd);;
@@ -83,7 +79,7 @@ public class Cell {
 	
 	public boolean isEmpty()
 	{
-		return list.size()<=1;
+		return list.size()<=0;
 	}
 	
 	public Item lastItem()

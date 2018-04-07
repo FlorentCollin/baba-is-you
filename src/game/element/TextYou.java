@@ -8,7 +8,7 @@ public class TextYou extends RuleItem {
 	public TextYou()
 	{
 		setPriority(3);
-		setName("YOU ");
+		setName("you");
 		setGraphicsName("TextYou");
 	}
 

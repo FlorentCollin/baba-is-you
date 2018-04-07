@@ -2,9 +2,7 @@ package gui;
 
 import game.element.Board;
 import game.element.Cell;
-import game.element.IRule;
 import game.element.Item;
-import game.element.RuleItem;
 import game.element.Rules;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
@@ -36,7 +34,7 @@ public class Main extends Application {
 //		board = LevelManager.readLevel("testLvl");
 		Rules.scanRules(board.getBoard());
 		board.searchPlayers();
-		
+				
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -73,6 +71,7 @@ public class Main extends Application {
 				case "D": direction = 1 ; break;
 				case "S": direction = 2 ; break;
 				case "Q": direction = 3 ; break;
+				case "X": board.saveLvl(); return;
 				case "R" : 
 					board = LevelManager.readLevel(listOfLevels[LevelCounter]);
 					Rules.scanRules(board.getBoard());

@@ -8,7 +8,7 @@ public class TextIs extends RuleItem {
 	public TextIs()
 	{
 		setPriority(3);
-		setName(" IS ");
+		setName("is");
 		setGraphicsName("TextIs");
 	}
 

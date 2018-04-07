@@ -8,7 +8,7 @@ public class TextRock extends RuleItem {
 	public TextRock()
 	{
 		setPriority(3);
-		setName("ROCK");
+		setName("text_rock");
 		setGraphicsName("TextRock");
 	}
 

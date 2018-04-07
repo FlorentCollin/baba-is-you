@@ -5,15 +5,12 @@ package console;
  * Test unitaires
  * rapport
  * commentaires
- * Changer les whoiswin et whoisyou par des listes car on peut avoir la règle WALL is YOU et BABA is you simultanément
- * Bug connu : Lorsque les règles Wall is you et Baba is you sont Activées et qu'il y a baba et un wall sur une même cellule
- * On a une erreur Array out of bands
- * Bug connu : Premier niveau lorsque la règle wall is you est activée quand on move vers la droite les murs se réduisent 
  * Bug connu : Lorsqu'il y a la règle baba is push et baba is you en même temps la liste des règles est incorrecte
  */
 
 /* A AJOUTER
  *  Les Téléporteurs (idée méga intéressante !)
+ *  Système de sauvegardes
  */
 
 import java.util.Scanner;

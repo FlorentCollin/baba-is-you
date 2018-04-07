@@ -8,7 +8,7 @@ public class TextBaba extends RuleItem {
 	public TextBaba()
 	{
 		setPriority(3);
-		setName("BABA");
+		setName("text_baba");
 		setGraphicsName("TextBaba");
 	}
 	

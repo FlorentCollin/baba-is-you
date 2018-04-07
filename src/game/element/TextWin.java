@@ -8,7 +8,7 @@ public class TextWin extends RuleItem {
 	public TextWin()
 	{
 		setPriority(3);
-		setName("WIN ");
+		setName("win");
 		setGraphicsName("TextWin");
 	}
 

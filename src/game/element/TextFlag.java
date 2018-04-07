@@ -8,7 +8,7 @@ public class TextFlag extends RuleItem {
 	public TextFlag()
 	{
 		setPriority(3);
-		setName("FLAG");
+		setName("text_flag");
 		setGraphicsName("TextFlag");
 	}
 

@@ -8,7 +8,7 @@ public class TextPush extends RuleItem {
 	public TextPush()
 	{
 		setPriority(3);
-		setName("PUSH");
+		setName("push");
 		setGraphicsName("TextPush");
 	}
 

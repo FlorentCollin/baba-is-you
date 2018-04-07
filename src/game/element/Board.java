@@ -1,7 +1,7 @@
 package game.element;
 
 import java.util.ArrayList;
-
+import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
 /**
@@ -57,10 +57,29 @@ public class Board {
 	
 	public ArrayList<Tuple> getAndResetChangedCells() {
 		ArrayList<Tuple> temp = changedCells;
+		for(Tuple element : changedCells)
+		{
+			removeAllOccurenceInACell(board[element.getY()][element.getX()]);
+		}
 		changedCells = new ArrayList<>();
 		return temp;
 	}
-
+	
+	/**
+	 * Méthode qui va supprimer tous les doublons d'Item dans une cellule, par exemple [Wall, Wall, Wall] --> [Wall]
+	 * @param cellToChange Cellule sur laquelle la méthode va agir
+	 */
+	public void removeAllOccurenceInACell(Cell cellToChange)
+	{
+		ArrayList<Item> list = cellToChange.getList();
+		for(int index = 0; index < list.size()-1; index++)
+		{
+			if(list.get(index).equals(list.get(index+1))) {
+				list.remove(index+1);
+			}
+		}
+			
+	}
 
 	/**
 	 * Méthode qui va scanner les règles et ajuster le plateau en fonction
@@ -273,5 +292,13 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Méthode qui va sauvegarder le niveau en cours dans un fichier .txt
+	 */
+	public void saveLvl()
+	{
+		LevelManager.saveLvl(this);
 	}
 }

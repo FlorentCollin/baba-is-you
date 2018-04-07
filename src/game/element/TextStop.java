@@ -8,7 +8,7 @@ public class TextStop extends RuleItem {
 	public TextStop()
 	{
 		setPriority(3);
-		setName("STOP");
+		setName("stop");
 		setGraphicsName("TextStop");
 	}
 

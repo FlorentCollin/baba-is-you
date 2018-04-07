@@ -8,7 +8,7 @@ public class TextWall extends RuleItem {
 	public TextWall()
 	{
 		setPriority(3);
-		setName("WALL");
+		setName("text_wall");
 		setGraphicsName("TextWall");
 	}
 

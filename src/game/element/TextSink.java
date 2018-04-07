@@ -8,7 +8,7 @@ public class TextSink extends RuleItem {
 	public TextSink()
 	{
 		setPriority(3);
-		setName("SINK");
+		setName("sink");
 		setGraphicsName("TextSink");
 	}
 

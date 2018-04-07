@@ -8,7 +8,7 @@ public class TextGoop extends RuleItem {
 	public TextGoop()
 	{
 		setPriority(3);
-		setName("GOOP");
+		setName("text_goop");
 		setGraphicsName("TextGoop");
 	}
 

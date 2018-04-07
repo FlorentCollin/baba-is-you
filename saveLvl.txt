@@ -4,7 +4,7 @@ is 6 5
 stop 7 5
 text_rock 12 5
 is 13 5
-push 14 5
+text_push 14 5
 wall 4 7
 wall 5 7
 wall 6 7
