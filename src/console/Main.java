@@ -1,10 +1,8 @@
 package console;
 
 /* Ce qu'il faut modifier :
- * Le jeu ne gère pas la règle ROCK IS WALL
  * Test unitaires
  * rapport
- * commentaires : il ne reste quasimenent plus que les commentaires de la classe Board
  */
 
 /* A AJOUTER
@@ -90,7 +88,7 @@ public class Main {
     {
         Scanner in = new Scanner(System.in);
         String line = in.next();
-        
+        in.close();
         return line;
     }
 }

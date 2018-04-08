@@ -8,7 +8,7 @@ public class TextGoop extends RuleItem {
 	public TextGoop()
 	{
 		setPriority(3);
-		setName("text_goop");
+		setName("TextGoop");
 		setGraphicsName("TextGoop");
 	}
 
@@ -20,5 +20,10 @@ public class TextGoop extends RuleItem {
 	@Override
 	public boolean isWord() {
 		return true;
+	}
+
+	@Override
+	public boolean isAction() {
+		return false;
 	}
 }

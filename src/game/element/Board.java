@@ -1,6 +1,7 @@
 package game.element;
 
 import java.util.ArrayList;
+
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
@@ -106,29 +107,42 @@ public class Board {
 		ArrayList<IRule[]> listOfActivesRules = Rules.scanRules(board);
 		IRule element1;
 		IRule element2;
+		//Itération sur la liste des règles Actives pour savoir si il y a une règle du type "WALL is ROCK", "WALL IS BABA", etc,...
 		for(IRule[] element : listOfActivesRules)
 		{
 			element1 = element[0];
 			element2 = element[2];
-			if(element1 instanceof IRealItem && element2 instanceof IRealItem)
+			if(element1.isWord() && element2.isWord())
 			{
+				//On change tous les items qui correspondent à element1 en item element2
 				changeAllItemsforAnOtherItem(element1, element2);
 			}
 		}
 	}
 	
+	/**
+	 * Change tous les items de la map correspondant à baseItem et les remplace par les items correspondant à endItem
+	 * @param baseItem L'item qu'on doit changer
+	 * @param endItem Ce en quoi baseItem doit être changé
+	 */
 	private void changeAllItemsforAnOtherItem(IRule baseItem, IRule endItem) 
 	{
+		//Itération sur l'entièreté de la map
 		for(int i = 0; i < cols; i++)
 		{
 			for(int j = 0; j < rows; j++)
 			{
 				ArrayList<Item> list = board[i][j].getList();
-				for(int k = 1; k < list.size(); k++)
+				//Itération sur la liste d'Item
+				for(int k = 0; k < list.size(); k++)
 				{
-					if(list.get(k).isRepresentedBy(baseItem))
+					if(list.get(k).isRepresentedBy(baseItem)) //Si l'élement correspond à baseItem alors on doit le changer en endItem
 					{
-						//TODO ??? Petit problème d'implémentation
+						Item itemEndItem = (Item) endItem; //Pour pouvoir utiliser .getName() aucune erreur possible car IRule n'est implanté que dans Item
+						//Ici on change l'Item mais comme on veut passer d'un Item de règle à un "vrai" item on doit chercher sa correspondance
+						//Dans le fichier JSON des correspondance
+						list.set(k, LevelManager.createItem(LevelManager.correspondingTextOrItem(itemEndItem.getName())));
+						changedCells.add(new Tuple(j,i,0)); //On n'oublie pas d'ajouter les cellules changés car sinon elles ne seront pas repeinte par l'interface graphique
 					}
 				}
 			}
@@ -251,7 +265,7 @@ public class Board {
 		board[y2][x2].add(itemChange);
 		// Si un item de Règle est bougé alors on rescan les règles
 		if(itemChange instanceof IRule)
-			Rules.scanRules(board);
+			scanRules();
 	}
 	
 		

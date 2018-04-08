@@ -7,37 +7,27 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
-import game.element.Baba;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import game.element.Board;
 import game.element.Boundary;
 import game.element.Cell;
-import game.element.Flag;
 import game.element.Item;
-import game.element.Rock;
-import game.element.TextBaba;
-import game.element.TextFlag;
-import game.element.TextGoop;
-import game.element.TextIs;
-import game.element.TextPush;
-import game.element.TextRock;
-import game.element.TextSink;
-import game.element.TextStop;
-import game.element.TextWall;
-import game.element.TextWin;
-import game.element.TextYou;
-import game.element.Wall;
-import game.element.Water;
 
 /**
- * Classe qui va s'occuper de l'importation des niveaux et de l'édition
+ * Classe qui va s'occuper de l'importation des niveaux, de l'édition, des sauvegardes, etc,...
  * 
  */
 public class LevelManager {
 	
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
 	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"};
-//	private static String[] listOfLevels = {"saveLvl"};
+//	private static String[] listOfLevels = {"testLvl"};
 	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
@@ -103,26 +93,7 @@ public class LevelManager {
                 word = list[0];
                 
                 // Choix de l'Item à ajouter en fonction du mot
-                //  Note : Il est possible d'améliorer le switch pour le remplacer par un constructeur dynamique (en utilisant le principe de refléction)
-                switch(word)
-                {
-                case "wall" : itemToAdd = new Wall(TextWall.class); break;
-                case "rock" : itemToAdd = new Rock(TextRock.class); break;
-                case "is" : itemToAdd = new TextIs(); break;
-                case "flag" : itemToAdd = new Flag(TextFlag.class); break;
-                case "water" : itemToAdd = new Water(TextGoop.class); break;
-                case "text_wall" : itemToAdd = new TextWall(); break;
-                case "text_rock" : itemToAdd = new TextRock(); break;
-                case "text_baba" : itemToAdd = new TextBaba(); break;
-                case "text_goop" : itemToAdd = new TextGoop(); break;
-                case "text_flag" : itemToAdd = new TextFlag(); break;
-                case "win" : itemToAdd = new TextWin(); break;
-                case "push" : itemToAdd = new TextPush(); break;
-                case "stop" : itemToAdd = new TextStop(); break;
-                case "you" : itemToAdd = new TextYou(); break;
-                case "baba" : itemToAdd = new Baba(TextBaba.class); break;
-                case "sink" : itemToAdd = new TextSink(); break;
-                }
+                itemToAdd = createItem(word);
                 //Ajout de l'item dans sa cellule
              	cellToChange = array[cols][rows];
              	cellToChange.add(itemToAdd);
@@ -134,6 +105,115 @@ public class LevelManager {
         } 
         
 		return new Board(array, levelNumber, rowsOfBoard, colsOfBoard);
+	}
+	
+	/**
+	 * Méthode qui va retourner la classe d'un item à partir d'un string
+	 * @param str le string sur lequel on doit trouver l'item
+	 * @return la classe d'un Item
+	 */
+	public static Class<?> getClassFromString(String str)
+	{
+		/* Ici on va utiliser le principe de réfléction
+		 * Ce principe va nous permettre de trouver une class à partir d'un String
+		 * Et donc d'éviter de devoir placer un switch(str) qui aurait du énumérer tous les éléments possible
+		 * On rend ainsi l'ajout de nouveaux items plus dynamique :)
+		 */
+		try {
+			return Class.forName("game.element."+str);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Méthode qui va créer un Item correspondant à un string. Il se peut que le constructeur de l'Item doit avoir un argument
+	 * (EX : Wall(TextWall.class), si l'Item a besoin d'un argument on va chercher sa comparaison dans un fichier json
+	 * @param str Le string duquel on veut créer l'Item
+	 * @return L'Item correspondant au string
+	 * @author Le code de la récuparation du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
+	 */
+	public static Item createItem(String str)
+	{
+		Item itemToReturn = null;
+		Class<?> strClass = getClassFromString(str);
+		try {
+			Constructor<?> strConstructor = strClass.getConstructors()[0];
+			if(strConstructor.getParameterTypes().length != 0) //Si le constructeur demande un paramètre "Class" alors on recherche la classe associé à l'Item
+			{
+				JSONParser parser = new JSONParser();
+				try {
+					
+					Object obj = parser.parse(new FileReader("ressources/CorrespondingTextOrItem.json"));
+					JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
+					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString()); //Récupération de la class correspondante à l'Item (ex : wall --> TextWall.class)
+					try {
+						itemToReturn = (Item) strConstructor.newInstance(CorrespondingItemClass);
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			else {
+				try {
+					itemToReturn = (Item) strConstructor.newInstance();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (SecurityException e1) {
+			e1.printStackTrace();
+		}
+		return itemToReturn;
+	}
+	
+	/**
+	 * Méthode qui va ouvrir un fichier JSON qui contient les correspondances de chaque Item (Ex : la clé "Wall" donne comme valeur "TextWall")
+	 * Et après avoir ouvert le fichier, la méthode va juste renvoyer la valeur de la clé donnée en paramètre
+	 * @param str La clé dont on veut connaître la correspondance dans le JSON
+	 * @return la valeur de la clé donnée en paramètre
+	 * @author Le code de la récuparation du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
+	 */
+	public static String correspondingTextOrItem(String str)
+	{
+		JSONParser parser = new JSONParser();
+			try {
+				
+				Object obj = parser.parse(new FileReader("ressources/CorrespondingTextOrItem.json"));
+				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
+				return jsonObject.get(str).toString();				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return null;
+			
+		
 	}
 	
 	/**

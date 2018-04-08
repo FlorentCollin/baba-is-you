@@ -8,7 +8,7 @@ public class TextYou extends RuleItem {
 	public TextYou()
 	{
 		setPriority(3);
-		setName("you");
+		setName("TextYou");
 		setGraphicsName("TextYou");
 	}
 
@@ -19,6 +19,11 @@ public class TextYou extends RuleItem {
 
 	@Override
 	public boolean isWord() {
+		return false;
+	}
+
+	@Override
+	public boolean isAction() {
 		return true;
 	}
 }

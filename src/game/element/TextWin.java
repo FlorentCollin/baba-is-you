@@ -8,7 +8,7 @@ public class TextWin extends RuleItem {
 	public TextWin()
 	{
 		setPriority(3);
-		setName("win");
+		setName("TextWin");
 		setGraphicsName("TextWin");
 	}
 
@@ -19,6 +19,11 @@ public class TextWin extends RuleItem {
 
 	@Override
 	public boolean isWord() {
+		return false;
+	}
+
+	@Override
+	public boolean isAction() {
 		return true;
 	}
 }

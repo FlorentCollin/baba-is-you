@@ -8,7 +8,7 @@ public class TextPush extends RuleItem {
 	public TextPush()
 	{
 		setPriority(3);
-		setName("push");
+		setName("TextPush");
 		setGraphicsName("TextPush");
 	}
 
@@ -19,6 +19,12 @@ public class TextPush extends RuleItem {
 
 	@Override
 	public boolean isWord() {
+		return false;
+	}
+
+	@Override
+	public boolean isAction() {
+		// TODO Auto-generated method stub
 		return true;
 	}
 }

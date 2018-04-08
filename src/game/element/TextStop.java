@@ -8,7 +8,7 @@ public class TextStop extends RuleItem {
 	public TextStop()
 	{
 		setPriority(3);
-		setName("stop");
+		setName("TextStop");
 		setGraphicsName("TextStop");
 	}
 
@@ -19,6 +19,11 @@ public class TextStop extends RuleItem {
 
 	@Override
 	public boolean isWord() {
+		return false;
+	}
+
+	@Override
+	public boolean isAction() {
 		return true;
 	}
 }

@@ -1,0 +1,14 @@
+{
+    "Wall" : "TextWall",
+    "TextWall" : "Wall",
+    "Rock" : "TextRock",
+    "TextRock" : "Rock",
+    "Flag" : "TextFlag",
+    "TextFlag" : "Flag",
+    "Baba" : "TextBaba",
+    "TextBaba" : "Baba",
+    "Water" : "TextGoop",
+    "TextGoop" : "Water"
+
+
+}

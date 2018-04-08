@@ -8,7 +8,7 @@ public class TextRock extends RuleItem {
 	public TextRock()
 	{
 		setPriority(3);
-		setName("text_rock");
+		setName("TextRock");
 		setGraphicsName("TextRock");
 	}
 
@@ -20,5 +20,10 @@ public class TextRock extends RuleItem {
 	@Override
 	public boolean isWord() {
 		return true;
+	}
+
+	@Override
+	public boolean isAction() {
+		return false;
 	}
 }

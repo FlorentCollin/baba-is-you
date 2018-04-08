@@ -8,7 +8,7 @@ public class TextFlag extends RuleItem {
 	public TextFlag()
 	{
 		setPriority(3);
-		setName("text_flag");
+		setName("TextFlag");
 		setGraphicsName("TextFlag");
 	}
 
@@ -20,5 +20,10 @@ public class TextFlag extends RuleItem {
 	@Override
 	public boolean isWord() {
 		return true;
+	}
+
+	@Override
+	public boolean isAction() {
+		return false;
 	}
 }

@@ -8,7 +8,7 @@ public class TextBaba extends RuleItem {
 	public TextBaba()
 	{
 		setPriority(3);
-		setName("text_baba");
+		setName("TextBaba");
 		setGraphicsName("TextBaba");
 	}
 	
@@ -20,6 +20,11 @@ public class TextBaba extends RuleItem {
 	@Override
 	public boolean isWord() {
 		return true;
+	}
+
+	@Override
+	public boolean isAction() {
+		return false;
 	}
 	
 }

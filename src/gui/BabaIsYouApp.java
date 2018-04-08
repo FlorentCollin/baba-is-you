@@ -33,7 +33,7 @@ public class BabaIsYouApp extends Application {
 		String[] listOfLevels = LevelManager.getListOfLevels();
 		board = LevelManager.readLevel(listOfLevels[0]);
 //		board = LevelManager.readLevel("testLvl");
-		Rules.scanRules(board.getBoard());
+		board.scanRules();
 		board.searchPlayers();
 				
 		Group root = new Group();

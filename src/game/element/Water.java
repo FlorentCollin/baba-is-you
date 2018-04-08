@@ -6,13 +6,13 @@ package game.element;
  */
 public class Water extends Item implements IRealItem {
 
-	Class typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextWall)
+	Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextWall)
 	
-	public Water(Class typeText)
+	public Water(Class<?> typeText)
 	{
 		this.typeText = typeText;
 		setPriority(1);
-		setName("water");
+		setName("Water");
 		setGraphicsName("liquidWater");
 	}
 	

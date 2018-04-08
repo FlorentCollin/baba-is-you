@@ -8,7 +8,7 @@ public class TextWall extends RuleItem {
 	public TextWall()
 	{
 		setPriority(3);
-		setName("text_wall");
+		setName("TextWall");
 		setGraphicsName("TextWall");
 	}
 
@@ -20,6 +20,11 @@ public class TextWall extends RuleItem {
 	@Override
 	public boolean isWord() {
 		return true;
+	}
+
+	@Override
+	public boolean isAction() {
+		return false;
 	}
 }
 
