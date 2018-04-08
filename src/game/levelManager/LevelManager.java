@@ -55,6 +55,7 @@ public class LevelManager {
 		String[] list;
 		Cell cellToChange;
 		Item itemToAdd = null; // on l'initialise car on l'utilise dans un try catch donc il est possible qu'il ne soit pas initialisé après
+		int levelNumber = 0;
 		int rows; //Lignes
 		int cols; //Colonnes
 		int rowsOfBoard = 0; //Nombre de lignes de la map
@@ -68,10 +69,12 @@ public class LevelManager {
         } catch (FileNotFoundException fnfex) {
             System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
         }
-        
+        // Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...)
         // Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
         // Et pré remplissage de la map
         try {
+        	line = br.readLine();
+        	levelNumber = Integer.parseInt(line.split(" ")[1]);
         	line = br.readLine();
         	rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
         	colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
@@ -130,7 +133,7 @@ public class LevelManager {
             System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
         } 
         
-		return new Board(array, rowsOfBoard, colsOfBoard);
+		return new Board(array, levelNumber, rowsOfBoard, colsOfBoard);
 	}
 	
 	/**
@@ -144,7 +147,9 @@ public class LevelManager {
 		try {
 			File save = new File("saveLvl.txt"); //Nom du fichier dans lequel on va faire la savegarde
 			bw = new BufferedWriter(new FileWriter(save));
-			bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la première ligne qui désigne le nombre de lignes et de colonnes de la map
+			bw.write("LVL " + board.getLevelNumber()); //Ajout de la première ligne qui désigne le numéro du niveau 
+			bw.newLine(); 
+			bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
 			bw.newLine();
 			//Itération sur toute la map pour récupérer les Items
 			for(Cell[] element1 : board.getBoard())

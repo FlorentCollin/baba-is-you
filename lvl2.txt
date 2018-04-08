@@ -1,3 +1,4 @@
+LVL 2
 18 18
 wall 8 4
 wall 9 4

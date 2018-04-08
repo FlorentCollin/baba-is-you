@@ -11,17 +11,19 @@ import game.levelManager.Tuple;
 public class Board {
 	
 	private Cell[][] board; //map
-	private ArrayList<Tuple> players;
 	private int rows; // nombre de lignes
 	private int cols; // nombre de colonnes
+	private int LevelNumber; // Numéro du niveau (ex LVL 1, LVL 2,...)
+	private ArrayList<Tuple> players;
 	private ArrayList<Tuple> changedCells = new ArrayList<>();
 	
 
 	
 
-	public Board(Cell[][] board, int rows, int cols)
+	public Board(Cell[][] board, int LevelNumber, int rows, int cols)
 	{
 		this.board = board;
+		this.LevelNumber = LevelNumber;
 		this.rows = rows;
 		this.cols = cols;
 	}
@@ -50,6 +52,16 @@ public class Board {
 		board[y][x] = c; 
 	}
 	
+	public int getLevelNumber() {
+		return LevelNumber;
+	}
+
+
+	public void setLevelNumber(int levelNumber) {
+		LevelNumber = levelNumber;
+	}
+
+
 	public ArrayList<Tuple> getPlayers()
 	{
 		return players;

@@ -23,14 +23,13 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	
-	private static int LevelCounter = 0;
 	private final static int CELL_SIZE = 48;
 	private static Board board;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		String[] listOfLevels = LevelManager.getListOfLevels();
-		board = LevelManager.readLevel(listOfLevels[LevelCounter]);
+		board = LevelManager.readLevel(listOfLevels[0]);
 //		board = LevelManager.readLevel("testLvl");
 		Rules.scanRules(board.getBoard());
 		board.searchPlayers();
@@ -71,12 +70,34 @@ public class Main extends Application {
 				case "D": direction = 1 ; break;
 				case "S": direction = 2 ; break;
 				case "Q": direction = 3 ; break;
-				case "X": board.saveLvl(); return;
-				case "R" : 
-					board = LevelManager.readLevel(listOfLevels[LevelCounter]);
+				case "X": board.saveLvl(); return; //Sauvegarde le niveau en cours
+				case "L": //Charge la sauvegarde
+					board = LevelManager.readLevel("saveLvl"); 
 					Rules.scanRules(board.getBoard());
 					board.searchPlayers();
 					drawBoard(canvas, board);
+					return;
+				case "R": //Reinitialise le niveau en cours
+					board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
+					Rules.scanRules(board.getBoard());
+					board.searchPlayers();
+					drawBoard(canvas, board);
+					return;
+				case "DIGIT1": //Charge le niveau précédent
+					if(board.getLevelNumber()-2>=0) {
+						board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()-2]);
+						Rules.scanRules(board.getBoard());
+						board.searchPlayers();
+						drawBoard(canvas, board);
+					}
+					return;
+				case "DIGIT2": //Charge le niveau suivant
+					if(board.getLevelNumber()<=listOfLevels.length-1) {
+						board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
+						Rules.scanRules(board.getBoard());
+						board.searchPlayers();
+						drawBoard(canvas, board);
+					}
 					return;
 				default : return;
 				}
@@ -99,13 +120,12 @@ public class Main extends Application {
 				board.searchPlayers();
 				if(board.isWin()) 
 				{
-					LevelCounter++;
-					if(LevelCounter>3)
+					if(board.getLevelNumber()>3)
 					{
 						primaryStage.close();
 						return;
 					}
-					board = LevelManager.readLevel(listOfLevels[LevelCounter]);
+					board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()]); //Charge le prochain niveau
 					Rules.scanRules(board.getBoard());
 					board.searchPlayers();
 					drawBoard(canvas, board);
