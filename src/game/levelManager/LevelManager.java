@@ -63,7 +63,7 @@ public class LevelManager {
 		
 		// Ouverture du fichier
         try{
-            File file = new File(nameLevel);
+            File file = new File("levels/"+nameLevel);
             System.out.println(file.getAbsolutePath());
             br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
         } catch (FileNotFoundException fnfex) {
@@ -145,7 +145,7 @@ public class LevelManager {
 		BufferedWriter bw = null;
 		
 		try {
-			File save = new File("saveLvl.txt"); //Nom du fichier dans lequel on va faire la savegarde
+			File save = new File("levels/saveLvl.txt"); //Nom du fichier dans lequel on va faire la savegarde
 			bw = new BufferedWriter(new FileWriter(save));
 			bw.write("LVL " + board.getLevelNumber()); //Ajout de la première ligne qui désigne le numéro du niveau 
 			bw.newLine(); 

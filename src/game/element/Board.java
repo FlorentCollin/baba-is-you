@@ -67,6 +67,10 @@ public class Board {
 		return players;
 	}
 	
+	/**
+	 * Méthode qui va renvoyer l'ensemble des cellules changées et qui va remettre à 0 cette liste
+	 * @return Les cellules changées
+	 */
 	public ArrayList<Tuple> getAndResetChangedCells() {
 		ArrayList<Tuple> temp = changedCells;
 		for(Tuple element : changedCells)
@@ -94,7 +98,7 @@ public class Board {
 	}
 
 	/**
-	 * Méthode qui va scanner les règles et ajuster le plateau en fonction
+	 * Méthode qui va scanner les règles et ajuster la map en fonction
 	 * 
 	 */
 	public void scanRules()
@@ -124,7 +128,7 @@ public class Board {
 				{
 					if(list.get(k).isRepresentedBy(baseItem))
 					{
-						//TODO ?????????? Petit problème d'implémentation
+						//TODO ??? Petit problème d'implémentation
 					}
 				}
 			}
@@ -140,6 +144,7 @@ public class Board {
 	public boolean isWin()
 	{
 		IRule wordInRule = whoIsWin(); //Récupération de l'item gagnant
+		//Optimisation de l'algo pour éviter d'itérer sur l'entièreté des joueurs si il n'y a pas d'item gagnant
 		if(wordInRule == null)
 		{
 			return false;
@@ -163,6 +168,7 @@ public class Board {
 	 */
 	private IRule whoIsWin()
 	{
+		//Itération sur la liste des règles actives
 		for(IRule[] element : Rules.getListOfRulesActives())
 		{
 			if(element[2] instanceof TextWin)
@@ -181,19 +187,24 @@ public class Board {
 	{
 		players = new ArrayList<>();
 		ArrayList<IRule> playerIs = whoIsPlayer();
+		//Optimisation de l'algo qui évite de parcourir l'entièreté de la map si il n'y a aucun joueur
 		if(playerIs.size() == 0)
 		{
 			return;
 		}
+		//Itération sur l'entièreté de la map pour rechercher les joueurs
 		for(int y = 0; y < cols; y++)
 		{
 			for(int x = 0; x < rows; x++)
 			{
 				ArrayList<Item> list = board[y][x].getList();
+				//Le z correspond à l'index dans la liste d'Item de la cellule et ici on itère sur la liste d'Item
 				for(int z = 0; z < list.size(); z++)
 				{
+					//Itération sur la list des joueurs
 					for(IRule OnePlayer : playerIs)
 					{
+						//Si l'Item est un joueur alors on ajoute un Tuple(x,y,z) qui correspond au coordonnées du joueur dans la map
 						if(list.get(z) instanceof IRealItem && ((IRealItem) list.get(z)).isRepresentedBy(OnePlayer))
 						{
 							players.add(new Tuple(x,y,z));
@@ -210,7 +221,10 @@ public class Board {
 	 */
 	public ArrayList<IRule> whoIsPlayer()
 	{
+		//Note : on renvoit une ArrayList<IRule> car il est possible d'avoir plusieurs sortes de joueurs en même temps
+		//Exemple "BABA is YOU" et "WALL is YOU"
 		ArrayList<IRule> playerIs = new ArrayList<>();
+		//Itération sur l'ensemble des règles
 		for(IRule[] element : Rules.getListOfRulesActives())
 		{
 			if(element[2] instanceof TextYou)
@@ -251,27 +265,29 @@ public class Board {
 	 */
 	public boolean move(int x1, int y1, int z, int direction)
 	{
+		//Copie des coordonnées
 		int x2 = x1;
 		int y2 = y1;
 		Cell cellToMove = board[y1][x1];
-		if(cellToMove.isEmpty())
+		if(cellToMove.isEmpty()) //Si la cellule est vide alors on peut forément bouger tous les éléments précédents
 		{
 			return true;
 		}
-		if(z == -1 || z > cellToMove.getList().size()-1)
+		if(z == -1 || z > cellToMove.getList().size()-1) //On remet l'index de la liste de la Cellule s'il est trop loin au dernier élement
 		{
 			z = cellToMove.getList().size()-1;
 		}
 		switch(direction)
 		{
-		case 0: y2--; break;
-		case 1: x2++; break;
-		case 2: y2++; break;
-		case 3: x2--; break;
+		case 0: y2--; break; //UP
+		case 1: x2++; break; //RIGHT
+		case 2: y2++; break; //DOWN
+		case 3: x2--; break; //LEFT
 		}
 		Cell nextCell = board[y2][x2];
 		if(! nextCell.isEmpty())
 		{
+			//On vérifie en premier si le prochain item est sous la règle "STOP", si c'est le cas cela indique qu'on ne peut pas bouger cellToMove
 			if(nextCell.lastItem().isStop())
 			{
 				return false;
@@ -281,29 +297,34 @@ public class Board {
 				//Ajout des cellules qui doivent être repeinte par la partie graphique
 				changedCells.add(new Tuple(x1,y1,0));
 				changedCells.add(new Tuple(x2,y2,0));
-				cellToMove.remove(z);
-				nextCell.removeItem(nextCell.lastItem());
+				cellToMove.remove(z); //On "tue" la cellule à bouger
+				nextCell.removeItem(nextCell.lastItem()); //On retire la cellule qui "tue"
 				return true;
 			}
+			//PARTIE RECURSIVE ! 
+			//Si le prochain item est sous la règle "PUSH" alors on applique la méthode "move" au prochain item
 			else if(nextCell.lastItem().isPushable())
 			{
-				if(move(x2, y2, -1, direction))
+				if(move(x2, y2, -1, direction)) //Comme "move" est une fonction booléenne si l'item suivant à été bouger alors cellToMove peut aussi bouger 
 				{
 					changeItemCell(x1, y1, x2, y2, z);
 					return true;
 				}
 			}
+			//Si la prochaine case n'est pas vide mais qu'aucune des règles qui modifient "move" ne sont actives dessus alors on peut bouger cellToMove
 			else
 			{
 				changeItemCell(x1, y1, x2, y2, z);
 				return true;
 			}
 		}
+		//Si la prochaine case est vide alors on peut forcément bouger cellToMove
 		else
 		{
 			changeItemCell(x1, y1, x2, y2, z);
 			return true;
 		}
+		//Comme l'entièreté des "return" sont dans des if else on retourne false pour être sûr d'avoir une valeur de retour
 		return false;
 	}
 	

@@ -9,7 +9,6 @@ package console;
 
 /* A AJOUTER
  *  Les Téléporteurs (idée méga intéressante !)
- *  Système de sauvegardes
  *  EDITEUR DE NIVEAUX
  */
 

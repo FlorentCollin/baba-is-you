@@ -1,0 +1,21 @@
+<project name="Baba is You (Florent COLLIN et Valentin ANTOINE)">
+	<target name="build">
+		<mkdir dir="build"/>
+		<javac srcdir="src" destdir="build" classpath="lib/junit-4.12.jar"/>
+		<copy todir="build/ressources">
+		<fileset dir="ressources" includes="*.png"/>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="build"/>
+		<delete dir="doc"/>
+	</target>
+	<target name="doc">
+		<mkdir dir="doc"/>
+		<javadoc destdir="doc" sourcepath="src"/>
+	</target>
+	<target name="run" depends="build">
+		<java classname="gui.BabaIsYouApp" fork="true" classpath="build"/>
+	</target>	 
+</project>
+

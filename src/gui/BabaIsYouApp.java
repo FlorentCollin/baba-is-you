@@ -8,6 +8,7 @@ import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,12 +17,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
  * 
  */
-public class Main extends Application {
+public class BabaIsYouApp extends Application {
 	
 	private final static int CELL_SIZE = 48;
 	private static Board board;
@@ -37,10 +39,11 @@ public class Main extends Application {
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
+		primaryStage.setTitle("BABA IS YOU");
 //		primaryStage.setMaximized(true);
 //		primaryStage.setFullScreen(true);
-//		primaryStage.initStyle(StageStyle.UNDECORATED);
-//		scene.setCursor(Cursor.NONE);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+		scene.setCursor(Cursor.NONE);
 		Canvas canvas = new Canvas(960, 960);
 		root.getChildren().add(canvas);
 		
@@ -48,8 +51,8 @@ public class Main extends Application {
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		
-//		holder.setStyle("-fx-background-color: #1c1f22");
-		holder.setStyle("-fx-background-color: #161616");
+		holder.setStyle("-fx-background-color: #1c1f22");
+//		holder.setStyle("-fx-backgroudnd-color: #161616");
 		
 		drawBoard(canvas, board);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
