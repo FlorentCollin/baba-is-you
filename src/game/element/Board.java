@@ -223,6 +223,7 @@ public class Board {
 		changedCells.add(new Tuple(x2,y2,0));
 		Item itemChange =  board[y1][x1].remove(z);
 		board[y2][x2].add(itemChange);
+		// Si un item de Règle est bougé alors on rescan les règles
 		if(itemChange instanceof IRule)
 			Rules.scanRules(board);
 	}

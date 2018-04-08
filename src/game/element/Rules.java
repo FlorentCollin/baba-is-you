@@ -47,6 +47,9 @@ public class Rules {
 							{
 								scanRight(array, j, i); // Ajout de la règle horizontal si elle existe
 							}
+							// On doit de nouveau instancier une nouvelle règle au cas où ScanRight en a déjà trouvé une
+							ruleToAdd = new IRule[3];
+							ruleToAdd[0] = iRuleElement;
 							if(j <= rows-2)
 							{
 								scanDown(array, j, i);	// Ajout de la règle vertical si elle existe

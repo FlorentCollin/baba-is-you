@@ -4,13 +4,13 @@ package console;
  * Le jeu ne gère pas la règle ROCK IS WALL
  * Test unitaires
  * rapport
- * commentaires
- * Bug connu : Lorsqu'il y a la règle baba is push et baba is you en même temps la liste des règles est incorrecte
+ * commentaires : il ne reste quasimenent plus que les commentaires de la classe Board
  */
 
 /* A AJOUTER
  *  Les Téléporteurs (idée méga intéressante !)
  *  Système de sauvegardes
+ *  EDITEUR DE NIVEAUX
  */
 
 import java.util.Scanner;
