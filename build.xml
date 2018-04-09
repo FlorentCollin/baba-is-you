@@ -1,10 +1,12 @@
 <project name="Baba is You (Florent COLLIN et Valentin ANTOINE)">
 	<target name="build">
 		<mkdir dir="build"/>
-		<javac srcdir="src" destdir="build">
-		    <classpath>
-		        <pathelement path="lib/json-simple-1.1:lib/junit-4.12.jar"/>
-		    </classpath>
+		<javac srcdir="src" destdir="build" includeantruntime="false">
+	        <classpath>
+	               <fileset dir="lib">
+	                  <include name="**/*.jar" />
+	               </fileset>
+	         </classpath>
 		</javac>
 		<copy todir="build/ressources">
 		<fileset dir="ressources" includes="*.png"/>
@@ -16,7 +18,13 @@
 	</target>
 
 	<target name="run" depends="build">
-		<java classname="gui.BabaIsYouApp" fork="true" classpath="build"/>
-	</target>	 
+		<java classname="gui.BabaIsYouApp" fork="true" classpath="build">
+	        <classpath>
+	               <fileset dir="lib">
+	                  <include name="**/*.jar" />
+	               </fileset>
+	         </classpath>
+		</java>
+	</target>	
 </project>
 
