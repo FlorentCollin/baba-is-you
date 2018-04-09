@@ -20,7 +20,6 @@ public class Board {
 	
 
 	
-
 	public Board(Cell[][] board, int LevelNumber, int rows, int cols)
 	{
 		this.board = board;
@@ -84,6 +83,7 @@ public class Board {
 	
 	/**
 	 * Méthode qui va supprimer tous les doublons d'Item dans une cellule, par exemple [Wall, Wall, Wall] --> [Wall]
+	 * Cette méthode va être très utile pour optimiser la vitesse du programme
 	 * @param cellToChange Cellule sur laquelle la méthode va agir
 	 */
 	public void removeAllOccurenceInACell(Cell cellToChange)
@@ -95,7 +95,6 @@ public class Board {
 				list.remove(index+1);
 			}
 		}
-			
 	}
 
 	/**
