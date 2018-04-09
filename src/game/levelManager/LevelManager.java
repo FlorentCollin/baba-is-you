@@ -109,7 +109,7 @@ public class LevelManager {
 	
 	/**
 	 * Méthode qui va retourner la classe d'un item à partir d'un string
-	 * @param str le string sur lequel on doit trouver l'item
+	 * @param str le string sur lequel on veut trouver l'item
 	 * @return la classe d'un Item
 	 */
 	public static Class<?> getClassFromString(String str)
@@ -118,9 +118,10 @@ public class LevelManager {
 		 * Ce principe va nous permettre de trouver une class à partir d'un String
 		 * Et donc d'éviter de devoir placer un switch(str) qui aurait du énumérer tous les éléments possible
 		 * On rend ainsi l'ajout de nouveaux items plus dynamique :)
+		 * Source : https://stackoverflow.com/questions/22439436/loading-a-class-from-a-different-package
 		 */
 		try {
-			return Class.forName("game.element."+str);
+			return Class.forName("game.element."+str); //Come les Class Item sont dans un autre package on doit indiquer où les trouver
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +133,8 @@ public class LevelManager {
 	 * (EX : Wall(TextWall.class), si l'Item a besoin d'un argument on va chercher sa comparaison dans un fichier json
 	 * @param str Le string duquel on veut créer l'Item
 	 * @return L'Item correspondant au string
-	 * @author Le code de la récuparation du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
+	 * @author Le code de la lecture du JSON vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
+	 * Et on utilise la lib "json-simple-1.1"
 	 */
 	public static Item createItem(String str)
 	{
@@ -194,7 +196,7 @@ public class LevelManager {
 	 * Et après avoir ouvert le fichier, la méthode va juste renvoyer la valeur de la clé donnée en paramètre
 	 * @param str La clé dont on veut connaître la correspondance dans le JSON
 	 * @return la valeur de la clé donnée en paramètre
-	 * @author Le code de la récuparation du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
+	 * @author Le code de la lecture du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
 	 */
 	public static String correspondingTextOrItem(String str)
 	{
@@ -203,7 +205,7 @@ public class LevelManager {
 				
 				Object obj = parser.parse(new FileReader("ressources/CorrespondingTextOrItem.json"));
 				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
-				return jsonObject.get(str).toString();				
+				return jsonObject.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -238,7 +240,7 @@ public class LevelManager {
 				{
 					for(Item element3 : element2.getList())
 					{
-						if(! element3.getName().equals("####"))
+						if(! element3.getName().equals("####")) //On pourrait optimiser en supprimant directement les colonnes concernées
 						{
 							bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
 							bw.newLine();
