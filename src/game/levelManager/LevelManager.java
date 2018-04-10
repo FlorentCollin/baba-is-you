@@ -14,9 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import game.element.Board;
+import game.boardController.Board;
+import game.boardController.Cell;
 import game.element.Boundary;
-import game.element.Cell;
 import game.element.Item;
 
 /**
@@ -26,8 +26,16 @@ import game.element.Item;
 public class LevelManager {
 	
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-	private static String[] listOfLevels = {"lvl1","lvl2","lvl3","lvl4"};
 //	private static String[] listOfLevels = {"testLvl"};
+	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},/*{"lvl4A", "lvl4B"}*/};
+	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans de jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
+	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
+	private static Board[] activesBoards;
+	
+	public static Board[] getActivesBoards()
+	{
+		return activesBoards;
+	}
 	
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
@@ -35,7 +43,7 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static Board readLevel(String nameLevel) 
+	public static void readLevel(String[] namesLevels) 
 	{
 		
 		BufferedReader br = null;
@@ -46,65 +54,70 @@ public class LevelManager {
 		Cell cellToChange;
 		Item itemToAdd = null; // on l'initialise car on l'utilise dans un try catch donc il est possible qu'il ne soit pas initialisé après
 		int levelNumber = 0;
+		int depthOfLevel = 0;
 		int rows; //Lignes
 		int cols; //Colonnes
 		int rowsOfBoard = 0; //Nombre de lignes de la map
 		int colsOfBoard = 0; //Nombre de colonnes de la map
-		
-		// Ouverture du fichier
-        try{
-            File file = new File("levels/"+nameLevel);
-            System.out.println(file.getAbsolutePath());
-            br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
-        } catch (FileNotFoundException fnfex) {
-            System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
-        }
-        // Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...)
-        // Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
-        // Et pré remplissage de la map
-        try {
-        	line = br.readLine();
-        	levelNumber = Integer.parseInt(line.split(" ")[1]);
-        	line = br.readLine();
-        	rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
-        	colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
-        	array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
-        	//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
-        	//Itération sur toutes les cellules de la map
-        	for(int i = 0; i < colsOfBoard; i++)
-        	{
-        		for(int j = 0; j< rowsOfBoard; j++)
-        		{
-        			// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
-        			if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
-        			{
-        				array[i][j] = new Cell(i,j, new Boundary());
-        			}
-        			else if(array[i][j] == null)
-        				array[i][j] = new Cell(i,j);
-        		}
-        	}
-        	// Lecture du reste du fichier
-            while((line = br.readLine()) != null)
-            {
-                list = line.split(" ");
-                rows = Integer.parseInt(list[1]);
-                cols = Integer.parseInt(list[2]);
-                word = list[0];
-                
-                // Choix de l'Item à ajouter en fonction du mot
-                itemToAdd = createItem(word);
-                //Ajout de l'item dans sa cellule
-             	cellToChange = array[cols][rows];
-             	cellToChange.add(itemToAdd);
-               	array[cols][rows] = cellToChange;
-                 
-            }
-        } catch (IOException ioex) {
-            System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
-        } 
-        
-		return new Board(array, levelNumber, rowsOfBoard, colsOfBoard);
+		activesBoards = new Board[namesLevels.length]; //On initialise le nombre de board qui vont être actifs simultanément
+		//On va charger chaque partie du Niveau (Pour les ajouter au final à activesBoards) 
+		for(int index = 0; index<namesLevels.length; index++)
+		{
+			// Ouverture du fichier
+			try{
+				File file = new File("levels/"+namesLevels[index]);
+				System.out.println(file.getAbsolutePath());
+				br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
+			} catch (FileNotFoundException fnfex) {
+				System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
+			}
+			// Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
+			// Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
+			// Et pré remplissage de la map
+			try {
+				line = br.readLine();
+				levelNumber = Integer.parseInt(line.split(" ")[1]);
+				depthOfLevel = Integer.parseInt(line.split(" ")[2]);
+				line = br.readLine();
+				rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
+				colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
+				array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
+				//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
+				//Itération sur toutes les cellules de la map
+				for(int i = 0; i < colsOfBoard; i++)
+				{
+					for(int j = 0; j< rowsOfBoard; j++)
+					{
+						// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
+						if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
+						{
+							array[i][j] = new Cell(i,j, new Boundary());
+						}
+						else if(array[i][j] == null)
+							array[i][j] = new Cell(i,j);
+					}
+				}
+				// Lecture du reste du fichier
+				while((line = br.readLine()) != null)
+				{
+					list = line.split(" ");
+					rows = Integer.parseInt(list[1]);
+					cols = Integer.parseInt(list[2]);
+					word = list[0];
+					
+					// Choix de l'Item à ajouter en fonction du mot
+					itemToAdd = createItem(word);
+					//Ajout de l'item dans sa cellule
+					cellToChange = array[cols][rows];
+					cellToChange.add(itemToAdd);
+					array[cols][rows] = cellToChange;
+					
+				}
+			} catch (IOException ioex) {
+				System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
+			} 
+			activesBoards[index] = new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard);
+		}
 	}
 	
 	/**
@@ -259,7 +272,7 @@ public class LevelManager {
 		
 	}
 	
-	public static String[] getListOfLevels()
+	public static String[][] getListOfLevels()
 	{
 		return listOfLevels;
 	}

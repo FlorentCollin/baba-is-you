@@ -12,8 +12,8 @@ package console;
 
 import java.util.Scanner;
 
-import game.element.Board;
-import game.element.Rules;
+import game.boardController.Board;
+import game.boardController.Rules;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
@@ -25,13 +25,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		String[] listOfLevels = LevelManager.getListOfLevels();
+		String[][] listOfLevels = LevelManager.getListOfLevels();
 		Board board = null;
 		String line;
 		int i=0;
 		while(i<listOfLevels.length)
 		{
-			board = LevelManager.readLevel(listOfLevels[i]);
 			while(true)
 			{
 				Rules.scanRules(board.getBoard());

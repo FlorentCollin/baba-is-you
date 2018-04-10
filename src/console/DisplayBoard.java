@@ -1,8 +1,9 @@
 package console;
 
 import java.util.ArrayList;
-import game.element.Board;
-import game.element.Cell;
+
+import game.boardController.Board;
+import game.boardController.Cell;
 import game.element.Item;
 
 /**

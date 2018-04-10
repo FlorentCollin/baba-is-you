@@ -1,9 +1,9 @@
 package gui;
 
-import game.element.Board;
-import game.element.Cell;
+import game.boardController.Board;
+import game.boardController.Cell;
+import game.boardController.Rules;
 import game.element.Item;
-import game.element.Rules;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.application.Application;
@@ -30,29 +30,26 @@ public class BabaIsYouApp extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		String[] listOfLevels = LevelManager.getListOfLevels();
-		board = LevelManager.readLevel(listOfLevels[0]);
-//		board = LevelManager.readLevel("testLvl");
-		board.scanRules();
-		board.searchPlayers();
+		String[][] listOfLevels = LevelManager.getListOfLevels();
+		LevelManager.readLevel(listOfLevels[0]);
+		board = LevelManager.getActivesBoards()[0];
 				
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("BABA IS YOU");
-//		primaryStage.setMaximized(true);
-//		primaryStage.setFullScreen(true);
-		primaryStage.initStyle(StageStyle.UNDECORATED);
-		scene.setCursor(Cursor.NONE);
 		Canvas canvas = new Canvas(960, 960);
 		root.getChildren().add(canvas);
+//		primaryStage.setMaximized(true);
+//		primaryStage.setFullScreen(true);
+//		scene.setCursor(Cursor.NONE);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
 		
 		StackPane holder = new StackPane();
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		
 		holder.setStyle("-fx-background-color: #1c1f22");
-//		holder.setStyle("-fx-backgroudnd-color: #161616");
 		
 		drawBoard(canvas, board);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -75,35 +72,32 @@ public class BabaIsYouApp extends Application {
 				case "Q": direction = 3 ; break;
 				case "X": board.saveLvl(); return; //Sauvegarde le niveau en cours
 				case "L": //Charge la sauvegarde
-					board = LevelManager.readLevel("saveLvl"); 
-					Rules.scanRules(board.getBoard());
-					board.searchPlayers();
+					LevelManager.readLevel(new String[]{"saveLvl"});
+					board = LevelManager.getActivesBoards()[0]; 
 					drawBoard(canvas, board);
 					return;
 				case "R": //Reinitialise le niveau en cours
-					board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
-					Rules.scanRules(board.getBoard());
-					board.searchPlayers();
+					LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
+					board = LevelManager.getActivesBoards()[0];
 					drawBoard(canvas, board);
 					return;
 				case "DIGIT1": //Charge le niveau précédent
-					if(board.getLevelNumber()-2>=0) {
-						board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()-2]);
-						Rules.scanRules(board.getBoard());
-						board.searchPlayers();
+					if(board.getLevelNumber()-1>=0) {
+						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
+						board = LevelManager.getActivesBoards()[0];
 						drawBoard(canvas, board);
 					}
 					return;
 				case "DIGIT2": //Charge le niveau suivant
-					if(board.getLevelNumber()<=listOfLevels.length-1) {
-						board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
-						Rules.scanRules(board.getBoard());
-						board.searchPlayers();
+					if(board.getLevelNumber()<listOfLevels.length-1) {
+						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
+						board = LevelManager.getActivesBoards()[0];
 						drawBoard(canvas, board);
 					}
 					return;
 				default : return;
 				}
+				
 				for(Tuple player: board.getPlayers())
 				{
 					board.move(player.getX(), player.getY(), player.getZ(), direction);
@@ -123,14 +117,13 @@ public class BabaIsYouApp extends Application {
 				board.searchPlayers();
 				if(board.isWin()) 
 				{
-					if(board.getLevelNumber()>3)
+					if(board.getLevelNumber()>2)
 					{
 						primaryStage.close();
 						return;
 					}
-					board = LevelManager.readLevel(listOfLevels[board.getLevelNumber()]); //Charge le prochain niveau
-					Rules.scanRules(board.getBoard());
-					board.searchPlayers();
+					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
+					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
 					drawBoard(canvas, board);
 				}
 			}});

@@ -1,7 +1,12 @@
-package game.element;
+package game.boardController;
 
 import java.util.ArrayList;
 
+import game.element.IRealItem;
+import game.element.IRule;
+import game.element.Item;
+import game.element.TextWin;
+import game.element.TextYou;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
@@ -15,17 +20,21 @@ public class Board {
 	private int rows; // nombre de lignes
 	private int cols; // nombre de colonnes
 	private int LevelNumber; // Numéro du niveau (ex LVL 1, LVL 2,...)
+	private int depthOfLevel; // Numérode la profondeur de niveau (ex LVL5_1, LVL5_2,...
 	private ArrayList<Tuple> players;
 	private ArrayList<Tuple> changedCells = new ArrayList<>();
 	
 
 	
-	public Board(Cell[][] board, int LevelNumber, int rows, int cols)
+	public Board(Cell[][] board, int LevelNumber, int depthOfLevel, int rows, int cols)
 	{
 		this.board = board;
 		this.LevelNumber = LevelNumber;
+		this.depthOfLevel = depthOfLevel;
 		this.rows = rows;
 		this.cols = cols;
+		scanRules();
+		searchPlayers();
 	}
 	
 	
@@ -59,6 +68,16 @@ public class Board {
 
 	public void setLevelNumber(int levelNumber) {
 		LevelNumber = levelNumber;
+	}
+
+
+	public int getDepthOfLevel() {
+		return depthOfLevel;
+	}
+
+
+	public void setDepthOfLevel(int depthOfLevel) {
+		this.depthOfLevel = depthOfLevel;
 	}
 
 
@@ -246,6 +265,14 @@ public class Board {
 			}
 		}
 		return playerIs;
+	}
+	
+	/**
+	 * Méthode qui va rechercher les téléporteurs actifs
+	 */
+	public void searchTp() //TP = TELEPORTEURS/PORTAILS
+	{
+//		ArrayList<IRule[]>
 	}
 	
 	/**

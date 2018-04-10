@@ -1,5 +1,7 @@
 package game.element;
 
+import game.boardController.Rules;
+
 /**
  * Classe abstraite servant de base à tous les éléments du jeu.
  * 

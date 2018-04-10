@@ -1,6 +1,9 @@
-package game.element;
+package game.boardController;
 
 import java.util.ArrayList;
+
+import game.element.IRule;
+import game.element.Item;
 /**
  * Classe gérant l'entiereté des règles du jeu
  * Se base sur ce principe : Une méthode qui analalyse tout le plateau et ajoute toutes les règles en cours dans une liste 

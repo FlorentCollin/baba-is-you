@@ -1,6 +1,8 @@
-package game.element;
+package game.boardController;
 
 import java.util.ArrayList;
+
+import game.element.Item;
 
 /**
  * Classe représentant une cellule de la map et qui contient une liste d'Item ce qui permettra d'avoir plusieurs Items superposés
