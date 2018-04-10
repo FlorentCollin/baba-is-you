@@ -2,13 +2,12 @@ package gui;
 
 import game.boardController.Board;
 import game.boardController.Cell;
-import game.boardController.Rules;
+import game.boardController.MoveController;
 import game.element.Item;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -33,7 +32,7 @@ public class BabaIsYouApp extends Application {
 		String[][] listOfLevels = LevelManager.getListOfLevels();
 		LevelManager.readLevel(listOfLevels[0]);
 		board = LevelManager.getActivesBoards()[0];
-				
+		board.searchPlayers();
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -43,7 +42,7 @@ public class BabaIsYouApp extends Application {
 //		primaryStage.setMaximized(true);
 //		primaryStage.setFullScreen(true);
 //		scene.setCursor(Cursor.NONE);
-		primaryStage.initStyle(StageStyle.UNDECORATED);
+//		primaryStage.initStyle(StageStyle.UNDECORATED);
 		
 		StackPane holder = new StackPane();
 		holder.getChildren().add(canvas);
@@ -74,24 +73,44 @@ public class BabaIsYouApp extends Application {
 				case "L": //Charge la sauvegarde
 					LevelManager.readLevel(new String[]{"saveLvl"});
 					board = LevelManager.getActivesBoards()[0]; 
+					board.searchPlayers();
 					drawBoard(canvas, board);
 					return;
 				case "R": //Reinitialise le niveau en cours
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
 					board = LevelManager.getActivesBoards()[0];
+					board.searchPlayers();
 					drawBoard(canvas, board);
 					return;
-				case "DIGIT1": //Charge le niveau précédent
-					if(board.getLevelNumber()-1>=0) {
-						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
-						board = LevelManager.getActivesBoards()[0];
+				case "DIGIT1":
+					if(board.getDepthOfLevel()-1>=0)
+					{
+						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
+						board.searchPlayers();
 						drawBoard(canvas, board);
 					}
 					return;
-				case "DIGIT2": //Charge le niveau suivant
+				case "DIGIT2":
+					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
+					{
+						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
+						board.searchPlayers();
+						drawBoard(canvas, board);
+					}
+					return;
+				case "DIGIT9": //Charge le niveau précédent
+					if(board.getLevelNumber()-1>=0) {
+						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
+						board = LevelManager.getActivesBoards()[0];
+						board.searchPlayers();
+						drawBoard(canvas, board);
+					}
+					return;
+				case "DIGIT0": //Charge le niveau suivant
 					if(board.getLevelNumber()<listOfLevels.length-1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
+						board.searchPlayers();
 						drawBoard(canvas, board);
 					}
 					return;
@@ -100,7 +119,7 @@ public class BabaIsYouApp extends Application {
 				
 				for(Tuple player: board.getPlayers())
 				{
-					board.move(player.getX(), player.getY(), player.getZ(), direction);
+					MoveController.move(board, player.getX(), player.getY(), player.getZ(), direction);
 				}
 				map = board.getBoard();
 				for(Tuple cellChanged : board.getAndResetChangedCells())
@@ -117,13 +136,15 @@ public class BabaIsYouApp extends Application {
 				board.searchPlayers();
 				if(board.isWin()) 
 				{
-					if(board.getLevelNumber()>2)
+//					System.out.println(board.getLevelNumber() + " : " + listOfLevels.length);
+					if(board.getLevelNumber()>=listOfLevels.length-1)
 					{
 						primaryStage.close();
 						return;
 					}
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
+					board.searchPlayers();
 					drawBoard(canvas, board);
 				}
 			}});

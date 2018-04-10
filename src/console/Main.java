@@ -10,6 +10,8 @@ package console;
  *  EDITEUR DE NIVEAUX
  */
 
+
+// NE FONCTIONNE PLUS ATTENTION !!!
 import java.util.Scanner;
 
 import game.boardController.Board;
@@ -33,7 +35,7 @@ public class Main {
 		{
 			while(true)
 			{
-				Rules.scanRules(board.getBoard());
+//				Rules.scanRules(board.getBoard());
 				board.searchPlayers();
 				DisplayBoard.display(board);
 				if(board.isWin())
@@ -71,7 +73,7 @@ public class Main {
 				}
 				for(Tuple player : board.getPlayers())
 				{
-					System.out.println("Something move ? " + board.move(player.getX(), player.getY(), player.getZ(), direction));
+//					System.out.println("Something move ? " + board.move(player.getX(), player.getY(), player.getZ(), direction));
 				}
 				
 			}

@@ -1,15 +1,15 @@
 package game.element;
 
 /**
- * Mot Règle "PUSH"
+ * Mot Règle "ON"
  */
-public class TextPush extends RuleItem {
+public class TextOn extends RuleItem {
 
-	public TextPush()
+	public TextOn()
 	{
 		setPriority(3);
-		setName("TextPush");
-		setGraphicsName("TextPush");
+		setName("TextOn");
+		setGraphicsName("TextOn");
 	}
 
 	@Override

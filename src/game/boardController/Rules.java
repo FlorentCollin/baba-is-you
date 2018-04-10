@@ -22,40 +22,45 @@ public class Rules {
 	 * Méthode qui va analyser la map pour sortir les règles actives.
 	 * @param board La map.
 	 */
-	public static ArrayList<IRule[]> scanRules(Cell[][] array)
+	public static ArrayList<IRule[]> scanRules(Board[] boards)
 	{
 		listOfRulesActives = new ArrayList<>();
-		int rows = array.length; // On récupère le nombre de lignes et de colonnes de la map
-		int cols = array[0].length;
-		/*
-		 * Itération sur chaque Cellule du tableau
-		 */
-		for(int i = 0; i < cols; i++)
+		Cell[][] array;
+		for(Board oneBoard : boards)
 		{
-			for(int j = 0; j < rows; j++)
+			array = oneBoard.getBoard();
+			int rows = array.length; // On récupère le nombre de lignes et de colonnes de la map
+			int cols = array[0].length;
+			/*
+			 * Itération sur chaque Cellule du tableau
+			 */
+			for(int i = 0; i < cols; i++)
 			{
-				// Chaque cellule est composé d'une liste d'Item
-				ArrayList<Item> list = array[i][j].getList(); // On récupère la liste d'Item
-				// Itération sur la liste d'Item
-				for(Item element : list) 
+				for(int j = 0; j < rows; j++)
 				{
-					if(element instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
+					// Chaque cellule est composé d'une liste d'Item
+					ArrayList<Item> list = array[i][j].getList(); // On récupère la liste d'Item
+					// Itération sur la liste d'Item
+					for(Item element : list) 
 					{
-						IRule iRuleElement = (IRule) element;
-						if(iRuleElement.isWord()) // Si l'élement est un nom commun alors c'est peut être le début d'une règle
+						if(element instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 						{
-							ruleToAdd = new IRule[3];
-							ruleToAdd[0] = iRuleElement;
-							if(i <= cols-2)
+							IRule iRuleElement = (IRule) element;
+							if(iRuleElement.isWord()) // Si l'élement est un nom commun alors c'est peut être le début d'une règle
 							{
-								scanRight(array, j, i); // Ajout de la règle horizontal si elle existe
-							}
-							// On doit de nouveau instancier une nouvelle règle au cas où ScanRight en a déjà trouvé une
-							ruleToAdd = new IRule[3];
-							ruleToAdd[0] = iRuleElement;
-							if(j <= rows-2)
-							{
-								scanDown(array, j, i);	// Ajout de la règle vertical si elle existe
+								ruleToAdd = new IRule[3];
+								ruleToAdd[0] = iRuleElement;
+								if(i <= cols-2)
+								{
+									scanRight(array, j, i); // Ajout de la règle horizontal si elle existe
+								}
+								// On doit de nouveau instancier une nouvelle règle au cas où ScanRight en a déjà trouvé une
+								ruleToAdd = new IRule[3];
+								ruleToAdd[0] = iRuleElement;
+								if(j <= rows-2)
+								{
+									scanDown(array, j, i);	// Ajout de la règle vertical si elle existe
+								}
 							}
 						}
 					}

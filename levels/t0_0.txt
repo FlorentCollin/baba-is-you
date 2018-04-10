@@ -1,0 +1,14 @@
+LVL 0 0
+18 18
+TextBaba 3 3
+TextIs 4 3
+TextYou 5 3
+Baba 5 5
+TextPush 7 7
+TpBlue 6 5
+TextTpBlue 6 3
+TextIs 7 3
+TextOn 8 3
+TextOn 10 10
+TextWall 8 8
+Wall 12 12

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import game.element.IRealItem;
 import game.element.IRule;
 import game.element.Item;
+import game.element.TextOn;
 import game.element.TextWin;
 import game.element.TextYou;
 import game.levelManager.LevelManager;
@@ -20,7 +21,7 @@ public class Board {
 	private int rows; // nombre de lignes
 	private int cols; // nombre de colonnes
 	private int LevelNumber; // Numéro du niveau (ex LVL 1, LVL 2,...)
-	private int depthOfLevel; // Numérode la profondeur de niveau (ex LVL5_1, LVL5_2,...
+	private int depthOfLevel; // Numérode la profondeur de niveau (ex LVL5_1, LVL5_2,...)
 	private ArrayList<Tuple> players;
 	private ArrayList<Tuple> changedCells = new ArrayList<>();
 	
@@ -33,8 +34,6 @@ public class Board {
 		this.depthOfLevel = depthOfLevel;
 		this.rows = rows;
 		this.cols = cols;
-		scanRules();
-		searchPlayers();
 	}
 	
 	
@@ -75,15 +74,14 @@ public class Board {
 		return depthOfLevel;
 	}
 
-
-	public void setDepthOfLevel(int depthOfLevel) {
-		this.depthOfLevel = depthOfLevel;
-	}
-
-
 	public ArrayList<Tuple> getPlayers()
 	{
 		return players;
+	}
+	
+	public void addChangedCell(Tuple changedCell)
+	{
+		this.changedCells.add(changedCell);
 	}
 	
 	/**
@@ -122,7 +120,7 @@ public class Board {
 	 */
 	public void scanRules()
 	{
-		ArrayList<IRule[]> listOfActivesRules = Rules.scanRules(board);
+		ArrayList<IRule[]> listOfActivesRules = Rules.scanRules(LevelManager.getActivesBoards());
 		IRule element1;
 		IRule element2;
 		//Itération sur la liste des règles Actives pour savoir si il y a une règle du type "WALL is ROCK", "WALL IS BABA", etc,...
@@ -168,6 +166,15 @@ public class Board {
 		
 	}
 
+	public boolean isAnActiveTp(Item tp)
+	{
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(element[2] instanceof TextOn && tp.isRepresentedBy(element[0]))
+				return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Méthode qui va regarder la map et retourner true si le joueur est sur l'objet qui permet de réussir le niveau
@@ -303,6 +310,7 @@ public class Board {
 	 * @param direction direction dans laquelle l'item sera déplacer (0 == UP, 1 == RIGHT, 2 == DOWN, 3 == LEFT)
 	 * @return true si l'objet à été bougé, false sinon
 	 */
+	/*
 	public boolean move(int x1, int y1, int z, int direction)
 	{
 		//Copie des coordonnées
@@ -366,7 +374,7 @@ public class Board {
 		}
 		//Comme l'entièreté des "return" sont dans des if else on retourne false pour être sûr d'avoir une valeur de retour
 		return false;
-	}
+	} */
 	
 	/**
 	 * Méthode qui va sauvegarder le niveau en cours dans un fichier .txt

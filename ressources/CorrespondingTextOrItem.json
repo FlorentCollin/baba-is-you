@@ -8,7 +8,10 @@
     "Baba" : "TextBaba",
     "TextBaba" : "Baba",
     "Water" : "TextGoop",
-    "TextGoop" : "Water"
-
+    "TextGoop" : "Water",
+    "TpBlue" : "TextTpBlue",
+    "TextTpBlue" : "TpBlue",
+    "TpRed" : "TextTpRed",
+    "TextTpRed" : "TpRed"
 
 }

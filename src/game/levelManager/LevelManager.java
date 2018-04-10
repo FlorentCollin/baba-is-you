@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import game.boardController.Board;
 import game.boardController.Cell;
+import game.boardController.Rules;
 import game.element.Boundary;
 import game.element.Item;
 
@@ -26,8 +27,8 @@ import game.element.Item;
 public class LevelManager {
 	
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-//	private static String[] listOfLevels = {"testLvl"};
-	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},/*{"lvl4A", "lvl4B"}*/};
+//	private static String[][] listOfLevels = {{"t0_0","t0_1"}};
+	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},{"lvl4_0", "lvl4_1"}};
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans de jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static Board[] activesBoards;
@@ -118,6 +119,7 @@ public class LevelManager {
 			} 
 			activesBoards[index] = new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard);
 		}
+		Rules.scanRules(activesBoards);
 	}
 	
 	/**
