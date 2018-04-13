@@ -71,6 +71,10 @@ public class MoveController {
 			//Si la prochaine case n'est pas vide mais qu'aucune des règles qui modifient "move" ne sont actives dessus alors on peut bouger cellToMove
 			else
 			{
+				/* ICI on doit vérifier si la prochaine cellule est un téléporteur actif
+				 * Si c'est le cas alors on retire l'item de cellToMove dans le board et on ajoute dans le board suivant ou précédent
+				 * l'item que l'on vient de retirer (en fonction de si c'est un TP bleue ou un TP rouge)
+				 */
 				Item itemToAdd;
 				for(Item element : nextCell.getList())
 				{

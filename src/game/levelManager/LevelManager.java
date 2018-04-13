@@ -237,39 +237,42 @@ public class LevelManager {
 	 * Méthode qui va sauvegarder le niveau en cours dans un fichier externe et qui permettra de le recharger
 	 * @param board la map a sauvegarder
 	 */
-	public static void saveLvl(Board board)
+	public static void saveLvl()
 	{
 		BufferedWriter bw = null;
-		
-		try {
-			File save = new File("levels/saveLvl.txt"); //Nom du fichier dans lequel on va faire la savegarde
-			bw = new BufferedWriter(new FileWriter(save));
-			bw.write("LVL " + board.getLevelNumber()); //Ajout de la première ligne qui désigne le numéro du niveau 
-			bw.newLine(); 
-			bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
-			bw.newLine();
-			//Itération sur toute la map pour récupérer les Items
-			for(Cell[] element1 : board.getBoard())
-			{
-				for(Cell element2 : element1)
+		for(int index = 0; index<activesBoards.length; index++)
+		{
+			try {
+				Board board = activesBoards[index];
+				File save = new File("levels/saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
+				bw = new BufferedWriter(new FileWriter(save));
+				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
+				bw.newLine(); 
+				bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
+				bw.newLine();
+				//Itération sur toute la map pour récupérer les Items
+				for(Cell[] element1 : board.getBoard())
 				{
-					for(Item element3 : element2.getList())
+					for(Cell element2 : element1)
 					{
-						if(! element3.getName().equals("####")) //On pourrait optimiser en supprimant directement les colonnes concernées
+						for(Item element3 : element2.getList())
 						{
-							bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
-							bw.newLine();
+							if(! element3.getName().equals("####")) //On pourrait optimiser en supprimant directement les colonnes concernées
+							{
+								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
+								bw.newLine();
+							}
 						}
 					}
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					bw.close();
+				}
+				catch (Exception e) {}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				bw.close();
-			}
-			catch (Exception e) {}
 		}
 		
 	}

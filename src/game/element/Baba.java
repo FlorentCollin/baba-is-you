@@ -6,7 +6,7 @@ package game.element;
  */
 public class Baba extends Item implements IRealItem{
 
-	Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextRock)
+	private Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextRock)
 	
 	public Baba(Class<?> typeText)
 	{

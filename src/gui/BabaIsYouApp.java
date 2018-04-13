@@ -69,9 +69,9 @@ public class BabaIsYouApp extends Application {
 				case "D": direction = 1 ; break;
 				case "S": direction = 2 ; break;
 				case "Q": direction = 3 ; break;
-				case "X": board.saveLvl(); return; //Sauvegarde le niveau en cours
+				case "X": LevelManager.saveLvl(); return; //Sauvegarde le niveau en cours
 				case "L": //Charge la sauvegarde
-					LevelManager.readLevel(new String[]{"saveLvl"});
+					LevelManager.readLevel(new String[]{"saveLvl_0"});
 					board = LevelManager.getActivesBoards()[0]; 
 					board.searchPlayers();
 					drawBoard(canvas, board);
@@ -114,7 +114,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard(canvas, board);
 					}
 					return;
-				default : return;
+				default : return; // Si une autre touche est pressée une ne fait rien
 				}
 				
 				for(Tuple player: board.getPlayers())
