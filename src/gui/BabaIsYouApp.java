@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.File;
+
 import game.boardController.Board;
 import game.boardController.Cell;
 import game.boardController.MoveController;
@@ -32,7 +34,6 @@ public class BabaIsYouApp extends Application {
 		String[][] listOfLevels = LevelManager.getListOfLevels();
 		LevelManager.readLevel(listOfLevels[0]);
 		board = LevelManager.getActivesBoards()[0];
-		board.searchPlayers();
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -73,13 +74,11 @@ public class BabaIsYouApp extends Application {
 				case "L": //Charge la sauvegarde
 					LevelManager.readLevel(new String[]{"saveLvl_0"});
 					board = LevelManager.getActivesBoards()[0]; 
-					board.searchPlayers();
 					drawBoard(canvas, board);
 					return;
 				case "R": //Reinitialise le niveau en cours
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
 					board = LevelManager.getActivesBoards()[0];
-					board.searchPlayers();
 					drawBoard(canvas, board);
 					return;
 				case "DIGIT1":
@@ -102,7 +101,6 @@ public class BabaIsYouApp extends Application {
 					if(board.getLevelNumber()-1>=0) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
 						board = LevelManager.getActivesBoards()[0];
-						board.searchPlayers();
 						drawBoard(canvas, board);
 					}
 					return;
@@ -110,7 +108,6 @@ public class BabaIsYouApp extends Application {
 					if(board.getLevelNumber()<listOfLevels.length-1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
-						board.searchPlayers();
 						drawBoard(canvas, board);
 					}
 					return;
@@ -129,14 +126,13 @@ public class BabaIsYouApp extends Application {
 					gc.clearRect(x*CELL_SIZE, y*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 					for(Item element : map[y][x].getList())
 					{
-						imageItem = new Image("file:ressources/"+element.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+						imageItem = new Image("file:ressources"+File.separatorChar+element.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 						gc.drawImage(imageItem, x*CELL_SIZE, y*CELL_SIZE);
 					}
 				}
 				board.searchPlayers();
 				if(board.isWin()) 
 				{
-//					System.out.println(board.getLevelNumber() + " : " + listOfLevels.length);
 					if(board.getLevelNumber()>=listOfLevels.length-1)
 					{
 						primaryStage.close();
@@ -144,7 +140,6 @@ public class BabaIsYouApp extends Application {
 					}
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
-					board.searchPlayers();
 					drawBoard(canvas, board);
 				}
 			}});
@@ -166,7 +161,7 @@ public class BabaIsYouApp extends Application {
 			{
 				for(Item element3 : element2.getList())
 				{
-					imageItem = new Image("file:ressources/"+element3.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+					imageItem = new Image("file:ressources"+File.separatorChar+element3.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 					gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
 				}
 			}

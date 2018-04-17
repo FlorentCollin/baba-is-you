@@ -66,8 +66,7 @@ public class LevelManager {
 		{
 			// Ouverture du fichier
 			try{
-				File file = new File("levels/"+namesLevels[index]);
-				System.out.println(file.getAbsolutePath());
+				File file = new File("levels"+File.separatorChar+namesLevels[index]);
 				br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
 			} catch (FileNotFoundException fnfex) {
 				System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
@@ -102,16 +101,16 @@ public class LevelManager {
 				while((line = br.readLine()) != null)
 				{
 					list = line.split(" ");
-					rows = Integer.parseInt(list[1]);
-					cols = Integer.parseInt(list[2]);
+					cols = Integer.parseInt(list[1]);
+					rows = Integer.parseInt(list[2]);
 					word = list[0];
 					
 					// Choix de l'Item à ajouter en fonction du mot
 					itemToAdd = createItem(word);
 					//Ajout de l'item dans sa cellule
-					cellToChange = array[cols][rows];
+					cellToChange = array[rows][cols];
 					cellToChange.add(itemToAdd);
-					array[cols][rows] = cellToChange;
+					array[rows][cols] = cellToChange;
 					
 				}
 			} catch (IOException ioex) {
@@ -120,6 +119,11 @@ public class LevelManager {
 			activesBoards[index] = new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard);
 		}
 		Rules.scanRules(activesBoards);
+		//On recherche les différents joueurs sur tous les boards
+		for(Board board : activesBoards)
+		{
+			board.searchPlayers();
+		}
 	}
 	
 	/**
@@ -162,7 +166,7 @@ public class LevelManager {
 				JSONParser parser = new JSONParser();
 				try {
 					
-					Object obj = parser.parse(new FileReader("ressources/CorrespondingTextOrItem.json"));
+					Object obj = parser.parse(new FileReader("ressources"+File.separatorChar+"CorrespondingTextOrItem.json"));
 					JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString()); //Récupération de la class correspondante à l'Item (ex : wall --> TextWall.class)
 					try {
@@ -218,7 +222,7 @@ public class LevelManager {
 		JSONParser parser = new JSONParser();
 			try {
 				
-				Object obj = parser.parse(new FileReader("ressources/CorrespondingTextOrItem.json"));
+				Object obj = parser.parse(new FileReader("ressources"+File.separatorChar+"CorrespondingTextOrItem.json"));
 				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 				return jsonObject.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 			} catch (FileNotFoundException e) {
@@ -238,13 +242,15 @@ public class LevelManager {
 	 * @param board la map a sauvegarder
 	 */
 	public static void saveLvl()
-	{
+	{ 
+		
+		//A MODIFIER EN ENREGISTRANT DIRECTEMENT LES DIFFERENTS BOARDS DANS UN FICHIER AU LIEU DE TOUT REECRIRE COMME UN CON
 		BufferedWriter bw = null;
 		for(int index = 0; index<activesBoards.length; index++)
 		{
 			try {
 				Board board = activesBoards[index];
-				File save = new File("levels/saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
+				File save = new File("levels"+File.separatorChar+"saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
 				bw = new BufferedWriter(new FileWriter(save));
 				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
