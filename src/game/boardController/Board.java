@@ -12,7 +12,7 @@ import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 
 /**
- * Classe qui va gï¿½rer le plateau de jeu.
+ * Classe qui va gérer le plateau de jeu.
  *
  */
 public class Board {

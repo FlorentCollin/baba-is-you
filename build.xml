@@ -28,7 +28,7 @@
 		<delete dir="bin"/>
 	</target>
 	<target name="delete_save">
-		<delete file="levels/saveLvl.txt"/>
+		<delete dir="levels/saves"/>
 	</target>
 </project>
 

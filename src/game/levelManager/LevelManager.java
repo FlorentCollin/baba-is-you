@@ -66,7 +66,13 @@ public class LevelManager {
 		{
 			// Ouverture du fichier
 			try{
-				File file = new File("levels"+File.separatorChar+namesLevels[index]);
+				File file;
+				if(namesLevels[index].substring(0, 4).equals("save")) {
+					file = new File("levels"+File.separatorChar+"saves"+File.separatorChar+namesLevels[index]);
+				}
+				else {
+					file = new File("levels"+File.separatorChar+namesLevels[index]);
+				}
 				br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
 			} catch (FileNotFoundException fnfex) {
 				System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
@@ -242,15 +248,17 @@ public class LevelManager {
 	 * @param board la map a sauvegarder
 	 */
 	public static void saveLvl()
-	{ 
+	{
+		//On clean le dossier de sauvegarde pour écraser correctement les différentes profondeurs de niveaux
+		File saveDir = new File("levels"+File.separatorChar+"saves");
+		saveDir.delete();
 		
-		//A MODIFIER EN ENREGISTRANT DIRECTEMENT LES DIFFERENTS BOARDS DANS UN FICHIER AU LIEU DE TOUT REECRIRE COMME UN CON
 		BufferedWriter bw = null;
 		for(int index = 0; index<activesBoards.length; index++)
 		{
 			try {
 				Board board = activesBoards[index];
-				File save = new File("levels"+File.separatorChar+"saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
+				File save = new File("levels"+File.separatorChar+"saves"+File.separatorChar+"saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
 				bw = new BufferedWriter(new FileWriter(save));
 				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
@@ -280,7 +288,25 @@ public class LevelManager {
 				catch (Exception e) {}
 			}
 		}
+	}
+	
+	public static void loadSaveLvl()
+	{
+		File file = new File("levels"+File.separatorChar+"saves");
+		String[] listActivesBoards = file.list();
+		for(int index = 0; index<listActivesBoards.length; index++)
+		{
+//			System.out.println(listActivesBoards[index].substring(0, listActivesBoards[index].length()-4));
+			listActivesBoards[index] = listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
+		}
+		readLevel(listActivesBoards);
 		
+		
+//		for(int index = 0; index < listActivesBoards.length; index++)
+//		{
+//			listActivesBoards[index] = listActivesBoards[index].split(".")[0];
+//		}
+//		readLevel(listActivesBoards);
 	}
 	
 	public static String[][] getListOfLevels()

@@ -72,7 +72,7 @@ public class BabaIsYouApp extends Application {
 				case "Q": direction = 3 ; break;
 				case "X": LevelManager.saveLvl(); return; //Sauvegarde le niveau en cours
 				case "L": //Charge la sauvegarde
-					LevelManager.readLevel(new String[]{"saveLvl_0"});
+					LevelManager.loadSaveLvl();
 					board = LevelManager.getActivesBoards()[0]; 
 					drawBoard(canvas, board);
 					return;
