@@ -13,7 +13,7 @@ public class Water extends Item implements IRealItem {
 		this.typeText = typeText;
 		setPriority(1);
 		setName("Water");
-		setGraphicsName("liquidWater");
+		setGraphicsName("water");
 	}
 	
 	/**

@@ -13,7 +13,7 @@ public class Baba extends Item implements IRealItem{
 		this.typeText = typeText;
 		setPriority(4);
 		setName("Baba");
-		setGraphicsName("Baba");
+		setGraphicsName("baba");
 	}
 	
 	/**

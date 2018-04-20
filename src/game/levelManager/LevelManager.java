@@ -298,6 +298,11 @@ public class LevelManager {
 	public static void loadSaveLvl()
 	{
 		File file = new File("levels"+File.separatorChar+"saves");
+		if(file.list().length==0) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
+		{
+			readLevel(getListOfLevels()[0]);
+			return;
+		}
 		String[] listActivesBoards = file.list();
 		for(int index = 0; index<listActivesBoards.length; index++)
 		{
@@ -306,12 +311,6 @@ public class LevelManager {
 		}
 		readLevel(listActivesBoards);
 		
-		
-//		for(int index = 0; index < listActivesBoards.length; index++)
-//		{
-//			listActivesBoards[index] = listActivesBoards[index].split(".")[0];
-//		}
-//		readLevel(listActivesBoards);
 	}
 	
 	public static String[][] getListOfLevels()

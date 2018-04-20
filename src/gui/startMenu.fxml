@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BabaIsYouApp">
+   <children>
+      <ImageView fitHeight="1022.0" fitWidth="1020.0" layoutX="-21.0" layoutY="-23.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/Blur%20baba.PNG" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="179.0" fitWidth="265.0" layoutX="347.0" layoutY="217.0" onMousePressed="#playButtonClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/play.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="173.0" fitWidth="274.0" layoutX="343.0" layoutY="551.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/editor.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="736.0" layoutY="798.0" onMousePressed="#exitButtonClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/exit.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="157.0" fitWidth="233.0" layoutX="379.0" layoutY="395.0" onMouseClicked="#loadSaveButtonClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/loadSave.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

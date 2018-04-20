@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.io.IOException;
 
 import game.boardController.Board;
 import game.boardController.Cell;
@@ -10,7 +11,9 @@ import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,22 +31,48 @@ public class BabaIsYouApp extends Application {
 	
 	private final static int CELL_SIZE = 48;
 	private static Board board;
+	private static Scene menu, game;
+	private static Stage primaryStage;
+	private static Class<?> thisClass;
 	
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage Stage) throws Exception {
+			primaryStage = Stage;
+			thisClass = getClass();
+			loadMenu();
+			primaryStage.setTitle("BABA IS YOU");
+//			primaryStage.setMaximized(true);
+//			primaryStage.setFullScreen(true);
+//			scene.setCursor(Cursor.NONE);
+			primaryStage.initStyle(StageStyle.UNDECORATED);
+			primaryStage.show();
+	}
+	
+	public static void loadMenu() {
+		Parent root = null;
+		try {
+			root = FXMLLoader.load(thisClass.getResource("startMenu.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		menu = new Scene(root, 960, 960);
+		primaryStage.setScene(menu);
+	}
+	
+	
+	public static void loadLevel(int index)
+	{
 		String[][] listOfLevels = LevelManager.getListOfLevels();
-		LevelManager.readLevel(listOfLevels[0]);
+		if(index == -1)
+			LevelManager.loadSaveLvl();
+		else
+			LevelManager.readLevel(listOfLevels[index]);
 		board = LevelManager.getActivesBoards()[0];
 		Group root = new Group();
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-		primaryStage.setTitle("BABA IS YOU");
+		game = new Scene(root, 960, 960);
+		primaryStage.setScene(game);
 		Canvas canvas = new Canvas(960, 960);
 		root.getChildren().add(canvas);
-//		primaryStage.setMaximized(true);
-//		primaryStage.setFullScreen(true);
-//		scene.setCursor(Cursor.NONE);
-//		primaryStage.initStyle(StageStyle.UNDECORATED);
 		
 		StackPane holder = new StackPane();
 		holder.getChildren().add(canvas);
@@ -54,7 +83,7 @@ public class BabaIsYouApp extends Application {
 		drawBoard(canvas, board);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			int x;
 			int y;
 			int direction;
@@ -81,7 +110,7 @@ public class BabaIsYouApp extends Application {
 					board = LevelManager.getActivesBoards()[0];
 					drawBoard(canvas, board);
 					return;
-				case "DIGIT1":
+				case "A":
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
@@ -89,7 +118,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard(canvas, board);
 					}
 					return;
-				case "DIGIT2":
+				case "E":
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
@@ -97,19 +126,27 @@ public class BabaIsYouApp extends Application {
 						drawBoard(canvas, board);
 					}
 					return;
-				case "DIGIT9": //Charge le niveau précédent
+				case "SPACE":
+					board = LevelManager.getActivesBoards()[(board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().length];
+					board.searchPlayers();
+					drawBoard(canvas, board);
+					return;
+				case "P": //Charge le niveau précédent
 					if(board.getLevelNumber()-1>=0) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
 						board = LevelManager.getActivesBoards()[0];
 						drawBoard(canvas, board);
 					}
 					return;
-				case "DIGIT0": //Charge le niveau suivant
+				case "N": //Charge le niveau suivant
 					if(board.getLevelNumber()<listOfLevels.length-1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
 						drawBoard(canvas, board);
 					}
+					return;
+				case "ESCAPE": //Retourne au menu principal
+					loadMenu();
 					return;
 				default : return; // Si une autre touche est pressée une ne fait rien
 				}
@@ -143,9 +180,6 @@ public class BabaIsYouApp extends Application {
 					drawBoard(canvas, board);
 				}
 			}});
-		
-		
-		primaryStage.show();	
 	}
 	
 	public static void drawBoard(Canvas canvas, Board board)
@@ -166,6 +200,18 @@ public class BabaIsYouApp extends Application {
 				}
 			}
 		}
+	}
+	
+	public void playButtonClicked() {
+		loadLevel(0);
+	}
+	
+	public void exitButtonClicked() {
+		primaryStage.close();
+	}
+	
+	public void loadSaveButtonClicked() {
+		loadLevel(-1);
 	}
 	
 	public static void main(String[] args)

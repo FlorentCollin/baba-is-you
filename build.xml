@@ -9,7 +9,10 @@
 	         </classpath>
 		</javac>
 		<copy todir="build/ressources">
-		<fileset dir="ressources" includes="*.png"/>
+			<fileset dir="ressources" includes="*.png"/>
+		</copy>
+		<copy todir="build/gui">
+			<fileset dir="src/gui" includes="*.fxml"/>
 		</copy>
 	</target>
 	
@@ -29,6 +32,7 @@
 	</target>
 	<target name="delete_save">
 		<delete dir="levels/saves"/>
+		<mkdir dir="levels/saves"/>
 	</target>
 </project>
 
