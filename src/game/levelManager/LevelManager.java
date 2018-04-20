@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,10 +27,10 @@ import game.element.Item;
  */
 public class LevelManager {
 	
-	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
 //	private static String[][] listOfLevels = {{"t0_0","t0_1"}};
+	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
 	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},{"lvl4_0", "lvl4_1"}};
-	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans de jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
+	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static Board[] activesBoards;
 	
@@ -251,8 +252,12 @@ public class LevelManager {
 	{
 		//On clean le dossier de sauvegarde pour écraser correctement les différentes profondeurs de niveaux
 		File saveDir = new File("levels"+File.separatorChar+"saves");
-		saveDir.delete();
-		
+		try {
+			FileUtils.deleteDirectory(saveDir);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		saveDir.mkdir();
 		BufferedWriter bw = null;
 		for(int index = 0; index<activesBoards.length; index++)
 		{

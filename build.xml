@@ -1,7 +1,7 @@
 <project name="Baba is You (Florent COLLIN et Valentin ANTOINE)">
 	<target name="build">
 		<mkdir dir="build"/>
-		<javac srcdir="src" destdir="build" includeantruntime="false">
+		<javac srcdir="src" destdir="build" encoding="Latin1" includeantruntime="false">
 	        <classpath>
 	               <fileset dir="lib">
 	                  <include name="**/*.jar" />
