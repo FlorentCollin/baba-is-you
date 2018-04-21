@@ -7,32 +7,56 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BabaIsYouApp">
    <children>
       <ImageView fitHeight="1022.0" fitWidth="1020.0" layoutX="-21.0" layoutY="-23.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../ressources/Blur%20baba.PNG" />
+            <Image url="@../../ressources/BackgroundMenu.PNG" />
          </image>
       </ImageView>
-      <ImageView fitHeight="179.0" fitWidth="265.0" layoutX="347.0" layoutY="217.0" onMousePressed="#playButtonClicked" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cadrePlay" fitHeight="135.0" fitWidth="577.0" layoutX="367.0" layoutY="213.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="1.9">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreLoadSave" fitHeight="197.0" fitWidth="312.0" layoutX="323.0" layoutY="378.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreEditor" fitHeight="125.0" fitWidth="368.0" layoutX="369.0" layoutY="590.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.0">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreExit" fitHeight="108.0" fitWidth="193.0" layoutX="737.0" layoutY="767.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="1.6">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="167.0" fitWidth="359.0" layoutX="301.0" layoutY="204.0" onMouseEntered="#cadrePlayMouseEntered" onMouseExited="#cadrePlayMouseExited" onMousePressed="#playButtonClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/play.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="173.0" fitWidth="274.0" layoutX="343.0" layoutY="551.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="223.0" fitWidth="487.0" layoutX="302.0" layoutY="377.0" onMouseClicked="#loadSaveButtonClicked" onMouseEntered="#cadreLoadSaveMouseEntered" onMouseExited="#cadreLoadSaveMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/loadSave.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="301.0" layoutY="600.0" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/editor.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="736.0" layoutY="798.0" onMousePressed="#exitButtonClicked" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="260.0" layoutX="700.0" layoutY="768.0" onMouseEntered="#cadreExitMouseEntered" onMouseExited="#cadreExitMouseExited" onMousePressed="#exitButtonClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/exit.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="157.0" fitWidth="233.0" layoutX="379.0" layoutY="395.0" onMouseClicked="#loadSaveButtonClicked" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="BabaIsYouText" fitHeight="189.0" fitWidth="966.0" layoutX="52.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../ressources/loadSave.png" />
+            <Image url="@../../ressources/BABA%20IS%20YOU.png" />
          </image>
       </ImageView>
    </children>

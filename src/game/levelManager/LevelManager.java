@@ -39,6 +39,10 @@ public class LevelManager {
 		return activesBoards;
 	}
 	
+	public static void setActivesBoards(Board[] activesBoards) {
+		LevelManager.activesBoards = activesBoards;
+	}
+
 	/**
 	 * Méthode qui va générer le plateau du jeu grâce à un fichier .txt
 	 * @param nameLevel le nom du fichier .txt où se trouve la description du niveau
@@ -253,7 +257,7 @@ public class LevelManager {
 		//On clean le dossier de sauvegarde pour écraser correctement les différentes profondeurs de niveaux
 		File saveDir = new File("levels"+File.separatorChar+"saves");
 		try {
-			FileUtils.deleteDirectory(saveDir);
+			FileUtils.forceDelete(saveDir);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

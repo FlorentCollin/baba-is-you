@@ -2,6 +2,7 @@ package gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import game.boardController.Board;
 import game.boardController.Cell;
@@ -11,6 +12,7 @@ import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -18,10 +20,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
@@ -34,6 +36,17 @@ public class BabaIsYouApp extends Application {
 	private static Scene menu, game;
 	private static Stage primaryStage;
 	private static Class<?> thisClass;
+	private static ArrayList<Board[]> previousMoves = new ArrayList<>();
+	private static ArrayList<Integer> previousDepth = new ArrayList<>();
+	
+	@FXML
+	private ImageView cadrePlay;
+	@FXML
+	private ImageView cadreLoadSave;
+	@FXML
+	private ImageView cadreEditor;
+	@FXML
+	private ImageView cadreExit;
 	
 	@Override
 	public void start(Stage Stage) throws Exception {
@@ -44,7 +57,7 @@ public class BabaIsYouApp extends Application {
 //			primaryStage.setMaximized(true);
 //			primaryStage.setFullScreen(true);
 //			scene.setCursor(Cursor.NONE);
-			primaryStage.initStyle(StageStyle.UNDECORATED);
+//			primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.show();
 	}
 	
@@ -148,8 +161,18 @@ public class BabaIsYouApp extends Application {
 				case "ESCAPE": //Retourne au menu principal
 					loadMenu();
 					return;
+				
+				case "W": //UNDO MOVE THIS CODE DOESNT WORK FOR THE MOMENT
+					System.out.println(previousMoves.size());
+					LevelManager.setActivesBoards(previousMoves.remove(previousMoves.size()-1));
+					board = LevelManager.getActivesBoards()[previousDepth.remove(previousDepth.size()-1)];
+					drawBoard(canvas, board);
+					return;
 				default : return; // Si une autre touche est pressée une ne fait rien
 				}
+				//Save previous move
+				previousMoves.add(LevelManager.getActivesBoards());
+				previousDepth.add(board.getDepthOfLevel());
 				
 				for(Tuple player: board.getPlayers())
 				{
@@ -201,17 +224,59 @@ public class BabaIsYouApp extends Application {
 			}
 		}
 	}
-	
+	@FXML
 	public void playButtonClicked() {
 		loadLevel(0);
 	}
 	
+	@FXML
 	public void exitButtonClicked() {
 		primaryStage.close();
 	}
 	
+	@FXML
 	public void loadSaveButtonClicked() {
 		loadLevel(-1);
+	}
+	
+	@FXML
+	public void cadrePlayMouseEntered() {
+		cadrePlay.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadrePlayMouseExited() {
+		cadrePlay.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreLoadSaveMouseEntered() {
+		cadreLoadSave.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreLoadSaveMouseExited() {
+		cadreLoadSave.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreEditorMouseEntered() {
+		cadreEditor.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreEditorMouseExited() {
+		cadreEditor.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreExitMouseEntered() {
+		cadreExit.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreExitMouseExited() {
+		cadreExit.setOpacity(0);
 	}
 	
 	public static void main(String[] args)
