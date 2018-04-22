@@ -56,7 +56,7 @@
       </ImageView>
       <ImageView fx:id="BabaIsYouText" fitHeight="189.0" fitWidth="966.0" layoutX="52.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../ressources/BABA%20IS%20YOU.png" />
+            <Image url="@../../ressources/BabaIsYou.png" />
          </image>
       </ImageView>
    </children>

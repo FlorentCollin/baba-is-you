@@ -54,6 +54,7 @@ public class BabaIsYouApp extends Application {
 			thisClass = getClass();
 			loadMenu();
 			primaryStage.setTitle("BABA IS YOU");
+			primaryStage.getIcons().add(new Image("file:ressources"+File.separatorChar+"baba.png"));
 //			primaryStage.setMaximized(true);
 //			primaryStage.setFullScreen(true);
 //			scene.setCursor(Cursor.NONE);
@@ -195,7 +196,7 @@ public class BabaIsYouApp extends Application {
 				{
 					if(board.getLevelNumber()>=listOfLevels.length-1)
 					{
-						primaryStage.close();
+						loadMenu();
 						return;
 					}
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
