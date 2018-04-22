@@ -27,7 +27,7 @@ import game.element.Item;
  */
 public class LevelManager {
 	
-//	private static String[][] listOfLevels = {{"t0_0","t0_1"}};
+//	private static String[][] listOfLevels = {{"cleanEditor"}};
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
 	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},{"lvl4_0", "lvl4_1"}};
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
@@ -39,8 +39,9 @@ public class LevelManager {
 		return activesBoards;
 	}
 	
-	public static void setActivesBoards(Board[] activesBoards) {
-		LevelManager.activesBoards = activesBoards;
+	public static String[][] getListOfLevels()
+	{
+		return listOfLevels;
 	}
 
 	/**
@@ -72,6 +73,7 @@ public class LevelManager {
 			// Ouverture du fichier
 			try{
 				File file;
+				//Si le nom du fichier est un fichier de sauvegarde on va chercher le fichier dans le dossier "levels/saves"
 				if(namesLevels[index].substring(0, 4).equals("save")) {
 					file = new File("levels"+File.separatorChar+"saves"+File.separatorChar+namesLevels[index]);
 				}
@@ -262,6 +264,7 @@ public class LevelManager {
 			e1.printStackTrace();
 		}
 		saveDir.mkdir();
+		
 		BufferedWriter bw = null;
 		for(int index = 0; index<activesBoards.length; index++)
 		{
@@ -272,7 +275,8 @@ public class LevelManager {
 				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
 				bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
-				bw.newLine();
+				// On retire -2 pour ne pas prendre en compte les bordures (frontières)
+				bw.newLine(); // = \n
 				//Itération sur toute la map pour récupérer les Items
 				for(Cell[] element1 : board.getBoard())
 				{
@@ -280,7 +284,7 @@ public class LevelManager {
 					{
 						for(Item element3 : element2.getList())
 						{
-							if(! element3.getName().equals("####")) //On pourrait optimiser en supprimant directement les colonnes concernées
+							if(!(element3 instanceof Boundary)) //On pourrait optimiser en supprimant directement les colonnes concernées
 							{
 								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
 								bw.newLine();
@@ -299,6 +303,9 @@ public class LevelManager {
 		}
 	}
 	
+	/**
+	 * Méthode qui va charger la sauvegarde, si elle n'existe pas alors on charge le premier niveau
+	 */
 	public static void loadSaveLvl()
 	{
 		File file = new File("levels"+File.separatorChar+"saves");
@@ -310,15 +317,15 @@ public class LevelManager {
 		String[] listActivesBoards = file.list();
 		for(int index = 0; index<listActivesBoards.length; index++)
 		{
-//			System.out.println(listActivesBoards[index].substring(0, listActivesBoards[index].length()-4));
 			listActivesBoards[index] = listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
 		}
 		readLevel(listActivesBoards);
 		
 	}
-	
-	public static String[][] getListOfLevels()
-	{
-		return listOfLevels;
+
+	public static void loadEditor() {
+		String[] cleanEditor = {"cleanEditor"};
+		readLevel(cleanEditor);
 	}
+	
 }

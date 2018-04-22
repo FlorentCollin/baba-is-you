@@ -48,6 +48,12 @@ public class Cell {
 		return list.get(index);
 	}
 	
+	public Item getLastItem() {
+		if(list.size()>0)
+			return list.get(list.size()-1);
+		return null;
+	}
+	
 	public boolean add(Item itemToAdd)
 	{
 		Item itemOfIndex;

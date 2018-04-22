@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BabaIsYouApp">
+   <children>
+      <TextField layoutX="53.0" layoutY="45.0" promptText="name">
+         <font>
+            <Font name="8-Bit Madness" size="21.0" />
+         </font>
+      </TextField>
+      <Button layoutX="229.0" layoutY="44.0" mnemonicParsing="false" onMouseClicked="#saveButtonClicked" text="SAVE">
+         <font>
+            <Font name="8-Bit Madness" size="21.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

@@ -1,3 +1,3 @@
-LVL -1
-18 18
+LVL 0 0
+10 10
 TextWall 1 1

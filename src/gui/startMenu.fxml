@@ -44,7 +44,7 @@
             <Image url="@../../ressources/loadSave.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="301.0" layoutY="600.0" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="301.0" layoutY="600.0" onMouseClicked="#editorButtonClicked" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/editor.png" />
          </image>

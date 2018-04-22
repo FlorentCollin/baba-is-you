@@ -20,8 +20,8 @@ public class Board {
 	private Cell[][] board; //map
 	private int rows; // nombre de lignes
 	private int cols; // nombre de colonnes
-	private int LevelNumber; // Numï¿½ro du niveau (ex LVL 1, LVL 2,...)
-	private int depthOfLevel; // Numï¿½rode la profondeur de niveau (ex LVL5_1, LVL5_2,...)
+	private int LevelNumber; // Numéro du niveau (ex LVL 1, LVL 2,...)
+	private int depthOfLevel; // Numéro de la profondeur de niveau (ex LVL5_1, LVL5_2,...)
 	private ArrayList<Tuple> players;
 	private ArrayList<Tuple> changedCells = new ArrayList<>();
 
@@ -35,7 +35,6 @@ public class Board {
 		this.rows = rows;
 		this.cols = cols;
 	}
-
 
 	public Cell[][] getBoard() {
 		return board;
