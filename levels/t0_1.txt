@@ -1,6 +1,0 @@
-LVL 0 1
-18 18
-TextTpRed 2 2
-TextIs 3 2
-TextPush 4 2
-TpRed 10 10

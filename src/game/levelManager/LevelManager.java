@@ -26,10 +26,9 @@ import game.element.Item;
  * 
  */
 public class LevelManager {
-	
-//	private static String[][] listOfLevels = {{"cleanEditor"}};
+//	private static String[][] listOfLevels = {{"editor/test_0"}};
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-	private static String[][] listOfLevels = {{"lvl0"},{"lvl1"},{"lvl2"},{"lvl3"},{"lvl4_0", "lvl4_1"}};
+	private static String[][] listOfLevels = {{"levels"+File.separator+"lvl0"},{"levels"+File.separator+"lvl1"},{"levels"+File.separator+"lvl2"},{"levels"+File.separator+"lvl3"},{"levels"+File.separator+"lvl4_0", "levels"+File.separator+"lvl4_1"}};
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static Board[] activesBoards;
@@ -72,14 +71,7 @@ public class LevelManager {
 		{
 			// Ouverture du fichier
 			try{
-				File file;
-				//Si le nom du fichier est un fichier de sauvegarde on va chercher le fichier dans le dossier "levels/saves"
-				if(namesLevels[index].substring(0, 4).equals("save")) {
-					file = new File("levels"+File.separatorChar+"saves"+File.separatorChar+namesLevels[index]);
-				}
-				else {
-					file = new File("levels"+File.separatorChar+namesLevels[index]);
-				}
+				File file = new File(namesLevels[index]);
 				br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
 			} catch (FileNotFoundException fnfex) {
 				System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
@@ -126,15 +118,17 @@ public class LevelManager {
 					array[rows][cols] = cellToChange;
 					
 				}
+				br.close();
 			} catch (IOException ioex) {
 				System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
 			} 
 			activesBoards[index] = new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard);
 		}
 		Rules.scanRules(activesBoards);
-		//On recherche les différents joueurs sur tous les boards
+		//On recherche les différents joueurs sur tous les boards et on en profite pour mettre à jour les règles sur l'ensemble des boards actifs
 		for(Board board : activesBoards)
 		{
+			board.scanRules();
 			board.searchPlayers();
 		}
 	}
@@ -254,7 +248,7 @@ public class LevelManager {
 	 * Méthode qui va sauvegarder le niveau en cours dans un fichier externe et qui permettra de le recharger
 	 * @param board la map a sauvegarder
 	 */
-	public static void saveLvl()
+	public static void saveLvl(String name)
 	{
 		//On clean le dossier de sauvegarde pour écraser correctement les différentes profondeurs de niveaux
 		File saveDir = new File("levels"+File.separatorChar+"saves");
@@ -270,13 +264,13 @@ public class LevelManager {
 		{
 			try {
 				Board board = activesBoards[index];
-				File save = new File("levels"+File.separatorChar+"saves"+File.separatorChar+"saveLvl_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
+				File save = new File(name+"_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
 				bw = new BufferedWriter(new FileWriter(save));
 				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
 				bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
 				// On retire -2 pour ne pas prendre en compte les bordures (frontières)
-				bw.newLine(); // = \n
+				bw.newLine(); // = "\n"
 				//Itération sur toute la map pour récupérer les Items
 				for(Cell[] element1 : board.getBoard())
 				{
@@ -303,6 +297,47 @@ public class LevelManager {
 		}
 	}
 	
+	public static void saveLvlEditor(String name) {
+		
+		BufferedWriter bw = null;
+		for(int index = 0; index<activesBoards.length; index++)
+		{
+			try {
+				Board board = activesBoards[index];
+				File save = new File("levels"+File.separatorChar+"editor"+File.separatorChar+name+"_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va sauvegarder le niveau
+				bw = new BufferedWriter(new FileWriter(save));
+				bw.write(name + " " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
+				bw.newLine(); 
+				bw.write(18 + " " + 18); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map (Comme on est dans l'éditeur de niveau
+				// L'utilisateur ne peut pas choisir la taille du niveau et le taile imposée est de 18x18 cases
+				bw.newLine(); // = "\n"
+				//Itération sur toute la map
+				for(Cell[] element1 : board.getBoard())
+				{
+					for(Cell element2 : element1)
+					{
+						for(Item element3 : element2.getList())
+						{
+							if(!(element3 instanceof Boundary) && element2.getX()>4 && element2.getY()<20) //On pourrait optimiser en supprimant directement les colonnes concernées
+							{
+								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()-4));
+								bw.newLine();
+							}
+						}
+					}
+				}
+				bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					bw.close();
+				}
+				catch (Exception e) {}
+			}
+		}
+	}
+	
 	/**
 	 * Méthode qui va charger la sauvegarde, si elle n'existe pas alors on charge le premier niveau
 	 */
@@ -317,15 +352,67 @@ public class LevelManager {
 		String[] listActivesBoards = file.list();
 		for(int index = 0; index<listActivesBoards.length; index++)
 		{
-			listActivesBoards[index] = listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
+			listActivesBoards[index] = "levels"+File.separator+"saves"+File.separator+listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
 		}
 		readLevel(listActivesBoards);
 		
+	}
+	
+	/**
+	 * Méthode qui va charger le lvl de l'utilisateur pour l'adapter à l'éditeur de niveau
+	 * (utilisé notamment par le boutton "LOAD" dans l'éditeur de niveau)
+	 * Déroulement de la méthode :
+	 * 1) On copie le fichier "cleanEditor" pour pouvoir rajouter le niveau de l'utilisateur à la place de la partie vide où
+	 * l'utilisateur peut normalement modifier le niveau
+	 * 2) On lit le fichier de l'utilisateur et on le reécrit en modifiant le numéro des colonnes et des lignes pour qu'ils correspondent
+	 * au format de l'éditeur de niveau
+	 * ATTENTION le niveau à charger doit être de la taille 18x18 cases !
+	 */
+	public static String loadUserLvl(File fileName) {
+		// 1) On copier le fichier "cleanEditor"
+		File newCleanEditor = new File("levels"+File.separator+"editor"+File.separator+"cleanEditor_0.txt");
+		try {
+			FileUtils.copyFile(new File("levels"+File.separator+"cleanEditor.txt"), newCleanEditor);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// 2) On lit le fichier de l'utilisateur
+		String[] namesLevels = {fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4)}; 
+		readLevel(namesLevels);
+		
+		// 3) On reécrit le niveau sous la forme propre à l'éditeur de niveau
+		BufferedWriter bw = null;
+		Board board = activesBoards[0];
+		try {
+			bw = new BufferedWriter(new FileWriter(newCleanEditor, true));
+			bw.newLine(); // = "\n"
+			//Itération sur toute la map
+			for(Cell[] element1 : board.getBoard())
+			{
+				for(Cell element2 : element1)
+				{
+					for(Item element3 : element2.getList())
+					{
+						if(!(element3 instanceof Boundary))
+						{
+							bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()+4));
+							bw.newLine();
+						}
+					}
+				}
+			}
+			bw.close();
+			activesBoards = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return newCleanEditor.getAbsolutePath().substring(0 ,newCleanEditor.getAbsolutePath().length()-4);
 	}
 
 	public static void loadEditor() {
 		String[] cleanEditor = {"cleanEditor"};
 		readLevel(cleanEditor);
 	}
-	
+
 }

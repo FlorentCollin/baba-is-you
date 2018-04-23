@@ -1,3 +1,0 @@
-LVL 0 0
-10 10
-TextWall 1 1

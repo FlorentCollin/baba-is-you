@@ -9,7 +9,7 @@ public class Boundary extends Item {
 	public Boundary()
 	{
 		setPriority(0);
-		setName("####");
+		setName("Boundary");
 		setGraphicsName("boundary");
 	}
 	

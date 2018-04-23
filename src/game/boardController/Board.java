@@ -1,5 +1,6 @@
 package game.boardController;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import game.element.IRealItem;
@@ -84,7 +85,7 @@ public class Board {
 	}
 
 	/**
-	 * Mï¿½thode qui va renvoyer l'ensemble des cellules changï¿½es et qui va remettre ï¿½ 0 cette liste
+	 * Méthode qui va renvoyer l'ensemble des cellules changï¿½es et qui va remettre ï¿½ 0 cette liste
 	 * @return Les cellules changï¿½es
 	 */
 	public ArrayList<Tuple> getAndResetChangedCells() {
@@ -119,11 +120,12 @@ public class Board {
 	 */
 	public void scanRules()
 	{
-		ArrayList<IRule[]> listOfActivesRules = Rules.scanRules(LevelManager.getActivesBoards());
+		if(Rules.getListOfRulesActives() == null)
+			Rules.scanRules(LevelManager.getActivesBoards());
 		IRule element1;
 		IRule element2;
-		//Itï¿½ration sur la liste des rï¿½gles Actives pour savoir si il y a une rï¿½gle du type "WALL is ROCK", "WALL IS BABA", etc,...
-		for(IRule[] element : listOfActivesRules)
+		//Itération sur la liste des rï¿½gles Actives pour savoir si il y a une rï¿½gle du type "WALL is ROCK", "WALL IS BABA", etc,...
+		for(IRule[] element : Rules.getListOfRulesActives())
 		{
 			element1 = element[0];
 			element2 = element[2];
@@ -136,7 +138,7 @@ public class Board {
 	}
 
 	/**
-	 * Change tous les items de la map correspondant ï¿½ baseItem et les remplace par les items correspondant ï¿½ endItem
+	 * Change tous les items de la map correspondant à la baseItem et les remplace par les items correspondant au endItem
 	 * @param baseItem L'item qu'on doit changer
 	 * @param endItem Ce en quoi baseItem doit ï¿½tre changï¿½
 	 */
@@ -287,9 +289,11 @@ public class Board {
 		changedCells.add(new Tuple(x2,y2,0));
 		Item itemChange =  board[y1][x1].remove(z);
 		board[y2][x2].add(itemChange);
-		// Si un item de Rï¿½gle est bougï¿½ alors on rescan les rï¿½gles
-		if(itemChange instanceof IRule)
+		// Si un item de Rï¿½gle est bougï¿½ alors on rescan les rï¿½gles et on applique les modifications sur le board
+		if(itemChange instanceof IRule) {
+			Rules.scanRules(LevelManager.getActivesBoards());
 			scanRules();
+		}
 	}
 
 	/**
@@ -297,6 +301,6 @@ public class Board {
 	 */
 	public void saveLvl()
 	{
-		LevelManager.saveLvl();
+		LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save");
 	}
 }

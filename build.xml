@@ -30,9 +30,14 @@
 		<delete dir="build"/>
 		<delete dir="bin"/>
 	</target>
+	<target name = "clean_all" depends="clean,delete_save,delete_customs_lvls"/>
 	<target name="delete_save">
 		<delete dir="levels/saves"/>
 		<mkdir dir="levels/saves"/>
+	</target>
+	<target name="delete_customs_lvls">
+		<delete dir="levels/editor"/>
+		<mkdir dir="levels/editor"/>
 	</target>
 </project>
 

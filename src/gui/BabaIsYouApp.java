@@ -26,6 +26,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -43,6 +47,7 @@ public class BabaIsYouApp extends Application {
 	private static Class<?> thisClass;
 	private static Item selectedItem;
 	
+	// START MENU
 	@FXML
 	private ImageView cadrePlay;
 	@FXML
@@ -51,6 +56,16 @@ public class BabaIsYouApp extends Application {
 	private ImageView cadreEditor;
 	@FXML
 	private ImageView cadreExit;
+	
+	// EDITOR
+	private static Font fontMadness;
+	private static TextField saveText;
+	private static Button saveButton;
+	private static Button testButton;
+	private static Button resetButton;
+	private static Button loadButton;
+	private static Text textZone;
+	private static Text textSelectedItem;
 	
 	@Override
 	public void start(Stage Stage) throws Exception {
@@ -63,6 +78,12 @@ public class BabaIsYouApp extends Application {
 //			primaryStage.setFullScreen(true);
 //			scene.setCursor(Cursor.NONE);
 //			primaryStage.initStyle(StageStyle.UNDECORATED);
+			
+			//Changement de la police d'écriture en 8_Bit_Madness qui est une police d'écriture gratuite d'utilisation sauf pour une utilisation commerciale
+			fontMadness = Font.loadFont("file:ressources"+File.separatorChar+"fonts"+File.separatorChar+"8-Bit Madness.ttf", 21);
+			if(fontMadness == null)
+				throw new IOException("Custom font was not find");
+			
 			primaryStage.show();
 	}
 	
@@ -76,18 +97,67 @@ public class BabaIsYouApp extends Application {
 		menu = new Scene(root, 960, 960);
 		primaryStage.setScene(menu);
 	}
-	
-	private static void loadEditor() {
-		loadLevel(-2);
-		TextField saveText = new TextField();
+
+	private static void loadEditor(String levelName) {
+		//TextField pour entrer le nom du niveau à sauvegarder
+		String[] levelsNames = {levelName};
+		loadLevel(levelsNames, false);
+		
+		saveText = new TextField();
+		saveText.setFont(fontMadness);
 		saveText.setPromptText("name");
 		saveText.setLayoutX(53);
 		saveText.setLayoutY(45);
 		
-		Button saveButton = new Button("SAVE");
-		saveButton.setLayoutX(250);
+		//Boutton qui permet de charger un niveau
+		loadButton = new Button("LOAD");
+		loadButton.setFont(fontMadness);
+		loadButton.setOnMouseClicked(loadButtonClicked());
+		loadButton.setLayoutX(250);
+		loadButton.setLayoutY(45);
+		
+		//Boutton qui va permettre à l'utilisateur de sauvegarder le niveau qu'il a crée
+		saveButton = new Button("SAVE");
+		saveButton.setFont(fontMadness);
+		saveButton.setOnMouseClicked(saveButtonClicked());
+		saveButton.setLayoutX(330);
 		saveButton.setLayoutY(45);
-		root.getChildren().addAll(saveText, saveButton);
+		
+		//Boutton qui va reset l'éditeur de niveau
+		resetButton = new Button("RESET");
+		resetButton.setFont(fontMadness);
+		resetButton.setOnMouseClicked(resetButtonClicked());
+		resetButton.setLayoutX(410);
+		resetButton.setLayoutY(45);
+		
+		//Boutton qui va permettre à l'utilisateur de tester le niveau qu'il vient de créer
+		testButton = new Button("TEST");
+		testButton.setFont(fontMadness);
+		testButton.setOnMouseClicked(testButtonClicked());
+		testButton.setLayoutX(500);
+		testButton.setLayoutY(45);
+		
+		//Text qui va indiquer si le niveau à bien été sauvegarder
+		textZone = new Text("");
+		textZone.setFont(fontMadness);
+		textZone.setFill(Color.WHITE);
+		textZone.setScaleX(1.5);
+		textZone.setScaleY(1.5);
+		textZone.setLayoutX(80);
+		textZone.setLayoutY(110);
+		
+		//Text "Selected Item"
+		textSelectedItem = new Text("SELECTED  ITEM  : ");
+		textSelectedItem.setFont(fontMadness);
+		textSelectedItem.setFill(Color.WHITE);
+		textSelectedItem.setScaleX(1.5);
+		textSelectedItem.setScaleY(1.5);
+		textSelectedItem.setLayoutX(685);
+		textSelectedItem.setLayoutY(65);
+		
+		
+		//On ajout le tout à la scène
+		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem);
 		
 		game.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -95,42 +165,57 @@ public class BabaIsYouApp extends Application {
 			public void handle(MouseEvent event) {
 				double mouseX = event.getX();
 				double mouseY = event.getY();
-				if(mouseX >= 21*CELL_SIZE && mouseX<= 23*CELL_SIZE && mouseY >= 3*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
+//				System.out.println(board.getBoard()[(int)(mouseY/CELL_SIZE)][(int)(mouseX/CELL_SIZE)].getList());
+				if(mouseX >= 20*CELL_SIZE && mouseX<= 23*CELL_SIZE && mouseY >= 4*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
 					selectedItem = board.getBoard()[(int)(mouseY/CELL_SIZE)][(int)(mouseX/CELL_SIZE)].getLastItem();
 					if(selectedItem != null) {
-						board.setCell(1, 22, new Cell(1, 22, selectedItem));
-						drawCell(board.getCell(1, 22));
+						board.setCell(22, 1, new Cell(1, 22, selectedItem));
+						drawCell(board.getCell(22, 1));
 					}
+					return;
 				}
-				if(mouseX >= 1*CELL_SIZE && mouseX <= 20*CELL_SIZE && mouseY >= 4*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
+				else if(mouseX >= 1*CELL_SIZE && mouseX < 19*CELL_SIZE && mouseY >= 5*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
 					if(selectedItem == null) {
 						return;
 					}
-					else if(selectedItem instanceof Eraser) {
-						board.setCell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE), new Cell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE)));
-						drawCell(board.getCell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE)));
+					int x = (int)(mouseX/CELL_SIZE);
+					int y = (int)(mouseY/CELL_SIZE);
+					if(selectedItem instanceof Eraser) {
+						board.setCell(x, y, new Cell(y, x));
+					}
+					else if(board.getCell(x, y).getList().size() > 0) {
+						board.getCell(x, y).add(selectedItem);
 					}
 					else {
-						board.setCell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE), new Cell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE), selectedItem));
-						drawCell(board.getCell((int)(mouseY/CELL_SIZE), (int)(mouseX/CELL_SIZE)));
+						board.setCell(x, y, new Cell(y, x, selectedItem));
 					}
+					textZone.setText(""); //On met la textZone à "" pour ne pas afficher que le niveau a été sauvegarder alors qu'il ne l'est pas
+//					drawBoard();
+					drawCell(board.getCell(x, y));
 				}
 			}
 			
 		});
+		
+		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				String code = event.getCode().toString();
+				if(code.equals("ESCAPE")) {
+					loadMenu();
+				}
+			}
+			
+		});
+	}	
 	
-	}
-	
-	
-	private static void loadLevel(int index)
+	private static void loadLevel(String[] names, boolean activateInputs)
 	{
-		String[][] listOfLevels = LevelManager.getListOfLevels();
-		if(index == -1)
+		if(names[0].equals("save"))
 			LevelManager.loadSaveLvl();
-		else if(index == -2)
-			LevelManager.loadEditor();
 		else
-			LevelManager.readLevel(listOfLevels[index]);
+			LevelManager.readLevel(names);
 		board = LevelManager.getActivesBoards()[0];
 		root = new Group();
 		game = new Scene(root, 960, 960);
@@ -145,7 +230,7 @@ public class BabaIsYouApp extends Application {
 		holder.setStyle("-fx-background-color: #1c1f22");
 		
 		drawBoard();
-		if(index != -2)
+		if(activateInputs)
 			activateKeyInputs();
 	}
 	
@@ -197,7 +282,8 @@ public class BabaIsYouApp extends Application {
 				case "D": direction = 1 ; break;
 				case "S": direction = 2 ; break;
 				case "Q": direction = 3 ; break;
-				case "X": LevelManager.saveLvl(); return; //Sauvegarde le niveau en cours
+				case "X": LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save"); 
+					return; //Sauvegarde le niveau en cours
 				case "L": //Charge la sauvegarde
 					LevelManager.loadSaveLvl();
 					board = LevelManager.getActivesBoards()[0]; 
@@ -279,10 +365,12 @@ public class BabaIsYouApp extends Application {
 					drawBoard();
 				}
 			}});
+		
+	// START MENU 
 	}
 	@FXML
 	public void playButtonClicked() {
-		loadLevel(0);
+		loadLevel(LevelManager.getListOfLevels()[0], true);
 	}
 	
 	@FXML
@@ -292,12 +380,19 @@ public class BabaIsYouApp extends Application {
 	
 	@FXML
 	public void loadSaveButtonClicked() {
-		loadLevel(-1);
+		String[] save = {"save"};
+		loadLevel(save, true);
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
-		loadEditor();
+		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt");
+		if(file.exists()) {
+			String name = LevelManager.loadUserLvl(file);
+			loadEditor(name); //On retire le ".txt"
+		}
+		else
+			loadEditor("levels"+File.separator+"cleanEditor");
 	}
 	
 	@FXML
@@ -343,6 +438,81 @@ public class BabaIsYouApp extends Application {
 	public static void main(String[] args)
 	{
 		launch(args);
+	}
+	
+	// EDITOR
+	private static EventHandler<MouseEvent> saveButtonClicked() {
+		return new EventHandler<MouseEvent> () {
+
+			@Override
+			public void handle(MouseEvent event) {
+				if (saveText.getText().equals("testEditor")) {
+					textZone.setText("ENTER AN OTHER NAME.");
+				}
+				else if(saveText.getText().length()>0) {
+					LevelManager.saveLvlEditor(saveText.getText());
+					textZone.setText("LEVEL SAVED !");
+				}
+				else {
+					textZone.setText("ENTER A NAME !");
+				}
+			}
+			
+		};
+	}
+	
+	private static EventHandler<MouseEvent> resetButtonClicked() {
+		return new EventHandler<MouseEvent> () {
+
+			@Override
+			public void handle(MouseEvent event) {
+				//On supprime le niveau temporaire pour que si l'utilisateur quitte et reviens dans l'éditeur de niveau l'éditeur soit vide
+				File[] files = {new File("levels"+File.separator+"editor"+File.separator+"cleanEditor_0.txt"), 
+						new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt")};
+				for(File file : files) {
+					if(file.exists())
+						file.delete();
+				}
+				loadEditor("levels"+File.separator+"cleanEditor");
+			}
+			
+		};
+	}
+	
+	private static EventHandler<MouseEvent> loadButtonClicked() {
+		return new EventHandler<MouseEvent> () {
+
+			@Override
+			public void handle(MouseEvent event) {
+				//On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le niveau qu'il veut charger dans l'éditeur de niveau
+				FileChooser fc = new FileChooser();
+				fc.setTitle("Choose level to load :");
+				// Le code ci-dessous provient de : "https://stackoverflow.com/questions/13634576/javafx-filechooser-how-to-set-file-filters"
+				// Il permet de définir les extensions de fichier autorisées. Ici, on n'autorise que les fichiers textes (".txt")
+				FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".TXT", "*.txt");
+				fc.getExtensionFilters().add(fileExtensions);
+				fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
+				File fileChoose = fc.showOpenDialog(primaryStage);
+				if(!(fileChoose == null))
+					loadEditor(LevelManager.loadUserLvl(fileChoose));
+				
+			
+			}
+		};
+	}	
+	
+	private static EventHandler<MouseEvent> testButtonClicked() {
+		return new EventHandler<MouseEvent> () {
+
+			@Override
+			public void handle(MouseEvent event) {
+				LevelManager.saveLvlEditor("testEditor");
+				String[] testEditor = {"levels"+File.separator+"editor"+File.separatorChar+"testEditor_0"};
+				loadLevel(testEditor, true);
+				
+			}
+			
+		};
 	}
 	
 }
