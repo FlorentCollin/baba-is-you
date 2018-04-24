@@ -2,6 +2,7 @@ package gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import game.boardController.Board;
 import game.boardController.Cell;
@@ -70,25 +71,28 @@ public class BabaIsYouApp extends Application {
 	@Override
 	public void start(Stage Stage) throws Exception {
 			primaryStage = Stage;
-			thisClass = getClass();
+			thisClass = getClass(); // On en a besoin d'en d'autres méthodes et on ne peut pas y accéder par un getClass()
+			//Chargement du Menu principal
 			loadMenu();
 			primaryStage.setTitle("BABA IS YOU");
 			primaryStage.getIcons().add(new Image("file:ressources"+File.separatorChar+"baba.png"));
-//			primaryStage.setMaximized(true);
-//			primaryStage.setFullScreen(true);
-//			scene.setCursor(Cursor.NONE);
 //			primaryStage.initStyle(StageStyle.UNDECORATED);
 			
 			//Changement de la police d'écriture en 8_Bit_Madness qui est une police d'écriture gratuite d'utilisation sauf pour une utilisation commerciale
 			fontMadness = Font.loadFont("file:ressources"+File.separatorChar+"fonts"+File.separatorChar+"8-Bit Madness.ttf", 21);
 			if(fontMadness == null)
 				throw new IOException("Custom font was not find");
-			
+
+			//Ouverture de l'application
 			primaryStage.show();
 	}
 	
+	/**
+	 * Méthode qui va charger le menu principal 
+	 */
 	private static void loadMenu() {
-		Parent root = null;
+		Parent root = null; 
+		//Chargement du fichier @FXML qui représente le menu principal
 		try {
 			root = FXMLLoader.load(thisClass.getResource("startMenu.fxml"));
 		} catch (IOException e) {
@@ -96,13 +100,37 @@ public class BabaIsYouApp extends Application {
 		}
 		menu = new Scene(root, 960, 960);
 		primaryStage.setScene(menu);
+		
+		/*
+		 * Gestionnaire d'évènements du clavier, si la touche ESCAPE est pressée alors on ferme l'application
+		 * Sinon si la touche ENTER est pressée alors on charge le premier niveau
+		 */
+		menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode().toString().equals("ESCAPE")) {
+					primaryStage.close(); //Fermeture de l'application
+				}
+				else if(event.getCode().toString().equals("ENTER")) {
+					loadLevel(LevelManager.getListOfLevels()[0], true); //Chargement du premier niveau
+				}
+			}
+		});
 	}
 
+	/**
+	 * Méthode qui va charger l'Editeur de niveau
+	 * @param levelName Nom du niveau à charger
+	 */
 	private static void loadEditor(String levelName) {
-		//TextField pour entrer le nom du niveau à sauvegarder
-		String[] levelsNames = {levelName};
-		loadLevel(levelsNames, false);
+		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22*22
+		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
+		loadLevel(new String[] {levelName}, false);
 		
+		//On initialise l'entièreté des bouttons et zone de textes qui permettent de charger, tester, sauvegarder un niveau
+		
+		//TextField pour entrer le nom du niveau à sauvegarder
 		saveText = new TextField();
 		saveText.setFont(fontMadness);
 		saveText.setPromptText("name");
@@ -146,7 +174,7 @@ public class BabaIsYouApp extends Application {
 		textZone.setLayoutX(80);
 		textZone.setLayoutY(110);
 		
-		//Text "Selected Item"
+		//Text "Selected Item : " (en haut à droite) 
 		textSelectedItem = new Text("SELECTED  ITEM  : ");
 		textSelectedItem.setFont(fontMadness);
 		textSelectedItem.setFill(Color.WHITE);
@@ -159,13 +187,20 @@ public class BabaIsYouApp extends Application {
 		//On ajout le tout à la scène
 		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem);
 		
+		/*
+		 * Gestionnaire d'évènements pour la souris qui va permettre de sélectionner un Item et de pouvoir le placer dans le niveau
+		 */
 		game.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
+				//On récupère la position en X et en Y de la souris
 				double mouseX = event.getX();
 				double mouseY = event.getY();
-//				System.out.println(board.getBoard()[(int)(mouseY/CELL_SIZE)][(int)(mouseX/CELL_SIZE)].getList());
+				/*
+				 * Si la souris se situe dans la zone des items sélectionnables (voir en jeu pour mieux comprendre)
+				 * alors on cherche l'item dans le board. S'il existe on le place dans la variable Item selectedItem
+				 */
 				if(mouseX >= 20*CELL_SIZE && mouseX<= 23*CELL_SIZE && mouseY >= 4*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
 					selectedItem = board.getBoard()[(int)(mouseY/CELL_SIZE)][(int)(mouseX/CELL_SIZE)].getLastItem();
 					if(selectedItem != null) {
@@ -174,108 +209,144 @@ public class BabaIsYouApp extends Application {
 					}
 					return;
 				}
+				/*
+				 * Si la souris se trouve dans la zone où l'utilisateur peut composer son propre niveau alors l'utilisateur peut intéragir avec lui
+				 */
 				else if(mouseX >= 1*CELL_SIZE && mouseX < 19*CELL_SIZE && mouseY >= 5*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
-					if(selectedItem == null) {
+					if(selectedItem == null) { // On vérifie tout de même s'il a bien sélectionner un Item à placer
 						return;
 					}
+					//Coordonnées de la cellule où placer l'Item
 					int x = (int)(mouseX/CELL_SIZE);
 					int y = (int)(mouseY/CELL_SIZE);
+					
+					//Si l'utilisateur à sélectionner l'outil gomme alors on supprime ce qui se trouve dans la cellule
 					if(selectedItem instanceof Eraser) {
 						board.setCell(x, y, new Cell(y, x));
 					}
+					// S'il y a déjà un Item dans la cellule on y ajoute l'Item sélectionné
 					else if(board.getCell(x, y).getList().size() > 0) {
 						board.getCell(x, y).add(selectedItem);
 					}
 					else {
-						board.setCell(x, y, new Cell(y, x, selectedItem));
+						board.setCell(x, y, new Cell(y, x, selectedItem)); //On crée une nouvelle cellule qui ne contiendra que l'Item sélectionné
 					}
 					textZone.setText(""); //On met la textZone à "" pour ne pas afficher que le niveau a été sauvegarder alors qu'il ne l'est pas
-//					drawBoard();
-					drawCell(board.getCell(x, y));
+					drawCell(board.getCell(x, y)); //Mise à jour de la cellule qui a été modifiée
 				}
 			}
-			
 		});
-		
+
+		//Gestionnaire d'événements du clavier : Comme on se situe dans l'éditeur de niveau si l'utilisateur appuie sur "ESCAPE" on affiche le menu principal
 		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
 				String code = event.getCode().toString();
 				if(code.equals("ESCAPE")) {
+					//Sauvegarde automatique du niveau que l'utilisateur est en train de composer pour ne pas qu'il le perde s'il appuie par erreur sur "ESCAPE"
+					LevelManager.saveLvlEditor("testEditor"); //On sauvegarde le fichier dans le bon format
 					loadMenu();
 				}
 			}
-			
 		});
 	}	
 	
+	/**
+	 * Méthode qui va charger un niveau et l'afficher
+	 * @param names les noms des fichiers des différentes pronfondeur d'un niveau
+	 * @param activateInputs Est ce que les "Inputs" du clavier peuvent être utilisé
+	 */
 	private static void loadLevel(String[] names, boolean activateInputs)
 	{
-		if(names[0].equals("save"))
+		if(names[0].equals("save")) //Chargement du niveau sauvegardé
 			LevelManager.loadSaveLvl();
 		else
-			LevelManager.readLevel(names);
-		board = LevelManager.getActivesBoards()[0];
+			LevelManager.readLevel(names); //Chargement normal du niveau donné en paramètre
+		board = LevelManager.getActivesBoards()[0]; //Récupération de la première pronfondeur du niveau
 		root = new Group();
 		game = new Scene(root, 960, 960);
 		primaryStage.setScene(game);
 		canvas = new Canvas(960, 960);
 		root.getChildren().add(canvas);
-		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
+		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows()); //De combien doit être la taille d'une cellule
 		
+		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
+		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
 		StackPane holder = new StackPane();
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		holder.setStyle("-fx-background-color: #1c1f22");
 		
-		drawBoard();
-		if(activateInputs)
+		drawBoard(); //Affichage du niveau dans le canvas
+		
+		if(activateInputs) //On autorise ou non les "Inputs" clavier
 			activateKeyInputs();
 	}
 	
+	/**
+	 * Méthode qui va dessiner le niveau en cours dans le canvas
+	 */
 	public static void drawBoard()
 	{
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image imageItem;
 		
+		//Vidage de la cellule dans le canvas
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
+		//Itération sur l'entièreté du Board pour afficher tous les Items
 		for(Cell[] element1 : board.getBoard())
 		{
 			for(Cell element2 : element1)
 			{
+				//Itération sur tous les Items de la cellule
 				for(Item element3 : element2.getList())
 				{
+					//Récupération de l'image à afficher en fonction de son nom
 					imageItem = new Image("file:ressources"+File.separatorChar+element3.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+					//On dessine l'Item en fonction de la taille d'une cellule
 					gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
-					
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Méthode qui va redessiner une cellule
+	 * @param oneCell la cellule à redessiner
+	 */
 	private static void drawCell(Cell oneCell) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image imageItem;
+		//Récupération des coordonnées de la cellule
 		int x = oneCell.getX();
 		int y = oneCell.getY();
+		//Vidage de la cellule dans le canvas
 		gc.clearRect(y*CELL_SIZE, x*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		//Itération sur tous les Items de la cellule
 		for(Item element : oneCell.getList())
 		{
+			//Récupération de l'image à afficher en fonction de son nom
 			imageItem = new Image("file:ressources"+File.separatorChar+element.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+			//On dessine l'Item en fonction de la taille d'une cellule
 			gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
 		}
 	}
 	
+	/**
+	 * Méthode qui va gérer les inputs clavier de l'utilisateur
+	 */
 	public static void activateKeyInputs() {
 		String[][] listOfLevels = LevelManager.getListOfLevels();
+		
+		//Gestionnaire d'événements clavier
 		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			int direction;
+			int direction; //Variable qui va être utilisé dans la fonction move()
 			@Override
 			public void handle(KeyEvent event) 
 			{
-				String code = event.getCode().toString();
+				String code = event.getCode().toString(); //Récupération de la touche pressée
 				switch(code)
 				{
 				case "Z": direction = 0 ; break;
@@ -291,12 +362,17 @@ public class BabaIsYouApp extends Application {
 					drawBoard();
 					return;
 				case "R": //Reinitialise le niveau en cours
-					LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
+					if(board.getLevelNumber() == -1) {
+						LevelManager.readLevel(new String[] {"levels"+File.separator+"editor"+File.separator+"testEditor_0"});
+					}
+					else {
+						LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
+					}
 					board = LevelManager.getActivesBoards()[0];
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "A":
+				case "A": //Charge la prondeur précédente
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
@@ -305,7 +381,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard();
 					}
 					return;
-				case "E":
+				case "E": //Charge la pronfondeur suivante
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
@@ -314,7 +390,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard();
 					}
 					return;
-				case "SPACE":
+				case "SPACE": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
 					board = LevelManager.getActivesBoards()[(board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().length];
 					board.searchPlayers();
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
@@ -329,7 +405,7 @@ public class BabaIsYouApp extends Application {
 					}
 					return;
 				case "N": //Charge le niveau suivant
-					if(board.getLevelNumber()<listOfLevels.length-1) {
+					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
@@ -341,24 +417,27 @@ public class BabaIsYouApp extends Application {
 					return;
 				default : return; // Si une autre touche est pressée une ne fait rien
 				}
-				//Save previous move
-				
+				//Itération sur la liste des joueurs pour les déplacer
 				for(Tuple player: board.getPlayers())
 				{
+					//Déplacement d'un joueur en fonction de la direction
 					MoveController.move(board, player.getX(), player.getY(), player.getZ(), direction);
 				}
+				//On redessine les cellules qui ont été modifiées
 				for(Tuple cellChanged : board.getAndResetChangedCells())
 				{
 					drawCell(board.getBoard()[cellChanged.getY()][cellChanged.getX()]);
 				}
-				board.searchPlayers();
-				if(board.isWin()) 
+				board.searchPlayers(); //On recherche les nouveaux joueurs
+				if(board.isWin())
 				{
-					if(board.getLevelNumber()>=listOfLevels.length-1)
+					//Si le prochain niveau n'existe pas alors on charge le menu
+					if(board.getLevelNumber()>=listOfLevels.length-1 || board.getLevelNumber() == -1)
 					{
 						loadMenu();
 						return;
 					}
+					//Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
@@ -380,21 +459,21 @@ public class BabaIsYouApp extends Application {
 	
 	@FXML
 	public void loadSaveButtonClicked() {
-		String[] save = {"save"};
-		loadLevel(save, true);
+		loadLevel(new String[] {"save"}, true); //Chargement du niveau sauvegardé
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
 		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt");
-		if(file.exists()) {
+		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
 			String name = LevelManager.loadUserLvl(file);
 			loadEditor(name); //On retire le ".txt"
 		}
-		else
+		else //On charge l'éditeur de base
 			loadEditor("levels"+File.separator+"cleanEditor");
 	}
 	
+	//Gestion des animations dans le menu principal
 	@FXML
 	public void cadrePlayMouseEntered() {
 		cadrePlay.setOpacity(1);
@@ -435,12 +514,12 @@ public class BabaIsYouApp extends Application {
 		cadreExit.setOpacity(0);
 	}
 	
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
 	
 	// EDITOR
+	/**
+	 * Méthode qui va changer la zone de texte
+	 * @return ?
+	 */
 	private static EventHandler<MouseEvent> saveButtonClicked() {
 		return new EventHandler<MouseEvent> () {
 
@@ -461,12 +540,16 @@ public class BabaIsYouApp extends Application {
 		};
 	}
 	
+	/**
+	 * Méthode qui va s'occuper de la gestion du boutton "Reset"
+	 * @return
+	 */
 	private static EventHandler<MouseEvent> resetButtonClicked() {
 		return new EventHandler<MouseEvent> () {
 
 			@Override
 			public void handle(MouseEvent event) {
-				//On supprime le niveau temporaire pour que si l'utilisateur quitte et reviens dans l'éditeur de niveau l'éditeur soit vide
+				//On supprime les niveaux temporaires pour que si l'utilisateur quitte et reviens dans l'éditeur de niveau l'éditeur soit vide
 				File[] files = {new File("levels"+File.separator+"editor"+File.separator+"cleanEditor_0.txt"), 
 						new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt")};
 				for(File file : files) {
@@ -475,10 +558,13 @@ public class BabaIsYouApp extends Application {
 				}
 				loadEditor("levels"+File.separator+"cleanEditor");
 			}
-			
 		};
 	}
 	
+	/**
+	 * Méthode qui sa s'occuper de la gestion du boutton "LOAD"
+	 * @return
+	 */
 	private static EventHandler<MouseEvent> loadButtonClicked() {
 		return new EventHandler<MouseEvent> () {
 
@@ -493,28 +579,40 @@ public class BabaIsYouApp extends Application {
 				fc.getExtensionFilters().add(fileExtensions);
 				fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
 				File fileChoose = fc.showOpenDialog(primaryStage);
-				if(!(fileChoose == null))
-					loadEditor(LevelManager.loadUserLvl(fileChoose));
-				
-			
+				if(fileChoose != null) {
+					//Code pour split le path trouvé sur : "https://stackoverflow.com/questions/1099859/how-to-split-a-path-platform-independent"
+					String[] nameFileSplit = fileChoose.toString().split(Pattern.quote(File.separator));
+					if(nameFileSplit[nameFileSplit.length-1].equals("cleanEditor.txt")) {
+						textZone.setText("This level is not in the good format");
+						return;
+					}
+					loadEditor(LevelManager.loadUserLvl(fileChoose)); //Chargement du niveau choisi par l'utilisateur dans l'éditeur de niveau
+				}
+					
 			}
 		};
 	}	
 	
+	/**
+	 * Méthode qui va s'occuper de la gestion du boutton "TEST"
+	 * @return
+	 */
 	private static EventHandler<MouseEvent> testButtonClicked() {
 		return new EventHandler<MouseEvent> () {
 
 			@Override
 			public void handle(MouseEvent event) {
-				LevelManager.saveLvlEditor("testEditor");
+				LevelManager.saveLvlEditor("testEditor"); //On sauvegarde le fichier dans le bon format
 				String[] testEditor = {"levels"+File.separator+"editor"+File.separatorChar+"testEditor_0"};
-				loadLevel(testEditor, true);
-				
+				loadLevel(testEditor, true); //On charge le fichier qu'on vient de sauvegarder
 			}
-			
 		};
 	}
 	
+	public static void main(String[] args)
+	{
+		launch(args);
+	}
 }
 
 	

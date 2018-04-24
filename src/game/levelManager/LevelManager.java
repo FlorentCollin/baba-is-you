@@ -240,9 +240,10 @@ public class LevelManager {
 				e.printStackTrace();
 			}
 			return null;
-			
-		
 	}
+	
+	//TODO Changer la méthode saveLvl pour avoir une méthode unique qui prend en paramètre le nombres de colonnes et de lignes 
+	//+ le nombre de colonnes ou de ligne à retirer
 	
 	/**
 	 * Méthode qui va sauvegarder le niveau en cours dans un fichier externe et qui permettra de le recharger
@@ -258,7 +259,8 @@ public class LevelManager {
 			e1.printStackTrace();
 		}
 		saveDir.mkdir();
-		
+
+		//On sauvegarde le niveau dans un nouveau fichier en itérant sour l'entièreté des Boards actifs
 		BufferedWriter bw = null;
 		for(int index = 0; index<activesBoards.length; index++)
 		{
@@ -339,26 +341,6 @@ public class LevelManager {
 	}
 	
 	/**
-	 * Méthode qui va charger la sauvegarde, si elle n'existe pas alors on charge le premier niveau
-	 */
-	public static void loadSaveLvl()
-	{
-		File file = new File("levels"+File.separatorChar+"saves");
-		if(file.list().length==0) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
-		{
-			readLevel(getListOfLevels()[0]);
-			return;
-		}
-		String[] listActivesBoards = file.list();
-		for(int index = 0; index<listActivesBoards.length; index++)
-		{
-			listActivesBoards[index] = "levels"+File.separator+"saves"+File.separator+listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
-		}
-		readLevel(listActivesBoards);
-		
-	}
-	
-	/**
 	 * Méthode qui va charger le lvl de l'utilisateur pour l'adapter à l'éditeur de niveau
 	 * (utilisé notamment par le boutton "LOAD" dans l'éditeur de niveau)
 	 * Déroulement de la méthode :
@@ -409,10 +391,31 @@ public class LevelManager {
 		}
 		return newCleanEditor.getAbsolutePath().substring(0 ,newCleanEditor.getAbsolutePath().length()-4);
 	}
-
-	public static void loadEditor() {
-		String[] cleanEditor = {"cleanEditor"};
-		readLevel(cleanEditor);
+	
+	/**
+	 * Méthode qui va charger la sauvegarde, si elle n'existe pas alors on charge le premier niveau
+	 */
+	public static void loadSaveLvl()
+	{
+		File file = new File("levels"+File.separatorChar+"saves");
+		if(file.list().length==0) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
+		{
+			readLevel(getListOfLevels()[0]);
+			return;
+		}
+		String[] listActivesBoards = file.list();
+		for(int index = 0; index<listActivesBoards.length; index++)
+		{
+			listActivesBoards[index] = "levels"+File.separator+"saves"+File.separator+listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
+		}
+		readLevel(listActivesBoards);
+		
 	}
+	
+
+//	public static void loadEditor() {
+//		String[] cleanEditor = {"cleanEditor"};
+//		readLevel(cleanEditor);
+//	}
 
 }

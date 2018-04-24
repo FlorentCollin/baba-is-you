@@ -1,4 +1,4 @@
-cleanEditor 0 0
+cleanEditor -1 0
 22 22
 Boundary 1 4
 Boundary 2 4
