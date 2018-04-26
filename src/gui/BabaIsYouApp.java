@@ -32,6 +32,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
@@ -39,14 +40,22 @@ import javafx.stage.Stage;
  */
 public class BabaIsYouApp extends Application {
 	
-	private static double CELL_SIZE = 48;
+	//Fenêtre principale
+	private static Stage primaryStage;
 	private static Board board;
 	private static Scene menu, game;
-	private static Canvas canvas;
+	private static Canvas canvas = new Canvas(960, 960);
 	private static Group root;
-	private static Stage primaryStage;
+	private static double CELL_SIZE = 48;
 	private static Class<?> thisClass;
 	private static Item selectedItem;
+	
+	//Fenêtre secondaire (d'astuces)
+	private static Stage secondaryStage = new Stage();
+	private static Scene advice;
+	private static Canvas canvasAdvice;
+	private static Group rootAdvice;
+	private static Text close;
 	
 	// START MENU
 	@FXML
@@ -55,6 +64,8 @@ public class BabaIsYouApp extends Application {
 	private ImageView cadreLoadSave;
 	@FXML
 	private ImageView cadreEditor;
+	@FXML
+	private ImageView cadreLevels;
 	@FXML
 	private ImageView cadreExit;
 	
@@ -68,6 +79,7 @@ public class BabaIsYouApp extends Application {
 	private static Text textZone;
 	private static Text textSelectedItem;
 	
+	
 	@Override
 	public void start(Stage Stage) throws Exception {
 			primaryStage = Stage;
@@ -77,6 +89,7 @@ public class BabaIsYouApp extends Application {
 			primaryStage.setTitle("BABA IS YOU");
 			primaryStage.getIcons().add(new Image("file:ressources"+File.separatorChar+"baba.png"));
 //			primaryStage.initStyle(StageStyle.UNDECORATED);
+			secondaryStage.initStyle(StageStyle.UNDECORATED);
 			
 			//Changement de la police d'écriture en 8_Bit_Madness qui est une police d'écriture gratuite d'utilisation sauf pour une utilisation commerciale
 			fontMadness = Font.loadFont("file:ressources"+File.separatorChar+"fonts"+File.separatorChar+"8-Bit Madness.ttf", 21);
@@ -92,6 +105,12 @@ public class BabaIsYouApp extends Application {
 	 */
 	private static void loadMenu() {
 		Parent root = null; 
+//		Media media = new Media(new File("ressources/musicMenu.mp3").toURI().toString());
+//		MediaPlayer playerMusic = new MediaPlayer(media);
+//		playerMusic.play();
+//		playerMusic.setCycleCount(MediaPlayer.INDEFINITE); //Si tu veux la jouer en boucle
+		
+		
 		//Chargement du fichier @FXML qui représente le menu principal
 		try {
 			root = FXMLLoader.load(thisClass.getResource("startMenu.fxml"));
@@ -105,17 +124,98 @@ public class BabaIsYouApp extends Application {
 		 * Gestionnaire d'évènements du clavier, si la touche ESCAPE est pressée alors on ferme l'application
 		 * Sinon si la touche ENTER est pressée alors on charge le premier niveau
 		 */
-		menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
+		menu.setOnKeyPressed((KeyEvent event) -> {
 				if(event.getCode().toString().equals("ESCAPE")) {
 					primaryStage.close(); //Fermeture de l'application
+					secondaryStage.close();
 				}
 				else if(event.getCode().toString().equals("ENTER")) {
 					loadLevel(LevelManager.getListOfLevels()[0], true); //Chargement du premier niveau
 				}
-			}
+		});
+	}
+	
+	private static void loadLevelsMenu() {
+		//Initialisation
+		root = new Group();
+		canvas = new Canvas(960,960);
+		game = new Scene(root, 960, 960);
+		primaryStage.setScene(game);
+		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
+		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
+		root.getChildren().add(canvas);
+		StackPane holder = new StackPane();
+		holder.getChildren().add(canvas);
+		holder.setStyle("-fx-background-color: #1c1f22");
+		root.getChildren().add(holder);
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+//		gc.drawImage(new Image("file:ressources"+File.separator+"BackgroundMenu.png", 960, 960, true, true), 0, 0);
+		gc.drawImage(new Image("file:ressources"+File.separator+"levelsMenu.png"), 0, 0);
+		int x = -65;
+		for(int index = 0; index<=LevelManager.getListOfLevels().length; index++) {
+			ImageView levelImage = new ImageView(new Image("file:ressources"+File.separator+"level"+index+".png"));
+			levelImage.setPickOnBounds(true);
+			levelImage.setOpacity(0.5);
+			levelImage.setLayoutX(x);
+			levelImage.setLayoutY(200);
+			levelImage.setScaleX(0.75);
+			levelImage.setScaleY(0.75);
+			x+=100;
+			final int i = index;
+			levelImage.setOnMouseClicked((MouseEvent e) -> {
+				loadLevel(LevelManager.getListOfLevels()[i-1], true);
+			});
+			levelImage.setOnMouseEntered((MouseEvent e) -> {
+				levelImage.setOpacity(1);
+			});
+			levelImage.setOnMouseExited((MouseEvent e) -> {
+				levelImage.setOpacity(0.5);
+			});
+			
+			
+			root.getChildren().add(levelImage);
+		}
+		ImageView loadImage= new ImageView(new Image("file:ressources"+File.separator+"load.png"));
+		loadImage.setPickOnBounds(true);
+		loadImage.setOpacity(0.5);
+		loadImage.setScaleX(0.75);
+		loadImage.setScaleY(0.75);
+		loadImage.setLayoutX(750);
+		loadImage.setLayoutY(690);
+		loadImage.setOnMouseClicked((MouseEvent e) -> {
+			File fileChoose = FileChooserLvl();
+			loadLevel(new String[] {fileChoose.getPath().split(Pattern.quote("."))[0]}, true);
+		});
+		loadImage.setOnMouseEntered((MouseEvent e) -> {
+			loadImage.setOpacity(1);
+		});
+		loadImage.setOnMouseExited((MouseEvent e) -> {
+			loadImage.setOpacity(0.5);
+		});
+		close = new Text("X");
+		close.setFont(fontMadness);
+		close.setFill(Color.WHITE);
+		close.setOpacity(0.5 );
+		close.setScaleX(3);
+		close.setScaleY(3);
+		close.setX(910);
+		close.setY(45);
+		close.setOnMouseClicked((MouseEvent event) -> {
+			loadMenu();
+		});
+		close.setOnMouseEntered((MouseEvent event) -> {
+			close.setOpacity(1);
+		});
+		close.setOnMouseExited((MouseEvent event) -> {
+			close.setOpacity(0.5);
+		});
+		
+		
+		root.getChildren().addAll(loadImage, close);
+		
+		game.setOnKeyPressed((KeyEvent event) -> {
+			if(event.getCode().toString() == "ESCAPE")
+				loadMenu();
 		});
 	}
 
@@ -158,6 +258,11 @@ public class BabaIsYouApp extends Application {
 		resetButton.setLayoutX(410);
 		resetButton.setLayoutY(45);
 		
+//		Button bouton= new Button("demo");
+//		bouton.setOnAction((????? event) -> {
+//			
+//		});
+//		
 		//Boutton qui va permettre à l'utilisateur de tester le niveau qu'il vient de créer
 		testButton = new Button("TEST");
 		testButton.setFont(fontMadness);
@@ -183,6 +288,48 @@ public class BabaIsYouApp extends Application {
 		textSelectedItem.setLayoutX(685);
 		textSelectedItem.setLayoutY(65);
 		
+		//Image qui permet de rajouter une pronfondeur de niveau supplémentaire
+		String[] imagesToLoad = {"file:ressources"+File.separator+"+.png", "file:ressources"+File.separator+"-.png",
+				"file:ressources"+File.separator+"flècheGauche.png","file:ressources"+File.separator+"flècheDroite.png"};
+		int x1 = 100;
+		for(int index = 0; index<4; index++) {
+			ImageView image = new ImageView(new Image(imagesToLoad[index]));
+			image.setX(x1);
+			image.setY(90);
+			image.setScaleX(0.3);
+			image.setScaleY(0.3);
+			image.setOpacity(0.5);
+			image.setPickOnBounds(true);
+			final int i = index;
+			image.setOnMousePressed((MouseEvent event) -> {
+				switch(i) {
+				case 0:
+					System.out.println("+");
+					break;
+				case 1:
+					System.out.println("-");
+					break;
+				case 2:
+					System.out.println("<--");
+					break;
+				case 3:
+					System.out.println("-->");
+					break;
+				default: break;
+				}
+				
+			});
+			image.setOnMouseEntered((MouseEvent event) -> {
+				image.setOpacity(1);
+			});
+			image.setOnMouseExited((MouseEvent event) -> {
+				image.setOpacity(0.5);
+			});
+			
+			x1+=35;
+			root.getChildren().add(image);
+		}
+		
 		
 		//On ajout le tout à la scène
 		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem);
@@ -190,10 +337,7 @@ public class BabaIsYouApp extends Application {
 		/*
 		 * Gestionnaire d'évènements pour la souris qui va permettre de sélectionner un Item et de pouvoir le placer dans le niveau
 		 */
-		game.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
+		game.setOnMouseClicked((MouseEvent event) -> {
 				//On récupère la position en X et en Y de la souris
 				double mouseX = event.getX();
 				double mouseY = event.getY();
@@ -234,21 +378,16 @@ public class BabaIsYouApp extends Application {
 					textZone.setText(""); //On met la textZone à "" pour ne pas afficher que le niveau a été sauvegarder alors qu'il ne l'est pas
 					drawCell(board.getCell(x, y)); //Mise à jour de la cellule qui a été modifiée
 				}
-			}
 		});
 
 		//Gestionnaire d'événements du clavier : Comme on se situe dans l'éditeur de niveau si l'utilisateur appuie sur "ESCAPE" on affiche le menu principal
-		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
+		game.setOnKeyPressed((KeyEvent event) -> {
 				String code = event.getCode().toString();
 				if(code.equals("ESCAPE")) {
 					//Sauvegarde automatique du niveau que l'utilisateur est en train de composer pour ne pas qu'il le perde s'il appuie par erreur sur "ESCAPE"
 					LevelManager.saveLvlEditor("testEditor"); //On sauvegarde le fichier dans le bon format
 					loadMenu();
 				}
-			}
 		});
 	}	
 	
@@ -267,7 +406,6 @@ public class BabaIsYouApp extends Application {
 		root = new Group();
 		game = new Scene(root, 960, 960);
 		primaryStage.setScene(game);
-		canvas = new Canvas(960, 960);
 		root.getChildren().add(canvas);
 		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows()); //De combien doit être la taille d'une cellule
 		
@@ -279,9 +417,53 @@ public class BabaIsYouApp extends Application {
 		holder.setStyle("-fx-background-color: #1c1f22");
 		
 		drawBoard(); //Affichage du niveau dans le canvas
-		
+		if(board.getLevelNumber() == 0)
+			loadAdviceStage("advice1");
+		else if (board.getLevelNumber() == 4)
+			loadAdviceStage("advice2");
+			
 		if(activateInputs) //On autorise ou non les "Inputs" clavier
 			activateKeyInputs();
+	}
+	
+	public static void loadAdviceStage(String name) {
+		rootAdvice = new Group();
+		advice = new Scene(rootAdvice, 600, 600);
+		secondaryStage.setScene(advice);
+		canvasAdvice = new Canvas(600, 600);
+		rootAdvice.getChildren().add(canvasAdvice);
+		
+		GraphicsContext gc = canvasAdvice.getGraphicsContext2D();
+		gc.drawImage(new Image("file:ressources"+File.separator+name+".png"), 0, 0);
+		
+		close = new Text("X");
+		close.setFont(fontMadness);
+		close.setFill(Color.WHITE);
+		close.setOpacity(0.5);
+		close.setScaleX(2);
+		close.setScaleY(2);
+		close.setLayoutX(560);
+		close.setLayoutY(40);
+		close.setOnMouseClicked((MouseEvent e) -> {
+			secondaryStage.close();
+		});
+		close.setOnMouseEntered((MouseEvent e) -> {
+			close.setOpacity(1);
+		});
+		close.setOnMouseExited((MouseEvent e) -> {
+			close.setOpacity(0.5);
+		});
+		advice.setOnKeyPressed((KeyEvent e) -> {
+			if(e.getCode().toString().equals("ESCAPE"))
+				secondaryStage.close();
+				
+			
+		});
+		rootAdvice.getChildren().addAll(close);
+		
+		secondaryStage.setX(primaryStage.getX()+180);
+		secondaryStage.setY(primaryStage.getY()+180);
+		secondaryStage.show();
 	}
 	
 	/**
@@ -408,9 +590,17 @@ public class BabaIsYouApp extends Application {
 					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
+						if(board.getLevelNumber() == 4)
+							loadAdviceStage("advice2");
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
+					return;
+				case "F1": //Affiche les astuces
+					if(board.getLevelNumber() == 0)
+						loadAdviceStage("advice1");
+					else if(board.getLevelNumber() == 4)
+						loadAdviceStage("advice2");
 					return;
 				case "ESCAPE": //Retourne au menu principal
 					loadMenu();
@@ -440,13 +630,35 @@ public class BabaIsYouApp extends Application {
 					//Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
+					if(board.getLevelNumber() == 4)
+						loadAdviceStage("advice2");
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 				}
 			}});
-		
-	// START MENU 
 	}
+		
+	private static File FileChooserLvl() {
+		//On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le niveau qu'il veut charger dans l'éditeur de niveau
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose level to load :");
+		// Le code ci-dessous provient de : "https://stackoverflow.com/questions/13634576/javafx-filechooser-how-to-set-file-filters"
+		// Il permet de définir les extensions de fichier autorisées. Ici, on n'autorise que les fichiers textes (".txt")
+		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".TXT", "*.txt");
+		fc.getExtensionFilters().add(fileExtensions);
+		fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
+		File fileChoose = fc.showOpenDialog(primaryStage);
+		if(fileChoose != null) {
+			//Code pour split le path trouvé sur : "https://stackoverflow.com/questions/1099859/how-to-split-a-path-platform-independent"
+			String[] nameFileSplit = fileChoose.toString().split(Pattern.quote(File.separator));
+			if(nameFileSplit[nameFileSplit.length-1].equals("cleanEditor.txt")) {
+				return null;
+			}
+		}
+		return fileChoose;
+	}
+	
+	// START MENU 
 	@FXML
 	public void playButtonClicked() {
 		loadLevel(LevelManager.getListOfLevels()[0], true);
@@ -455,6 +667,7 @@ public class BabaIsYouApp extends Application {
 	@FXML
 	public void exitButtonClicked() {
 		primaryStage.close();
+		secondaryStage.close();
 	}
 	
 	@FXML
@@ -471,6 +684,11 @@ public class BabaIsYouApp extends Application {
 		}
 		else //On charge l'éditeur de base
 			loadEditor("levels"+File.separator+"cleanEditor");
+	}
+	
+	@FXML
+	public void levelsButtonClicked() {
+		loadLevelsMenu();
 	}
 	
 	//Gestion des animations dans le menu principal
@@ -502,6 +720,16 @@ public class BabaIsYouApp extends Application {
 	@FXML
 	public void cadreEditorMouseExited() {
 		cadreEditor.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreLevelsMouseEntered() {
+		cadreLevels.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreLevelsMouseExited() {
+		cadreLevels.setOpacity(0);
 	}
 	
 	@FXML
@@ -570,29 +798,10 @@ public class BabaIsYouApp extends Application {
 
 			@Override
 			public void handle(MouseEvent event) {
-				//On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le niveau qu'il veut charger dans l'éditeur de niveau
-				FileChooser fc = new FileChooser();
-				fc.setTitle("Choose level to load :");
-				// Le code ci-dessous provient de : "https://stackoverflow.com/questions/13634576/javafx-filechooser-how-to-set-file-filters"
-				// Il permet de définir les extensions de fichier autorisées. Ici, on n'autorise que les fichiers textes (".txt")
-				FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".TXT", "*.txt");
-				fc.getExtensionFilters().add(fileExtensions);
-				fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
-				File fileChoose = fc.showOpenDialog(primaryStage);
-				if(fileChoose != null) {
-					//Code pour split le path trouvé sur : "https://stackoverflow.com/questions/1099859/how-to-split-a-path-platform-independent"
-					String[] nameFileSplit = fileChoose.toString().split(Pattern.quote(File.separator));
-					if(nameFileSplit[nameFileSplit.length-1].equals("cleanEditor.txt")) {
-						textZone.setText("This level is not in the good format");
-						return;
-					}
-					loadEditor(LevelManager.loadUserLvl(fileChoose)); //Chargement du niveau choisi par l'utilisateur dans l'éditeur de niveau
-				}
-					
+				 loadEditor(LevelManager.loadUserLvl(FileChooserLvl())); //Chargement du niveau choisi par l'utilisateur dans l'éditeur de niveau
 			}
 		};
 	}	
-	
 	/**
 	 * Méthode qui va s'occuper de la gestion du boutton "TEST"
 	 * @return
@@ -615,4 +824,3 @@ public class BabaIsYouApp extends Application {
 	}
 }
 
-	

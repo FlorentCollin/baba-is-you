@@ -24,7 +24,12 @@
             <Image url="@../../ressources/cadre.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cadreEditor" fitHeight="125.0" fitWidth="368.0" layoutX="369.0" layoutY="590.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.0">
+      <ImageView fx:id="cadreEditor" fitHeight="125.0" fitWidth="368.0" layoutX="626.0" layoutY="588.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.0">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreLevels" fitHeight="125.0" fitWidth="368.0" layoutX="128.0" layoutY="588.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.1">
          <image>
             <Image url="@../../ressources/cadre.png" />
          </image>
@@ -44,9 +49,14 @@
             <Image url="@../../ressources/loadSave.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="301.0" layoutY="600.0" onMouseClicked="#editorButtonClicked" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="558.0" layoutY="598.0" onMouseClicked="#editorButtonClicked" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/editor.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="115.0" fitWidth="357.0" layoutX="52.0" layoutY="595.0" onMouseClicked="#levelsButtonClicked" onMouseEntered="#cadreLevelsMouseEntered" onMouseExited="#cadreLevelsMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/levels.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="260.0" layoutX="700.0" layoutY="768.0" onMouseEntered="#cadreExitMouseEntered" onMouseExited="#cadreExitMouseExited" onMousePressed="#exitButtonClicked" pickOnBounds="true" preserveRatio="true">

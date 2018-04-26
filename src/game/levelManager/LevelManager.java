@@ -412,10 +412,4 @@ public class LevelManager {
 		
 	}
 	
-
-//	public static void loadEditor() {
-//		String[] cleanEditor = {"cleanEditor"};
-//		readLevel(cleanEditor);
-//	}
-
 }
