@@ -8,9 +8,6 @@
 	               </fileset>
 	         </classpath>
 		</javac>
-		<copy todir="build/ressources">
-			<fileset dir="ressources" includes="*.png"/>
-		</copy>
 		<copy todir="build/gui">
 			<fileset dir="src/gui" includes="*.fxml"/>
 		</copy>
