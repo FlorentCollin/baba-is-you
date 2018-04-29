@@ -173,7 +173,7 @@ public class LevelManager {
 				JSONParser parser = new JSONParser();
 				try {
 					
-					Object obj = parser.parse(new FileReader("ressources"+File.separatorChar+"CorrespondingTextOrItem.json"));
+					Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"CorrespondingTextOrItem.json"));
 					JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString()); //Récupération de la class correspondante à l'Item (ex : wall --> TextWall.class)
 					try {

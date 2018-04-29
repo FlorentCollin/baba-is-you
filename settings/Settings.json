@@ -1,0 +1,16 @@
+{
+    "Z" : "UP",
+    "S" : "DOWN",
+    "D" : "RIGHT",
+    "Q" : "LEFT",
+    "R" : "RESTART",
+    "X" : "SAVE",
+    "L" : "LOAD_SAVE",
+    "E" : "NEXT_WORLD",
+    "A" : "PREVIOUS_WORLD",
+    "SPACE" : "NEXT_WORLD_MOD",
+    "P" : "NEXT_LEVEL",
+    "N" : "PREVIOUS_LEVEL",
+    "F1" : "F1",
+    "ESCAPE" : "ESCAPE"
+}

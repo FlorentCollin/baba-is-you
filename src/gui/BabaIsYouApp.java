@@ -1,8 +1,14 @@
 package gui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import game.boardController.Board;
 import game.boardController.Cell;
@@ -30,7 +36,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -72,6 +77,51 @@ public class BabaIsYouApp extends Application {
 	private ImageView cadreLevels;
 	@FXML
 	private ImageView cadreExit;
+	@FXML
+	private ImageView cadreSettings;
+	
+	// SETTINGS MENU
+	@FXML
+    private ImageView upKey;
+
+    @FXML
+    private ImageView restartKey;
+
+    @FXML
+    private ImageView nextWorldKey;
+
+    @FXML
+    private ImageView saveKey;
+
+    @FXML
+    private ImageView downKey;
+
+    @FXML
+    private ImageView rightKey;
+
+    @FXML
+    private ImageView musicOff;
+
+    @FXML
+    private ImageView previousWorldKey;
+
+    @FXML
+    private ImageView newtWorldModKey;
+
+    @FXML
+    private ImageView loadSaveKey;
+
+    @FXML
+    private ImageView musicOn;
+
+    @FXML
+    private ImageView soundOn;
+
+    @FXML
+    private ImageView leftKey;
+
+    @FXML
+    private ImageView soundOff;
 	
 	// EDITOR
 	private static Font fontMadness;
@@ -86,6 +136,9 @@ public class BabaIsYouApp extends Application {
 	// MUSIQUE
 	private static Media musicMenu = new Media(new File("ressources/musicMenu.mp3").toURI().toString());
 	private static MediaPlayer playerMusic = new MediaPlayer(musicMenu);
+	
+	// AUTRE
+	private static JSONObject settings;
 
 	
 	@Override
@@ -111,6 +164,20 @@ public class BabaIsYouApp extends Application {
 	public void init() {
 		playerMusic.setVolume(0.05);
 		playerMusic.setCycleCount(MediaPlayer.INDEFINITE); //Pour jouer en boucle la musique
+		
+		//Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
+		JSONParser parser = new JSONParser();
+		try {
+			
+			Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"Settings.json"));
+			settings = (JSONObject) obj; //Ouverture du fichier JSON et lecture
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -168,7 +235,6 @@ public class BabaIsYouApp extends Application {
 		root.getChildren().add(holder);
 		//Récupération de l'outil qui va permettre de dessiner sur le canvas
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-//		gc.drawImage(new Image("file:ressources"+File.separator+"BackgroundMenu.png", 960, 960, true, true), 0, 0);
 		gc.drawImage(new Image("file:ressources"+File.separator+"levelsMenu.png"), 0, 0); //Affichage de l'image de fond
 		//Boucle permettant d'afficher et de contrôler les différents bouttons de niveaux (ex : LVL 1, LVL 2,...)
 		int x = -65;
@@ -218,6 +284,7 @@ public class BabaIsYouApp extends Application {
 		//Bouton qui permet de revenir au menu principal
 		close = new Text("X");
 		close.setFont(fontMadness);
+		System.out.println(close.getFont());
 		close.setFill(Color.WHITE);
 		close.setOpacity(0.5 );
 		close.setScaleX(3);
@@ -253,7 +320,6 @@ public class BabaIsYouApp extends Application {
 		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
 		loadLevel(new String[] {levelName}, false);
 		
-		playerMusic.play();
 		
 		//On initialise l'entièreté des bouttons et zone de textes qui permettent de charger, tester, sauvegarder un niveau
 		
@@ -422,7 +488,30 @@ public class BabaIsYouApp extends Application {
 					loadMenu();
 				}
 		});
-	}	
+	}
+	
+	private static void loadSettingsMenu() {
+		Parent root = null; 
+		if(! playerMusic.getStatus().equals(Status.PLAYING)) {
+			playerMusic.play();
+		}
+		
+		
+		//Chargement du fichier @FXML qui représente le menu des paramètres
+		try {
+			root = FXMLLoader.load(thisClass.getResource("settingsMenu.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		menu = new Scene(root, 960, 960);
+		primaryStage.setScene(menu);
+		
+		menu.setOnKeyPressed((KeyEvent event) -> {
+			if(event.getCode().toString().equals("ESCAPE"))
+				loadMenu();
+		});
+
+	}
 	
 	/**
 	 * Méthode qui va charger un niveau et l'afficher
@@ -581,22 +670,24 @@ public class BabaIsYouApp extends Application {
 			@Override
 			public void handle(KeyEvent event) 
 			{
-				String code = event.getCode().toString(); //Récupération de la touche pressée
+				String code = (String) settings.get(event.getCode().toString()); //Récupération de la touche pressée
+				if(code == null)
+					code = "Not a shortcut"; //Pour pouvoir tout de même rentrer dans le switch
 				switch(code)
 				{
-				case "Z": direction = 0 ; break;
-				case "D": direction = 1 ; break;
-				case "S": direction = 2 ; break;
-				case "Q": direction = 3 ; break;
-				case "X": LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save"); 
+				case "UP": direction = 0 ; break;
+				case "RIGHT": direction = 1 ; break;
+				case "DOWN": direction = 2 ; break;
+				case "LEFT": direction = 3 ; break;
+				case "SAVE": LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save"); 
 					return; //Sauvegarde le niveau en cours
-				case "L": //Charge la sauvegarde
+				case "LOAD_SAVE": //Charge la sauvegarde
 					LevelManager.loadSaveLvl();
 					board = LevelManager.getActivesBoards()[0]; 
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "R": //Reinitialise le niveau en cours
+				case "RESTART": //Reinitialise le niveau en cours
 					if(board.getLevelNumber() == -1) {
 						LevelManager.readLevel(new String[] {"levels"+File.separator+"editor"+File.separator+"testEditor_0"});
 					}
@@ -607,7 +698,7 @@ public class BabaIsYouApp extends Application {
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "A": //Charge la prondeur précédente
+				case "PREVIOUS_WORLD": //Charge la prondeur précédente
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
@@ -616,7 +707,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard();
 					}
 					return;
-				case "E": //Charge la pronfondeur suivante
+				case "NEXT_WORLD": //Charge la pronfondeur suivante
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
 					{
 						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
@@ -625,13 +716,13 @@ public class BabaIsYouApp extends Application {
 						drawBoard();
 					}
 					return;
-				case "SPACE": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
+				case "NEXT_WORLD_MOD": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
 					board = LevelManager.getActivesBoards()[(board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().length];
 					board.searchPlayers();
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "P": //Charge le niveau précédent
+				case "PREVIOUS_LEVEL": //Charge le niveau précédent
 					if(board.getLevelNumber()-1>=0) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
 						board = LevelManager.getActivesBoards()[0];
@@ -639,7 +730,7 @@ public class BabaIsYouApp extends Application {
 						drawBoard();
 					}
 					return;
-				case "N": //Charge le niveau suivant
+				case "NEXT_LEVEL": //Charge le niveau suivant
 					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
 						board = LevelManager.getActivesBoards()[0];
@@ -744,6 +835,11 @@ public class BabaIsYouApp extends Application {
 		loadLevelsMenu();
 	}
 	
+	@FXML
+	public void settingsButtonClicked() {
+		loadSettingsMenu();
+	}
+	
 	//Gestion des animations dans le menu principal
 	@FXML
 	public void cadrePlayMouseEntered() {
@@ -793,6 +889,33 @@ public class BabaIsYouApp extends Application {
 	@FXML
 	public void cadreExitMouseExited() {
 		cadreExit.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreSettingsMouseEntered() {
+		cadreSettings.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreSettingsMouseExited() {
+		cadreSettings.setOpacity(0);
+	}
+	
+	// SETTINGS
+	@FXML
+	public void upPressed() {
+		upKey.setOpacity(1);
+		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+"a.png"));
+		menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				System.out.println(event.getCode());
+				menu.removeEventHandler(KeyEvent.KEY_PRESSED, this);
+				
+			}
+			
+		});
+	
 	}
 	
 	
