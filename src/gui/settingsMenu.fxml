@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.*?>
@@ -10,7 +11,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BabaIsYouApp">
    <children>
-      <ImageView fx:id="musicOn" fitHeight="960.0" fitWidth="1032.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="musicOn" fitHeight="960.0" fitWidth="1032.0" onMouseEntered="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/settingsMenu.png" />
          </image>
@@ -20,70 +21,75 @@
             <Image url="@../../ressources/Key_images/z.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="downKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="185.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="downKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="185.0" onMouseClicked="#downPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/s.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="rightKey" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="246.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="rightKey" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="246.0" onMouseClicked="#rightPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/d.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="leftKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="311.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="leftKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="311.0" onMouseClicked="#leftPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/q.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="restartKey" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="372.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="restartKey" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="372.0" onMouseClicked="#restartPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/r.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="nextWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="437.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="nextWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="437.0" onMouseClicked="#nextWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/a.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="previousWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="617.0" layoutY="501.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="previousWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="617.0" layoutY="501.0" onMouseClicked="#previousWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/e.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="newtWorldModKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="561.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="nextWorldModKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="561.0" onMouseClicked="#nextWorldModPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
-            <Image url="@../../ressources/Key_images/e.png" />
+            <Image url="@../../ressources/Key_images/space.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="saveKey" fitHeight="180.0" fitWidth="230.0" layoutX="151.0" layoutY="623.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="saveKey" fitHeight="180.0" fitWidth="230.0" layoutX="151.0" layoutY="623.0" onMouseDragged="#savePressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/x.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="loadSaveKey" fitHeight="180.0" fitWidth="230.0" layoutX="303.0" layoutY="686.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="loadSaveKey" fitHeight="180.0" fitWidth="230.0" layoutX="303.0" layoutY="686.0" onMouseClicked="#loadSavePressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/l.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="musicOff" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="751.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="musicOff" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="751.0" onMouseClicked="#musicOffPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/off.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="soundOff" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="814.0" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="soundOff" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="814.0" onMouseClicked="#soundOffPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/off.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="musicOn" fitHeight="180.0" fitWidth="230.0" layoutX="231.0" layoutY="751.0" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="musicOn" fitHeight="180.0" fitWidth="230.0" layoutX="231.0" layoutY="751.0" onMouseClicked="#musicOnPressed" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/on.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="soundOn" fitHeight="180.0" fitWidth="230.0" layoutX="311.0" layoutY="814.0" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+      <ImageView fx:id="soundOn" fitHeight="180.0" fitWidth="230.0" layoutX="311.0" layoutY="814.0" onMouseClicked="#soundOnPressed" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
             <Image url="@../../ressources/Key_images/on.png" />
          </image>
       </ImageView>
+      <Text fx:id="resetText" fill="WHITE" layoutX="788.0" layoutY="938.0" onMouseClicked="#resetTextClicked" onMouseEntered="#resetTextMouseEntered" onMouseExited="#resetTextMouseExited" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="RESET">
+         <font>
+            <Font name="8-Bit Madness" size="63.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

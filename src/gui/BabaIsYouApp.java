@@ -3,9 +3,11 @@ package gui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -42,6 +44,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
@@ -106,7 +109,7 @@ public class BabaIsYouApp extends Application {
     private ImageView previousWorldKey;
 
     @FXML
-    private ImageView newtWorldModKey;
+    private ImageView nextWorldModKey;
 
     @FXML
     private ImageView loadSaveKey;
@@ -122,6 +125,9 @@ public class BabaIsYouApp extends Application {
 
     @FXML
     private ImageView soundOff;
+    
+    @FXML
+    private Text resetText;
 	
 	// EDITOR
 	private static Font fontMadness;
@@ -157,19 +163,28 @@ public class BabaIsYouApp extends Application {
 			if(fontMadness == null)
 				throw new IOException("Custom font was not find");
 
+			primaryStage.setOnCloseRequest((WindowEvent event) -> {
+				close();
+			});
 			//Ouverture de l'application
 			primaryStage.show();
 	}
 	
 	public void init() {
-		playerMusic.setVolume(0.05);
+		initJson();
+		if((boolean) settings.get("MUSIC"))
+			playerMusic.setVolume(0.05);
+		else 
+			playerMusic.setVolume(0);
 		playerMusic.setCycleCount(MediaPlayer.INDEFINITE); //Pour jouer en boucle la musique
-		
+	}
+	
+	private void initJson() {
 		//Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
 		JSONParser parser = new JSONParser();
 		try {
 			
-			Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"Settings.json"));
+			Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"UserSettings.json"));
 			settings = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -178,6 +193,18 @@ public class BabaIsYouApp extends Application {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private static void close() {
+		try {
+			FileWriter file = new FileWriter("settings"+File.separator+"UserSettings.json");
+			file.write(settings.toJSONString());
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		secondaryStage.close();
+		primaryStage.close();
 	}
 	
 	/**
@@ -205,7 +232,7 @@ public class BabaIsYouApp extends Application {
 		 */
 		menu.setOnKeyPressed((KeyEvent event) -> {
 				if(event.getCode().toString().equals("ESCAPE")) {
-					primaryStage.close(); //Fermeture de l'application
+					close(); //Fermeture de l'application
 					secondaryStage.close();
 				}
 				else if(event.getCode().toString().equals("ENTER")) {
@@ -284,7 +311,6 @@ public class BabaIsYouApp extends Application {
 		//Bouton qui permet de revenir au menu principal
 		close = new Text("X");
 		close.setFont(fontMadness);
-		System.out.println(close.getFont());
 		close.setFill(Color.WHITE);
 		close.setOpacity(0.5 );
 		close.setScaleX(3);
@@ -378,7 +404,7 @@ public class BabaIsYouApp extends Application {
 		
 		//Image qui permet de rajouter une pronfondeur de niveau supplémentaire
 		String[] imagesToLoad = {"file:ressources"+File.separator+"+.png", "file:ressources"+File.separator+"-.png",
-				"file:ressources"+File.separator+"flècheGauche.png","file:ressources"+File.separator+"flècheDroite.png"};
+				"file:ressources"+File.separator+"leftArrow.png","file:ressources"+File.separator+"rightArrow.png"};
 		int x1 = 100;
 		//Boucle qui affiche les boutons  "+  -  -->  <--"
 		for(int index = 0; index<4; index++) {
@@ -390,6 +416,7 @@ public class BabaIsYouApp extends Application {
 			image.setOpacity(0.5);
 			image.setPickOnBounds(true);
 			final int i = index;
+			//TODO
 			image.setOnMousePressed((MouseEvent event) -> {
 				switch(i) {
 				case 0:
@@ -490,7 +517,8 @@ public class BabaIsYouApp extends Application {
 		});
 	}
 	
-	private static void loadSettingsMenu() {
+	@FXML
+	private void loadSettingsMenu() {
 		Parent root = null; 
 		if(! playerMusic.getStatus().equals(Status.PLAYING)) {
 			playerMusic.play();
@@ -503,8 +531,12 @@ public class BabaIsYouApp extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		setSettingsImages();
+		
 		menu = new Scene(root, 960, 960);
 		primaryStage.setScene(menu);
+	
+//		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("UP").toString()+".png"));
 		
 		menu.setOnKeyPressed((KeyEvent event) -> {
 			if(event.getCode().toString().equals("ESCAPE"))
@@ -539,7 +571,6 @@ public class BabaIsYouApp extends Application {
 		primaryStage.setScene(game);
 		root.getChildren().add(canvas);
 		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows()); //De combien doit être la taille d'une cellule
-		
 		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
 		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
 		StackPane holder = new StackPane();
@@ -802,6 +833,35 @@ public class BabaIsYouApp extends Application {
 		return fileChoose;
 	}
 	
+	/**
+	 * Méthode qui va changer un raccourci clavier par le choix de l'utilisateur
+	 * @param key le raccourci à modifier
+	 * @param newValue le nouveau raccourci
+	 * @throws IOException Au cas où le fichier json n'est pas trouvé
+	 */
+	@SuppressWarnings("unchecked")
+	private static void changeSettings(String key, ImageView keyImage) throws IOException {
+		keyImage.setOpacity(1);
+		menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				Image imageToLoad = new Image("file:ressources"+File.separator+"Key_images"+File.separator+event.getCode()+".png");
+				if(!imageToLoad.isError()) {
+					keyImage.setImage(imageToLoad);
+					String value = (String) settings.get(key);
+					settings.replace(key, event.getCode().toString());
+					settings.remove(value);
+					settings.put(event.getCode().toString(), key);
+					menu.setOnKeyPressed((KeyEvent e) -> {
+						if(e.getCode().toString().equals("ESCAPE"))
+							loadMenu();
+					});
+				}
+				keyImage.setOpacity(0.5);
+			}
+		});
+	}
+	
 	// START MENU 
 	@FXML
 	public void playButtonClicked() {
@@ -810,7 +870,7 @@ public class BabaIsYouApp extends Application {
 	
 	@FXML
 	public void exitButtonClicked() {
-		primaryStage.close();
+		close();
 		secondaryStage.close();
 	}
 	
@@ -903,22 +963,151 @@ public class BabaIsYouApp extends Application {
 	
 	// SETTINGS
 	@FXML
+	public void setSettingsImages() {
+		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("UP")+".png"));
+		downKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("DOWN")+".png"));
+		rightKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("RIGHT")+".png"));
+		leftKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("LEFT")+".png"));
+		restartKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("RESTART")+".png"));
+		saveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("SAVE")+".png"));
+		loadSaveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("LOAD_SAVE")+".png"));
+		nextWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("NEXT_WORLD")+".png"));
+		nextWorldModKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("NEXT_WORLD_MOD")+".png"));
+		previousWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("PREVIOUS_WORLD")+".png"));
+		if((boolean) settings.get("MUSIC")) { musicOn.setOpacity(1); musicOff.setOpacity(0.5);}
+		else { musicOn.setOpacity(0.5); musicOff.setOpacity(1);}
+		if((boolean) settings.get("SOUNDFX")) { soundOn.setOpacity(1); soundOff.setOpacity(0.5);}
+		else { soundOn.setOpacity(0.5); soundOff.setOpacity(1);}
+	}
+	@FXML
 	public void upPressed() {
-		upKey.setOpacity(1);
-		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+"a.png"));
-		menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				System.out.println(event.getCode());
-				menu.removeEventHandler(KeyEvent.KEY_PRESSED, this);
-				
-			}
-			
-		});
-	
+		try {
+			changeSettings("UP", upKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	
+	@FXML
+	public void downPressed() {
+		try {
+			changeSettings("DOWN", downKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void rightPressed() {
+		try {
+			changeSettings("RIGHT", rightKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void leftPressed() {
+		try {
+			changeSettings("LEFT", leftKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void restartPressed() {
+		try {
+			changeSettings("RESTART", restartKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void nextWorldPressed() {
+		try {
+			changeSettings("NEXT_WORLD", nextWorldKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void previousWorldPressed() {
+		try {
+			changeSettings("PREVIOUS_WORLD", previousWorldKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void nextWorldModPressed() {
+		try {
+			changeSettings("NEXT_WORLD_MOD", nextWorldModKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void savePressed() {
+		try {
+			changeSettings("SAVE", saveKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void loadSavePressed() {
+		try {
+			changeSettings("LOAD_SAVE", loadSaveKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@SuppressWarnings("unchecked")
+	@FXML
+	public void musicOnPressed() {
+		musicOn.setOpacity(1);
+		musicOff.setOpacity(0.5);
+		settings.replace("MUSIC", true);
+		playerMusic.setVolume(0.05);
+		playerMusic.play();
+	}
+	@SuppressWarnings("unchecked")
+	@FXML
+	public void musicOffPressed() {
+		musicOff.setOpacity(1);
+		musicOn.setOpacity(0.5);
+		settings.replace("MUSIC", false);
+		playerMusic.setVolume(0);
+		playerMusic.stop();
+	}
+	@SuppressWarnings("unchecked")
+	@FXML
+	public void soundOnPressed() {
+		soundOn.setOpacity(1);
+		soundOff.setOpacity(0.5);
+		settings.replace("SOUNDFX", true);
+	}
+	@SuppressWarnings("unchecked")
+	@FXML
+	public void soundOffPressed() {
+		soundOff.setOpacity(1);
+		soundOn.setOpacity(0.5);
+		settings.replace("SOUNDFX", false);
+		setSettingsImages();
+	}
+	@FXML
+	public void resetTextClicked() {
+		try {
+			FileUtils.copyFile(new File("settings"+File.separator+"UserSettingsReset.json"), new File("settings"+File.separator+"UserSettings.json"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		init(); //On recharge le fichier contenant les raccourcis car on vient de reset ceux-ci et on recharge par la même occasion la musique
+	}
+	public void resetTextMouseEntered() {
+		resetText.setOpacity(1);
+	}
+	public void resetTextMouseExited() {
+		resetText.setOpacity(0.5);
+	}
 	// EDITOR
 	/**
 	 * Méthode qui va changer la zone de texte
