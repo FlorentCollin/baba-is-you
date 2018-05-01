@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextSink extends RuleItem {
 
-	public TextSink()
-	{
-		setPriority(3);
-		setName("TextSink");
-		setGraphicsName("TextSink");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

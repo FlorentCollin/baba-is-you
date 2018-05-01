@@ -659,7 +659,7 @@ public class BabaIsYouApp extends Application {
 				for(Item element3 : element2.getList())
 				{
 					//Récupération de l'image à afficher en fonction de son nom
-					imageItem = new Image("file:ressources"+File.separatorChar+element3.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+					imageItem = new Image("file:ressources"+File.separatorChar+element3.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 					//On dessine l'Item en fonction de la taille d'une cellule
 					gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
 				}
@@ -683,7 +683,7 @@ public class BabaIsYouApp extends Application {
 		for(Item element : oneCell.getList())
 		{
 			//Récupération de l'image à afficher en fonction de son nom
-			imageItem = new Image("file:ressources"+File.separatorChar+element.getGraphicName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+			imageItem = new Image("file:ressources"+File.separatorChar+element.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 			//On dessine l'Item en fonction de la taille d'une cellule
 			gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
 		}

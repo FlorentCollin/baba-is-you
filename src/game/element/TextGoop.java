@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextGoop extends RuleItem {
 
-	public TextGoop()
-	{
-		setPriority(3);
-		setName("TextGoop");
-		setGraphicsName("TextGoop");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

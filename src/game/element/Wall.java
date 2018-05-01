@@ -4,36 +4,10 @@ package game.element;
  * Objet "WALL"
  *
  */
-public class Wall extends Item implements IRealItem {
+public class Wall extends RealItem {
 
-	private Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextRock)
-	
-	public Wall(Class<?> typeText)
-	{
-		this.typeText = typeText;
-		setPriority(1);
-		setName("Wall");
-		setGraphicsName("wall");
+	public Wall(Class<?> typeText) {
+		super(typeText);
 	}
-	
-	/**
-	 * Méthode qui regarde si l'Item correspond à sa comparaison en RuleItem (ex: Rock == TextRock retourne true)
-	 * @param wordInRule Mot d'une Règle
-	 */
-	@Override
-	public boolean isRepresentedBy(IRule wordInRule)
-	{
-		
-		return wordInRule.getClass().equals(typeText);
-		
-	}
-	
-	@Override
-	public boolean equals(Object other)
-	{
-		if(other instanceof Wall)
-			return true;
-		return false;
-	}
-	
+
 }

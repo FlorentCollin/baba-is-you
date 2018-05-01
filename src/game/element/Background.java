@@ -11,6 +11,5 @@ public class Background extends Item {
 	{
 		setPriority(0);
 		setName("    ");
-		setGraphicsName("");
 	}
 }

@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextPush extends RuleItem {
 
-	public TextPush()
-	{
-		setPriority(3);
-		setName("TextPush");
-		setGraphicsName("TextPush");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

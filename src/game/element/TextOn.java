@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextOn extends RuleItem {
 
-	public TextOn()
-	{
-		setPriority(3);
-		setName("TextOn");
-		setGraphicsName("TextOn");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

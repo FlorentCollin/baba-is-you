@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextFlag extends RuleItem {
 
-	public TextFlag()
-	{
-		setPriority(3);
-		setName("TextFlag");
-		setGraphicsName("TextFlag");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

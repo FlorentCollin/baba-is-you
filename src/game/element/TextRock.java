@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextRock extends RuleItem {
 
-	public TextRock()
-	{
-		setPriority(3);
-		setName("TextRock");
-		setGraphicsName("TextRock");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

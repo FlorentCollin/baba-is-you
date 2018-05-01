@@ -5,13 +5,6 @@ package game.element;
  */
 public class TextWall extends RuleItem {
 
-	public TextWall()
-	{
-		setPriority(3);
-		setName("TextWall");
-		setGraphicsName("TextWall");
-	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

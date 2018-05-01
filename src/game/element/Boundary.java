@@ -10,7 +10,6 @@ public class Boundary extends Item {
 	{
 		setPriority(0);
 		setName("Boundary");
-		setGraphicsName("boundary");
 	}
 	
 	public boolean isPushable()

@@ -5,12 +5,6 @@ package game.element;
  */
 public abstract class TextTp extends RuleItem {
 
-//	public TextTp()
-//	{
-//		setPriority(3);
-//		setName("TextTp");
-//	}
-
 	@Override
 	public boolean isVerb() {
 		return false;

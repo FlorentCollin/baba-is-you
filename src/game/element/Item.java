@@ -10,7 +10,6 @@ public abstract class Item {
 	
 	private int priority; //Ordre de priorité utilisé pour l'affichage (0 = fond, 0>> = baba)
 	private String name;
-	private String GName;
 	
 	public int getPriority() {
 		return priority;
@@ -28,13 +27,6 @@ public abstract class Item {
 		this.name = name;
 	}
 	
-	public void setGraphicsName(String name) {
-		this.GName = name;
-	}
-	
-	public String getGraphicName() {
-		return GName;
-	}
 
 	/**
 	 * Méthode booléenne qui indique si un Item est poussable

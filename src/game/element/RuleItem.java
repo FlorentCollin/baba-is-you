@@ -10,6 +10,10 @@ public abstract class RuleItem extends Item implements IRule {
 	public abstract boolean isVerb();
 	public abstract boolean isWord();
 	
+	public RuleItem() {
+		setPriority(3);
+		setName(this.getClass().getSimpleName());
+	}
 	
 	// Retourne "true" car un objet "règle" est toujours poussable et n'est jamais modifier par les règles
 	@Override

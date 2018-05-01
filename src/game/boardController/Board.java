@@ -3,7 +3,7 @@ package game.boardController;
 import java.io.File;
 import java.util.ArrayList;
 
-import game.element.IRealItem;
+import game.element.RealItem;
 import game.element.IRule;
 import game.element.Item;
 import game.element.TextOn;
@@ -245,7 +245,7 @@ public class Board {
 					for(IRule OnePlayer : playerIs)
 					{
 						//Si l'Item est un joueur alors on ajoute un Tuple(x,y,z) qui correspond au coordonn�es du joueur dans la map
-						if(list.get(z) instanceof IRealItem && ((IRealItem) list.get(z)).isRepresentedBy(OnePlayer))
+						if(list.get(z) instanceof RealItem && ((RealItem) list.get(z)).isRepresentedBy(OnePlayer))
 						{
 							players.add(new Tuple(x,y,z));
 						}

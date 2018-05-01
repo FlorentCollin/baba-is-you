@@ -1,7 +1,13 @@
 <project name="Baba is You (Florent COLLIN et Valentin ANTOINE)">
+
+	  <path id="classpath.test">
+	    <pathelement location="lib/junit-4.12.jar"/>
+	    <pathelement location="lib/hamcrest-core-1.3.jar"/>
+	    <pathelement location="build/tests"/>
+	  </path>
 	<target name="build">
 		<mkdir dir="build"/>
-		<javac srcdir="src" destdir="build" encoding="Latin1" includeantruntime="false">
+		<javac srcdir="src:src/tests" destdir="build" encoding="Latin1" includeantruntime="false">
 	        <classpath>
 	               <fileset dir="lib">
 	                  <include name="**/*.jar" />
@@ -21,6 +27,19 @@
 	               </fileset>
 	         </classpath>
 		</java>
+	</target>
+	
+	<target name="test" depends="build">
+		<junit printsummary="yes" showoutput="yes">
+			<classpath>
+				<path refid="classpath.test"/>
+				<pathelement location="build.*/tests"/>
+			</classpath>
+			 <formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="src/tests" includes="**/*Test.java"/>
+			</batchtest>
+		</junit>
 	</target>
 	
 	<target name="clean">

@@ -6,6 +6,5 @@ public class Eraser extends TextTp{
 	{
 		setPriority(3);
 		setName("Eraser");
-		setGraphicsName("Eraser");
 	}
 }
