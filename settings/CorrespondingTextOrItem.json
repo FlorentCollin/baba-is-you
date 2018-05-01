@@ -12,6 +12,7 @@
     "TpBlue" : "TextTpBlue",
     "TextTpBlue" : "TpBlue",
     "TpRed" : "TextTpRed",
-    "TextTpRed" : "TpRed"
+    "TextTpRed" : "TpRed",
+    "TextBest" : "Best"
 
 }

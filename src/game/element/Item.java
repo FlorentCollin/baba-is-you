@@ -104,6 +104,4 @@ public abstract class Item {
 	{
 		return getClass().toString();
 	}
-	
-	
 }

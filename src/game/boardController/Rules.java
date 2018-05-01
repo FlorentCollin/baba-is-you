@@ -93,7 +93,7 @@ public class Rules {
 						if(element2 instanceof IRule)// Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 						{
 							IRule iRuleElement2 = (IRule) element2;
-							if(iRuleElement2.isWord() || iRuleElement2.isAction()) // Si l'élement est un mot ou une action on a une nouvelle règle
+							if(iRuleElement2.isWord() || iRuleElement2.isAction() || iRuleElement2.isEffect()) // Si l'élement est un mot ou une action on a une nouvelle règle
 							{
 								ruleToAdd[1] = iRuleElement1;
 								ruleToAdd[2] = iRuleElement2;

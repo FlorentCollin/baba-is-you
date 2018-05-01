@@ -7,8 +7,18 @@ package game.element;
 public abstract class RuleItem extends Item implements IRule {
 	
 	
-	public abstract boolean isVerb();
-	public abstract boolean isWord();
+	public boolean isVerb() {
+		return false;
+	}
+	public boolean isWord() {
+		return false;
+	}
+	public boolean isAction() {
+		return false;
+	}
+	public boolean isEffect() {
+		return false;
+	}
 	
 	public RuleItem() {
 		setPriority(3);

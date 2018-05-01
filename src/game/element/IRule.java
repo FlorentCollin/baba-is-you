@@ -9,4 +9,5 @@ public interface IRule {
 	boolean isVerb();
 	boolean isWord();
 	boolean isAction();
+	boolean isEffect();
 }

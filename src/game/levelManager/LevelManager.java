@@ -229,7 +229,7 @@ public class LevelManager {
 		JSONParser parser = new JSONParser();
 			try {
 				
-				Object obj = parser.parse(new FileReader("ressources"+File.separatorChar+"CorrespondingTextOrItem.json"));
+				Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"CorrespondingTextOrItem.json"));
 				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 				return jsonObject.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 			} catch (FileNotFoundException e) {

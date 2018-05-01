@@ -1,5 +1,7 @@
 package game.element;
 
+import java.util.ArrayList;
+
 /**
  * Interface qui va gérer les "Vrais" Item (par exemple les Walls, Rocks, Flags, etc,...)
  *  
@@ -7,6 +9,7 @@ package game.element;
 public abstract class RealItem extends Item {
 	
 	private Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextRock)
+	private ArrayList<Item> effects;
 	
 	public RealItem(Class<?> typeText) {
 		setTypeText(typeText);
@@ -18,6 +21,21 @@ public abstract class RealItem extends Item {
 		this.typeText = typeText;
 	}
 
+
+	public ArrayList<Item> getEffects() {
+		return effects;
+	}
+
+	public void addEffects(Item effect) {
+		if(effects == null)
+			effects = new ArrayList<>();
+		effects.add(effect);
+	}
+	
+	public void removeEffects(Item effect) {
+		if(effects != null)
+			effects.remove(effect);
+	}
 
 	/**
 	 * Méthode qui regarde si l'Item correspond à sa comparaison en RuleItem (ex: Rock == TextRock retourne true)
