@@ -22,7 +22,7 @@ public class Rules {
 	 * Méthode qui va analyser la map pour sortir les règles actives.
 	 * @param board La map.
 	 */
-	public static ArrayList<IRule[]> scanRules(Board[] boards)
+	public static ArrayList<IRule[]> scanRules(ArrayList<Board> boards)
 	{
 		listOfRulesActives = new ArrayList<>();
 		Cell[][] array;
@@ -52,14 +52,14 @@ public class Rules {
 								ruleToAdd[0] = iRuleElement;
 								if(i <= cols-2)
 								{
-									scanRight(array, j, i); // Ajout de la règle horizontal si elle existe
+									scanInOneDirection(array, j, i, "RIGHT"); // Ajout de la règle horizontal si elle existe
 								}
 								// On doit de nouveau instancier une nouvelle règle au cas où ScanRight en a déjà trouvé une
 								ruleToAdd = new IRule[3];
 								ruleToAdd[0] = iRuleElement;
 								if(j <= rows-2)
 								{
-									scanDown(array, j, i);	// Ajout de la règle vertical si elle existe
+									scanInOneDirection(array, j, i, "DOWN");	// Ajout de la règle vertical si elle existe
 								}
 							}
 						}
@@ -69,7 +69,6 @@ public class Rules {
 		}
 		return listOfRulesActives;
 	}
-	//TODO Regrouper les méthodes scanRight et scanDown en une seule méthode avec un switch
 	/**
 	 * Méthode qui va analyser les cellules à droite de la cellule RuleItem
 	 * Si la première cellule à sa droite est un verbe, la méthode va analyser la cellule qui suit pour savoir
@@ -78,17 +77,25 @@ public class Rules {
 	 * @param x	position x du RuleItem
 	 * @param y position y du RuleItem
 	 */
-	public static void scanRight(Cell[][] array, int x, int y)
+	private static void scanInOneDirection(Cell[][] array, int x, int y, String direction)
 	{
+		if(direction.equals("RIGHT"))
+			x=x+1;
+		else if(direction.equals("DOWN"))
+			y=y+1;
 		// Itération sur la liste d'Item de la cellule à droite 
-		for(Item element1 : array[y][x+1].getList())
+		for(Item element1 : array[y][x].getList())
 		{
 			if(element1 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 			{
 				IRule iRuleElement1 = (IRule) element1;
 				if(iRuleElement1.isVerb()) // Si l'élement est un verbe on regarde si la cellule à droite est un mot pour finir la règle
 				{
-					for(Item element2 : array[y][x+2].getList())
+					if(direction.equals("RIGHT"))
+						x=x+1;
+					else if(direction.equals("DOWN"))
+						y=y+1;
+					for(Item element2 : array[y][x].getList())
 					{
 						if(element2 instanceof IRule)// Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
 						{
@@ -102,44 +109,7 @@ public class Rules {
 						}
 					}
 				}
-				}
-					
-		}
-	}
-	/**
-	 * Méthode qui va analyser les cellules en dessous de la cellule RuleItem
-	 * Si la première cellule en dessous est un verbe, la méthode va analyser la cellule qui suit pour savoir
-	 * si cette cellule est un mot.
-	 * @param array tableau de cellule
-	 * @param x	position x du RuleItem
-	 * @param y position y du RuleItem
-	 */
-	public static void scanDown(Cell[][] array, int x, int y)
-	{
-		// Itération sur la liste d'Item de la cellule en dessous 
-		for(Item element1 : array[y+1][x].getList())
-		{
-			if(element1 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
-			{
-				IRule iRuleElement1 = (IRule) element1;
-				if(iRuleElement1.isVerb()) // Si l'élement est un verbe on regarde si la cellule en dessous est un mot pour finir la règle
-				{
-					for(Item element2 : array[y+2][x].getList())
-					{
-						if(element2 instanceof IRule) // Si l'élement implémente IRule alors c'est que c'est un mot qui peut servir à créer une règle
-						{
-							IRule iRuleElement2 = (IRule) element2;
-							if(iRuleElement2.isWord() || iRuleElement2.isAction()) // Si l'élement est un mot ou une action on a une nouvelle règle
-							{
-								ruleToAdd[1] = iRuleElement1;
-								ruleToAdd[2] = iRuleElement2;
-								listOfRulesActives.add(ruleToAdd);								
-							}
-						}
-					}
-				}
 			}
-					
 		}
 	}
 }

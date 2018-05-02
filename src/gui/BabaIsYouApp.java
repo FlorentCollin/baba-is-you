@@ -299,7 +299,7 @@ public class BabaIsYouApp extends Application {
 			File fileChoose = FileChooserLvl();
 			if(fileChoose == null)
 				return;
-			loadLevel(new String[] {fileChoose.getPath().split(Pattern.quote("."))[0]}, true);
+			loadLevel(fileChoose.getPath().split(Pattern.quote("."))[0], true);
 		});
 		//Gestion de l'effet lorsqu'on passe sur l'image
 		loadImage.setOnMouseEntered((MouseEvent e) -> {
@@ -344,7 +344,7 @@ public class BabaIsYouApp extends Application {
 		
 		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22*22
 		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
-		loadLevel(new String[] {levelName}, false);
+		loadLevel(levelName, false);
 		
 		
 		//On initialise l'entièreté des bouttons et zone de textes qui permettent de charger, tester, sauvegarder un niveau
@@ -428,15 +428,15 @@ public class BabaIsYouApp extends Application {
 				case 2:
 					if(board.getDepthOfLevel()-1>=0)
 					{
-						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
+						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
 					break;
 				case 3:
-					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
+					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().size()-1)
 					{
-						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
+						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()+1);
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
@@ -550,7 +550,7 @@ public class BabaIsYouApp extends Application {
 	 * @param names les noms des fichiers des différentes pronfondeur d'un niveau
 	 * @param activateInputs Est ce que les "Inputs" du clavier peuvent être utilisé
 	 */
-	private static void loadLevel(String[] names, boolean activateInputs)
+	private static void loadLevel(String name, boolean activateInputs)
 	{
 		//TEST
 //		Media t1 = new Media(new File("ressources/test.mp4").toURI().toString());
@@ -561,11 +561,11 @@ public class BabaIsYouApp extends Application {
 		//Initialisation
 		playerMusic.stop();
 		
-		if(names[0].equals("save")) //Chargement du niveau sauvegardé
+		if(name.equals("save")) //Chargement du niveau sauvegardé
 			LevelManager.loadSaveLvl();
 		else
-			LevelManager.readLevel(names); //Chargement normal du niveau donné en paramètre
-		board = LevelManager.getActivesBoards()[0]; //Récupération de la première pronfondeur du niveau
+			LevelManager.readLevel(name); //Chargement normal du niveau donné en paramètre
+		board = LevelManager.getActivesBoards().get(0); //Récupération de la première pronfondeur du niveau
 		root = new Group();
 		game = new Scene(root, 960, 960);
 		primaryStage.setScene(game);
@@ -646,7 +646,6 @@ public class BabaIsYouApp extends Application {
 	{
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image imageItem;
-		
 		//Vidage de la cellule dans le canvas
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
@@ -662,6 +661,10 @@ public class BabaIsYouApp extends Application {
 					imageItem = new Image("file:ressources"+File.separatorChar+element3.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 					//On dessine l'Item en fonction de la taille d'une cellule
 					gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
+					for(Item element4 : element3.getEffects()) {
+						imageItem = new Image("file:ressources"+File.separatorChar+element4.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+						gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
+					}
 				}
 			}
 		}
@@ -680,12 +683,16 @@ public class BabaIsYouApp extends Application {
 		//Vidage de la cellule dans le canvas
 		gc.clearRect(y*CELL_SIZE, x*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		//Itération sur tous les Items de la cellule
-		for(Item element : oneCell.getList())
+		for(Item element1 : oneCell.getList())
 		{
 			//Récupération de l'image à afficher en fonction de son nom
-			imageItem = new Image("file:ressources"+File.separatorChar+element.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+			imageItem = new Image("file:ressources"+File.separatorChar+element1.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 			//On dessine l'Item en fonction de la taille d'une cellule
 			gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
+			for(Item element2 : element1.getEffects()) {
+				imageItem = new Image("file:ressources"+File.separatorChar+element2.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+				gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
+			}
 		}
 	}
 	
@@ -693,7 +700,7 @@ public class BabaIsYouApp extends Application {
 	 * Méthode qui va gérer les inputs clavier de l'utilisateur
 	 */
 	public static void activateKeyInputs() {
-		String[][] listOfLevels = LevelManager.getListOfLevels();
+		String[] listOfLevels = LevelManager.getListOfLevels();
 		
 		//Gestionnaire d'événements clavier
 		game.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -714,41 +721,41 @@ public class BabaIsYouApp extends Application {
 					return; //Sauvegarde le niveau en cours
 				case "LOAD_SAVE": //Charge la sauvegarde
 					LevelManager.loadSaveLvl();
-					board = LevelManager.getActivesBoards()[0]; 
+					board = LevelManager.getActivesBoards().get(0); 
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
 				case "RESTART": //Reinitialise le niveau en cours
 					if(board.getLevelNumber() == -1) {
-						LevelManager.readLevel(new String[] {"levels"+File.separator+"editor"+File.separator+"testEditor_0"});
+						LevelManager.readLevel("levels"+File.separator+"editor"+File.separator+"testEditor_0");
 					}
 					else {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()]);
 					}
-					board = LevelManager.getActivesBoards()[0];
+					board = LevelManager.getActivesBoards().get(0);
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
 				case "PREVIOUS_WORLD": //Charge la prondeur précédente
 					if(board.getDepthOfLevel()-1>=0)
 					{
-						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()-1];
+						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
 						board.searchPlayers();
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
 					return;
 				case "NEXT_WORLD": //Charge la pronfondeur suivante
-					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().length-1)
+					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().size()-1)
 					{
-						board = LevelManager.getActivesBoards()[board.getDepthOfLevel()+1];
+						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()+1);
 						board.searchPlayers();
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
 					return;
 				case "NEXT_WORLD_MOD": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
-					board = LevelManager.getActivesBoards()[(board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().length];
+					board = LevelManager.getActivesBoards().get((board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().size());
 					board.searchPlayers();
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
@@ -756,7 +763,7 @@ public class BabaIsYouApp extends Application {
 				case "PREVIOUS_LEVEL": //Charge le niveau précédent
 					if(board.getLevelNumber()-1>=0) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1]);
-						board = LevelManager.getActivesBoards()[0];
+						board = LevelManager.getActivesBoards().get(0);
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
@@ -764,7 +771,7 @@ public class BabaIsYouApp extends Application {
 				case "NEXT_LEVEL": //Charge le niveau suivant
 					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
-						board = LevelManager.getActivesBoards()[0];
+						board = LevelManager.getActivesBoards().get(0);
 						if(board.getLevelNumber() == 4)
 							loadAdviceStage("advice2");
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
@@ -804,7 +811,7 @@ public class BabaIsYouApp extends Application {
 					}
 					//Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1]);
-					board = LevelManager.getActivesBoards()[0]; //Charge le prochain niveau
+					board = LevelManager.getActivesBoards().get(0); //Charge le prochain niveau
 					if(board.getLevelNumber() == 4)
 						loadAdviceStage("advice2");
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
@@ -876,12 +883,12 @@ public class BabaIsYouApp extends Application {
 	
 	@FXML
 	public void loadSaveButtonClicked() {
-		loadLevel(new String[] {"save"}, true); //Chargement du niveau sauvegardé
+		loadLevel("save", true); //Chargement du niveau sauvegardé
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
-		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt");
+		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
 		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
 			String name = LevelManager.loadUserLvl(file);
 			loadEditor(name); //On retire le ".txt"
@@ -1182,8 +1189,7 @@ public class BabaIsYouApp extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				LevelManager.saveLvlEditor("testEditor"); //On sauvegarde le fichier dans le bon format
-				String[] testEditor = {"levels"+File.separator+"editor"+File.separatorChar+"testEditor_0"};
-				loadLevel(testEditor, true); //On charge le fichier qu'on vient de sauvegarder
+				loadLevel("levels"+File.separator+"editor"+File.separatorChar+"testEditor", true); //On charge le fichier qu'on vient de sauvegarder
 			}
 		};
 	}

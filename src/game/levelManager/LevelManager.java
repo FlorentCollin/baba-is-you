@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
@@ -28,17 +29,17 @@ import game.element.Item;
 public class LevelManager {
 //	private static String[][] listOfLevels = {{"editor/test_0"}};
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-	private static String[][] listOfLevels = {{"levels"+File.separator+"lvl0"},{"levels"+File.separator+"lvl1"},{"levels"+File.separator+"lvl2"},{"levels"+File.separator+"lvl3"},{"levels"+File.separator+"lvl4_0", "levels"+File.separator+"lvl4_1"}};
+	private static String[] listOfLevels = {"levels"+File.separator+"lvl0","levels"+File.separator+"lvl1","levels"+File.separator+"lvl2","levels"+File.separator+"lvl3","levels"+File.separator+"lvl4"};
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
-	private static Board[] activesBoards;
+	private static ArrayList<Board> activesBoards;
 	
-	public static Board[] getActivesBoards()
+	public static ArrayList<Board> getActivesBoards()
 	{
 		return activesBoards;
 	}
 	
-	public static String[][] getListOfLevels()
+	public static String[] getListOfLevels()
 	{
 		return listOfLevels;
 	}
@@ -49,9 +50,9 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static void readLevel(String[] namesLevels) 
+	public static void readLevel(String nameLevel)  
 	{
-		
+		System.out.println(nameLevel);
 		BufferedReader br = null;
 		Cell[][] array = null; //return
 		String line;
@@ -65,64 +66,73 @@ public class LevelManager {
 		int cols; //Colonnes
 		int rowsOfBoard = 0; //Nombre de lignes de la map
 		int colsOfBoard = 0; //Nombre de colonnes de la map
-		activesBoards = new Board[namesLevels.length]; //On initialise le nombre de board qui vont être actifs simultanément
+		activesBoards = new ArrayList<>(); // INIT
 		//On va charger chaque partie du Niveau (Pour les ajouter au final à activesBoards) 
-		for(int index = 0; index<namesLevels.length; index++)
-		{
-			// Ouverture du fichier
-			try{
-				File file = new File(namesLevels[index]);
-				br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
-			} catch (FileNotFoundException fnfex) {
-				System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
-			}
-			// Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
-			// Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
-			// Et pré remplissage de la map
-			try {
-				line = br.readLine();
-				levelNumber = Integer.parseInt(line.split(" ")[1]);
-				depthOfLevel = Integer.parseInt(line.split(" ")[2]);
-				line = br.readLine();
-				rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
-				colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
-				array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
-				//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
-				//Itération sur toutes les cellules de la map
-				for(int i = 0; i < colsOfBoard; i++)
-				{
-					for(int j = 0; j< rowsOfBoard; j++)
+		// Ouverture du fichier
+		try{
+			File file = new File(nameLevel);
+			br = new BufferedReader(new FileReader(file.getAbsolutePath()+ ".txt")); //PATH
+		} catch (FileNotFoundException fnfex) {
+			System.out.println(fnfex.getMessage() + " The file was not found"); // A MODIFIER
+		}
+		try {
+			line = br.readLine(); //Lecture de la première ligne du fichier pour rentrer dans la boucle
+			while(line != null)
+			{
+				System.out.println(line);
+				// Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
+				// Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
+				// Et pré remplissage de la map
+				try {
+					levelNumber = Integer.parseInt(line.split(" ")[1]);
+					depthOfLevel = Integer.parseInt(line.split(" ")[2]);
+					line = br.readLine();
+					rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
+					colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
+					array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
+					//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
+					//Itération sur toutes les cellules de la map
+					for(int i = 0; i < colsOfBoard; i++)
 					{
-						// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
-						if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
+						for(int j = 0; j< rowsOfBoard; j++)
 						{
-							array[i][j] = new Cell(i,j, new Boundary());
+							// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
+							if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
+							{
+								array[i][j] = new Cell(i,j, new Boundary());
+							}
+							else if(array[i][j] == null)
+								array[i][j] = new Cell(i,j);
 						}
-						else if(array[i][j] == null)
-							array[i][j] = new Cell(i,j);
 					}
-				}
-				// Lecture du reste du fichier
-				while((line = br.readLine()) != null)
-				{
-					list = line.split(" ");
-					cols = Integer.parseInt(list[1]);
-					rows = Integer.parseInt(list[2]);
-					word = list[0];
-					
-					// Choix de l'Item à ajouter en fonction du mot
-					itemToAdd = createItem(word);
-					//Ajout de l'item dans sa cellule
-					cellToChange = array[rows][cols];
-					cellToChange.add(itemToAdd);
-					array[rows][cols] = cellToChange;
-					
-				}
-				br.close();
-			} catch (IOException ioex) {
-				System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
-			} 
-			activesBoards[index] = new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard);
+					// Lecture du reste du fichier
+					line = br.readLine();
+					while(line != null && ! (line.split(" ")[0].equals("LVL")))
+					{
+						System.out.println("Lecture du reste : "+line);
+						list = line.split(" ");
+						cols = Integer.parseInt(list[1]);
+						rows = Integer.parseInt(list[2]);
+						word = list[0];
+						
+						// Choix de l'Item à ajouter en fonction du mot
+						itemToAdd = createItem(word);
+						//Ajout de l'item dans sa cellule
+						cellToChange = array[rows][cols];
+						cellToChange.add(itemToAdd);
+						array[rows][cols] = cellToChange;
+						line = br.readLine();
+					}
+//					line = br.readLine(); //Pour continuer dans le premier while()
+				} catch (IOException ioex) {
+					System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
+				} 
+				activesBoards.add(new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		Rules.scanRules(activesBoards);
 		//On recherche les différents joueurs sur tous les boards et on en profite pour mettre à jour les règles sur l'ensemble des boards actifs
@@ -130,6 +140,11 @@ public class LevelManager {
 		{
 			board.scanRules();
 			board.searchPlayers();
+		}
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -251,23 +266,27 @@ public class LevelManager {
 	 */
 	public static void saveLvl(String name)
 	{
-		//On clean le dossier de sauvegarde pour écraser correctement les différentes profondeurs de niveaux
-		File saveDir = new File("levels"+File.separatorChar+"saves");
+		//On clean le fichier de sauvegarde 
 		try {
-			FileUtils.forceDelete(saveDir);
+			File saveFile = new File("levels"+File.separator+"saves"+File.separator+"save.txt");
+			if(saveFile.exists())
+				FileUtils.forceDelete(saveFile);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		saveDir.mkdir();
 
 		//On sauvegarde le niveau dans un nouveau fichier en itérant sour l'entièreté des Boards actifs
 		BufferedWriter bw = null;
-		for(int index = 0; index<activesBoards.length; index++)
+		File save = new File(name+".txt"); //Nom du fichier dans lequel on va faire la savegarde
+		try {
+			bw = new BufferedWriter(new FileWriter(save));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		for(int index = 0; index<activesBoards.size(); index++)
 		{
 			try {
-				Board board = activesBoards[index];
-				File save = new File(name+"_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va faire la savegarde
-				bw = new BufferedWriter(new FileWriter(save));
+				Board board = activesBoards.get(index);
 				bw.write("LVL " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
 				bw.write((board.getRows()-2) + " " + (board.getCols()-2)); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
@@ -292,21 +311,26 @@ public class LevelManager {
 				e.printStackTrace();
 			} finally {
 				try {
-					bw.close();
 				}
 				catch (Exception e) {}
 			}
+		}
+		//Fermeture du BufferedWriter
+		try {
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public static void saveLvlEditor(String name) {
 		
 		BufferedWriter bw = null;
-		for(int index = 0; index<activesBoards.length; index++)
+		for(int index = 0; index<activesBoards.size(); index++)
 		{
 			try {
-				Board board = activesBoards[index];
-				File save = new File("levels"+File.separatorChar+"editor"+File.separatorChar+name+"_"+board.getDepthOfLevel()+".txt"); //Nom du fichier dans lequel on va sauvegarder le niveau
+				Board board = activesBoards.get(index);
+				File save = new File("levels"+File.separatorChar+"editor"+File.separatorChar+name+".txt"); //Nom du fichier dans lequel on va sauvegarder le niveau
 				bw = new BufferedWriter(new FileWriter(save));
 				bw.write(name + " " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
@@ -328,15 +352,16 @@ public class LevelManager {
 						}
 					}
 				}
-				bw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				try {
-					bw.close();
-				}
-				catch (Exception e) {}
 			}
+		}
+		//Fermeture du BufferedWriter
+		try {
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -352,7 +377,7 @@ public class LevelManager {
 	 */
 	public static String loadUserLvl(File fileName) {
 		// 1) On copier le fichier "cleanEditor"
-		File newCleanEditor = new File("levels"+File.separator+"editor"+File.separator+"cleanEditor_0.txt");
+		File newCleanEditor = new File("levels"+File.separator+"editor"+File.separator+"cleanEditor.txt");
 		try {
 			FileUtils.copyFile(new File("levels"+File.separator+"cleanEditor.txt"), newCleanEditor);
 		} catch (IOException e) {
@@ -360,12 +385,13 @@ public class LevelManager {
 		}
 		
 		// 2) On lit le fichier de l'utilisateur
-		String[] namesLevels = {fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4)}; 
-		readLevel(namesLevels);
+		String nameLevel = fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4); 
+		readLevel(nameLevel);
+	
 		
 		// 3) On reécrit le niveau sous la forme propre à l'éditeur de niveau
 		BufferedWriter bw = null;
-		Board board = activesBoards[0];
+		Board board = activesBoards.get(0);
 		try {
 			bw = new BufferedWriter(new FileWriter(newCleanEditor, true));
 			bw.newLine(); // = "\n"
@@ -384,11 +410,16 @@ public class LevelManager {
 					}
 				}
 			}
-			bw.close();
 			activesBoards = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//Fermeture du BufferedWriter
+		try {
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 		return newCleanEditor.getAbsolutePath().substring(0 ,newCleanEditor.getAbsolutePath().length()-4);
 	}
 	
@@ -397,18 +428,15 @@ public class LevelManager {
 	 */
 	public static void loadSaveLvl()
 	{
-		File file = new File("levels"+File.separatorChar+"saves");
-		if(file.list().length==0) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
+		File file = new File("levels"+File.separatorChar+"saves"+File.separator+"save.txt");
+		if(! file.exists()) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
 		{
 			readLevel(getListOfLevels()[0]);
 			return;
 		}
-		String[] listActivesBoards = file.list();
-		for(int index = 0; index<listActivesBoards.length; index++)
-		{
-			listActivesBoards[index] = "levels"+File.separator+"saves"+File.separator+listActivesBoards[index].substring(0, listActivesBoards[index].length()-4);
+		else {
+			readLevel("levels"+File.separator+"saves"+File.separator+"save");
 		}
-		readLevel(listActivesBoards);
 		
 	}
 	

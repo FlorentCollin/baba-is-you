@@ -1,5 +1,7 @@
 package game.boardController;
 
+import java.util.ArrayList;
+
 import game.element.Item;
 import game.element.TpBlue;
 import game.element.TpRed;
@@ -24,7 +26,7 @@ public class MoveController {
 		//Copie des coordonnées
 		int x2 = x1;
 		int y2 = y1;
-		Board[] activesBoard = LevelManager.getActivesBoards();
+		ArrayList<Board> activesBoard = LevelManager.getActivesBoards();
 		Cell cellToMove = board.getBoard()[y1][x1];
 		if(cellToMove.isEmpty()) //Si la cellule est vide alors on peut forément bouger tous les éléments précédents
 		{
@@ -78,12 +80,12 @@ public class MoveController {
 				Item itemToAdd;
 				for(Item element : nextCell.getList())
 				{
-					if(element instanceof TpBlue && board.getDepthOfLevel()+1<activesBoard.length && board.isAnActiveTp(element))
+					if(element instanceof TpBlue && board.getDepthOfLevel()+1<activesBoard.size() && board.isAnActiveTp(element))
 					{
 						board.addChangedCell(new Tuple(x1,y1,0));
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
-						activesBoard[board.getDepthOfLevel()+1].getCell(x2, y2).add(itemToAdd);
+						activesBoard.get(board.getDepthOfLevel()+1).getCell(x2, y2).add(itemToAdd);
 						return true;
 					}
 					if(element instanceof TpRed && board.getDepthOfLevel()-1>=0 && board.isAnActiveTp(element))
@@ -91,7 +93,7 @@ public class MoveController {
 						board.addChangedCell(new Tuple(x1,y1,0));
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
-						activesBoard[board.getDepthOfLevel()-1].getCell(x2, y2).add(itemToAdd);
+						activesBoard.get(board.getDepthOfLevel()-1).getCell(x2, y2).add(itemToAdd);
 						return true;
 					}
 				}

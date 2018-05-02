@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public abstract class RealItem extends Item {
 	
 	private Class<?> typeText; // Variable qui sert à comparer un Item avec sa comparaison en RuleItem (ex: Rock --> TextRock)
-	private ArrayList<Item> effects;
 	
 	public RealItem(Class<?> typeText) {
 		setTypeText(typeText);
@@ -21,20 +20,21 @@ public abstract class RealItem extends Item {
 		this.typeText = typeText;
 	}
 
-
+	@Override
 	public ArrayList<Item> getEffects() {
 		return effects;
 	}
-
+	@Override
 	public void addEffects(Item effect) {
 		if(effects == null)
 			effects = new ArrayList<>();
 		effects.add(effect);
 	}
-	
-	public void removeEffects(Item effect) {
+	@Override
+	public boolean removeEffects(Item effect) {
 		if(effects != null)
-			effects.remove(effect);
+			return effects.remove(effect);
+		return false;
 	}
 
 	/**

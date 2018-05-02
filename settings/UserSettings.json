@@ -1,1 +1,31 @@
-{"A":"PREVIOUS_WORLD","DOWN":"S","D":"RIGHT","E":"NEXT_WORLD","SOUNDFX":true,"L":"LOAD_SAVE","N":"NEXT_LEVEL","SPACE":"NEXT_WORLD_MOD","P":"PREVIOUS_LEVEL","NEXT_WORLD_MOD":"SPACE","Q":"LEFT","R":"RESTART","S":"DOWN","X":"SAVE","RIGHT":"D","RESTART":"R","Z":"UP","UP":"Z","SAVE":"X","LOAD_SAVE":"L","MUSIC":true,"LEFT":"Q","NEXT_LEVEL":"N","PREVIOUS_WORLD":"A","F1":"F1","ESCAPE":"ESCAPE","NEXT_WORLD":"E","PREVIOUS_LEVEL":"P"}
+{
+    "Z" : "UP",
+    "S" : "DOWN",
+    "D" : "RIGHT",
+    "Q" : "LEFT",
+    "R" : "RESTART",
+    "X" : "SAVE",
+    "L" : "LOAD_SAVE",
+    "E" : "NEXT_WORLD",
+    "A" : "PREVIOUS_WORLD",
+    "SPACE" : "NEXT_WORLD_MOD",
+    "P" : "PREVIOUS_LEVEL",
+    "N" : "NEXT_LEVEL",
+    "F1" : "F1",
+    "ESCAPE" : "ESCAPE",
+    "MUSIC" : true,
+    "SOUNDFX" : true,
+
+    "UP" : "Z",
+    "DOWN" : "S",
+    "RIGHT" : "D",
+    "LEFT" : "Q",
+    "RESTART" : "R",
+    "SAVE" : "X",
+    "LOAD_SAVE" : "L",
+    "NEXT_WORLD" : "E",
+    "PREVIOUS_WORLD" : "A",
+    "NEXT_WORLD_MOD" : "SPACE",
+    "PREVIOUS_LEVEL" : "P",
+    "NEXT_LEVEL" : "N"
+}

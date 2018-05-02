@@ -1,5 +1,7 @@
 package game.element;
 
+import java.util.ArrayList;
+
 import game.boardController.Rules;
 
 /**
@@ -10,6 +12,7 @@ public abstract class Item {
 	
 	private int priority; //Ordre de priorité utilisé pour l'affichage (0 = fond, 0>> = baba)
 	private String name;
+	protected ArrayList<Item> effects = new ArrayList<>();
 	
 	public int getPriority() {
 		return priority;
@@ -92,6 +95,19 @@ public abstract class Item {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+	public ArrayList<Item> getEffects() {
+		return effects;
+	}
+
+	public void addEffects(Item effect) {
+		//Implémenté uniquement sur les RealsItems (cfr RealItem)
+	}
+	
+	public boolean removeEffects(Item effect) {
+		//Implémenté uniquement sur les RealsItems (cfr RealItem)
 		return false;
 	}
 	
