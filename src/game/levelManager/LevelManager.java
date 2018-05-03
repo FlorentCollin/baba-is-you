@@ -340,7 +340,7 @@ public class LevelManager {
 		{
 			try {
 				Board board = activesBoards.get(index);
-				bw.write("LVL" + " " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
+				bw.write("LVL" + " " + "-1" + " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
 				bw.write(18 + " " + 18); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map (Comme on est dans l'éditeur de niveau
 				// L'utilisateur ne peut pas choisir la taille du niveau et le taile imposée est de 18x18 cases
@@ -377,20 +377,19 @@ public class LevelManager {
 	 * Méthode qui va charger le lvl de l'utilisateur pour l'adapter à l'éditeur de niveau
 	 * (utilisé notamment par le boutton "LOAD" dans l'éditeur de niveau)
 	 * Déroulement de la méthode :
-	 * 1) On copie le fichier "cleanEditor" pour pouvoir rajouter le niveau de l'utilisateur à la place de la partie vide où
+	 * 1) On copie le contenu du fichier "cleanEditor" pour pouvoir rajouter le niveau de l'utilisateur à la place de la partie vide où
 	 * l'utilisateur peut normalement modifier le niveau
 	 * 2) On lit le fichier de l'utilisateur et on le reécrit en modifiant le numéro des colonnes et des lignes pour qu'ils correspondent
 	 * au format de l'éditeur de niveau
 	 * ATTENTION le niveau à charger doit être de la taille 18x18 cases !
+	 * @param fileName le nom du fichier à charger dans l'éditeur
+	 * @return le nom du fichier qui contient l'éditeur avec le niveau de l'utilisateur dans la partie modifiable	
 	 */
 	public static String loadUserLvl(File fileName) {
+		//TODO Améliorer cette méthode car elle est fort compliqué, il doit sûrement y avoir un moyen beaucoup plus simple :) mais au moins
+		//Elle fonctionne
 		// 1) On copier le fichier "cleanEditor"
 		File newCleanEditor = new File("levels"+File.separator+"editor"+File.separator+"cleanEditor.txt");
-		try {
-			FileUtils.copyFile(new File("levels"+File.separator+"cleanEditor.txt"), newCleanEditor);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		// 2) On lit le fichier de l'utilisateur
 		String nameLevel = fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4); 
@@ -398,35 +397,50 @@ public class LevelManager {
 	
 		
 		// 3) On reécrit le niveau sous la forme propre à l'éditeur de niveau
+		BufferedReader br = null;
 		BufferedWriter bw = null;
+		//Ouverture du nouveau fichier
 		try {
-			bw = new BufferedWriter(new FileWriter(newCleanEditor, true));
-			bw.newLine(); // = "\n"
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			bw = new BufferedWriter(new FileWriter(newCleanEditor));
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		}
-		//TODO
-		Board board = activesBoards.get(0);
-		try {
-			//Itération sur toute la map
-			for(Cell[] element1 : board.getBoard())
-			{
-				for(Cell element2 : element1)
+		for(Board board : activesBoards) { //Itération sur l'ensemble des boards actifs (des mondes parrallèles actifs)
+			//Copie de l'éditeur vierge
+			try {
+				br = new BufferedReader(new FileReader("levels"+File.separator+"cleanEditor.txt"));
+				String line = br.readLine();
+				bw.write("LVL -1 "+board.getDepthOfLevel());
+				bw.newLine();
+				while((line = br.readLine()) !=null) {
+					bw.write(line);
+					bw.newLine();
+				}
+				br.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			//Ajout des items sur l'éditeur vierge
+			try {
+				//Itération sur toute la map
+				for(Cell[] element1 : board.getBoard())
 				{
-					for(Item element3 : element2.getList())
+					for(Cell element2 : element1)
 					{
-						if(!(element3 instanceof Boundary))
+						for(Item element3 : element2.getList())
 						{
-							bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()+4));
-							bw.newLine();
+							if(!(element3 instanceof Boundary))
+							{
+								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()+4)); //Ajout dans le fichier des items
+								bw.newLine();
+							}
 						}
 					}
 				}
+				activesBoards = null; //RESET
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			activesBoards = null;
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		//Fermeture du BufferedWriter
 		try {

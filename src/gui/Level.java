@@ -57,7 +57,6 @@ public class Level extends BabaIsYouApp {
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		holder.setStyle("-fx-background-color: #1c1f22");
-		
 		drawBoard(); //Affichage du niveau dans le canvas
 		if(board.getLevelNumber() == 0)
 			Advice.loadAdviceStage("advice1");

@@ -91,14 +91,10 @@ public class Settings extends Menu{
 	    		public void handle(KeyEvent event) {
 	    			Image imageToLoad = new Image("file:ressources"+File.separator+"Key_images"+File.separator+event.getCode()+".png");
 	    			if(!imageToLoad.isError()) {
-	    				System.out.println("1 "+key + " : " + settings.get(key));
 	    				keyImage.setImage(imageToLoad);
 	    				settings.remove(settings.get(key).toString());
 	    				settings.put(event.getCode().toString(), key);
 	    				settings.replace(key, event.getCode().toString());
-	    				System.out.println("2 "+key + " : " + settings.get(key));
-	    				System.out.println(settings.get("Z"));
-	    				System.out.println(settings.get(settings.get(key)).toString());
 	    				
 	    				menu.setOnKeyPressed((KeyEvent e) -> {
 	    					if(e.getCode().toString().equals("ESCAPE"))

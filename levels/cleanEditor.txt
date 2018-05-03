@@ -1,4 +1,4 @@
-cleanEditor -1 0
+LVL -1 0
 22 22
 Boundary 1 4
 Boundary 2 4
@@ -57,4 +57,5 @@ TextIs 22 12
 TextWin 22 13
 TextStop 22 14
 TextPush 22 15
-TextSink 22 16
+TextOn 22 16
+TextSink 22 17
