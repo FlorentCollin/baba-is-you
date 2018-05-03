@@ -19,7 +19,7 @@ public class RulesTest {
 		realRules.add(new String[] {"TextRock","TextIs","TextPush"});
 		realRules.add(new String[] {"TextBaba","TextIs","TextYou"});
 		realRules.add(new String[] {"TextFlag","TextIs","TextWin"});
-		LevelManager.readLevel(LevelManager.getListOfLevels()[0]); //Lecture du premier niveau
+		LevelManager.readLevel(LevelManager.getListOfLevels()[0], true); //Lecture du premier niveau
 		ArrayList<IRule[]> listOfRules = Rules.getListOfRulesActives();
 		for(int i=0; i<listOfRules.size(); i++) {
 			for(int j=0; j<listOfRules.get(i).length; j++) {

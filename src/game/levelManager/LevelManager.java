@@ -50,9 +50,8 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static void readLevel(String nameLevel)  
+	public static void readLevel(String nameLevel, boolean eraseActives)  
 	{
-		System.out.println(nameLevel);
 		BufferedReader br = null;
 		Cell[][] array = null; //return
 		String line;
@@ -66,7 +65,10 @@ public class LevelManager {
 		int cols; //Colonnes
 		int rowsOfBoard = 0; //Nombre de lignes de la map
 		int colsOfBoard = 0; //Nombre de colonnes de la map
-		activesBoards = new ArrayList<>(); // INIT
+		//Ce boolean est utile dans l'éditeur de niveau pour pouvoir ajouter facilement des profondeurs de niveaux supplémentaires
+		//Si eraseActives == true alors on reinitialise la liste des plateaux actifs
+		if(eraseActives || activesBoards == null)
+			activesBoards = new ArrayList<>();
 		//On va charger chaque partie du Niveau (Pour les ajouter au final à activesBoards) 
 		// Ouverture du fichier
 		try{
@@ -79,13 +81,13 @@ public class LevelManager {
 			line = br.readLine(); //Lecture de la première ligne du fichier pour rentrer dans la boucle
 			while(line != null)
 			{
-				System.out.println(line);
 				// Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
 				// Instanciation de tableau en récupérant le nombre de colonnes et de lignes grâce à la première ligne du fichier
 				// Et pré remplissage de la map
 				try {
 					levelNumber = Integer.parseInt(line.split(" ")[1]);
-					depthOfLevel = Integer.parseInt(line.split(" ")[2]);
+					depthOfLevel = activesBoards.size();
+//					depthOfLevel = Integer.parseInt(line.split(" ")[2]);
 					line = br.readLine();
 					rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
 					colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
@@ -109,7 +111,6 @@ public class LevelManager {
 					line = br.readLine();
 					while(line != null && ! (line.split(" ")[0].equals("LVL")))
 					{
-						System.out.println("Lecture du reste : "+line);
 						list = line.split(" ");
 						cols = Integer.parseInt(list[1]);
 						rows = Integer.parseInt(list[2]);
@@ -324,15 +325,22 @@ public class LevelManager {
 	}
 	
 	public static void saveLvlEditor(String name) {
-		
 		BufferedWriter bw = null;
+		//On clean le fichier temporaire 
+		try {
+			File saveFile = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
+			File save = new File("levels"+File.separatorChar+"editor"+File.separatorChar+name+".txt"); //Nom du fichier dans lequel on va sauvegarder le niveau
+			bw = new BufferedWriter(new FileWriter(save));
+			if(saveFile.exists()) {}
+//				FileUtils.forceDelete(saveFile);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		for(int index = 0; index<activesBoards.size(); index++)
 		{
 			try {
 				Board board = activesBoards.get(index);
-				File save = new File("levels"+File.separatorChar+"editor"+File.separatorChar+name+".txt"); //Nom du fichier dans lequel on va sauvegarder le niveau
-				bw = new BufferedWriter(new FileWriter(save));
-				bw.write(name + " " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
+				bw.write("LVL" + " " + board.getLevelNumber()+ " " + board.getDepthOfLevel()); //Ajout de la première ligne qui désigne le numéro du niveau 
 				bw.newLine(); 
 				bw.write(18 + " " + 18); //Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map (Comme on est dans l'éditeur de niveau
 				// L'utilisateur ne peut pas choisir la taille du niveau et le taile imposée est de 18x18 cases
@@ -386,15 +394,21 @@ public class LevelManager {
 		
 		// 2) On lit le fichier de l'utilisateur
 		String nameLevel = fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4); 
-		readLevel(nameLevel);
+		readLevel(nameLevel, true);
 	
 		
 		// 3) On reécrit le niveau sous la forme propre à l'éditeur de niveau
 		BufferedWriter bw = null;
-		Board board = activesBoards.get(0);
 		try {
 			bw = new BufferedWriter(new FileWriter(newCleanEditor, true));
 			bw.newLine(); // = "\n"
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//TODO
+		Board board = activesBoards.get(0);
+		try {
 			//Itération sur toute la map
 			for(Cell[] element1 : board.getBoard())
 			{
@@ -431,11 +445,11 @@ public class LevelManager {
 		File file = new File("levels"+File.separatorChar+"saves"+File.separator+"save.txt");
 		if(! file.exists()) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
 		{
-			readLevel(getListOfLevels()[0]);
+			readLevel(getListOfLevels()[0], true);
 			return;
 		}
 		else {
-			readLevel("levels"+File.separator+"saves"+File.separator+"save");
+			readLevel("levels"+File.separator+"saves"+File.separator+"save", true);
 		}
 		
 	}

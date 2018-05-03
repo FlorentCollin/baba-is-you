@@ -9,9 +9,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.canvas.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BabaIsYouApp">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Settings">
    <children>
-      <ImageView fx:id="musicOn" fitHeight="960.0" fitWidth="1032.0" onMouseEntered="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="960.0" fitWidth="1032.0" onMouseEntered="#setSettingsImages" onMouseMoved="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/settingsMenu.png" />
          </image>
@@ -43,12 +43,12 @@
       </ImageView>
       <ImageView fx:id="nextWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="437.0" onMouseClicked="#nextWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
-            <Image url="@../../ressources/Key_images/a.png" />
+            <Image url="@../../ressources/Key_images/E.png" />
          </image>
       </ImageView>
       <ImageView fx:id="previousWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="617.0" layoutY="501.0" onMouseClicked="#previousWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
          <image>
-            <Image url="@../../ressources/Key_images/e.png" />
+            <Image url="@../../ressources/Key_images/A.png" />
          </image>
       </ImageView>
       <ImageView fx:id="nextWorldModKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="561.0" onMouseClicked="#nextWorldModPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">

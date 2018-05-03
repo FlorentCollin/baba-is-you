@@ -2,6 +2,7 @@
 
 	  <path id="classpath.test">
 	    <pathelement location="lib/junit-4.12.jar"/>
+	  	<pathelement location="lib/json-simple-1.1.jar"/>
 	    <pathelement location="lib/hamcrest-core-1.3.jar"/>
 	    <pathelement location="build/tests"/>
 	  </path>
@@ -33,11 +34,11 @@
 		<junit printsummary="yes" showoutput="yes">
 			<classpath>
 				<path refid="classpath.test"/>
-				<pathelement location="build.*/tests"/>
+				<pathelement location="build"/>
 			</classpath>
 			 <formatter type="brief" usefile="false" />
 			<batchtest>
-				<fileset dir="src/tests" includes="**/*Test.java"/>
+				<fileset dir="src" includes="**/*Test.java"/>
 			</batchtest>
 		</junit>
 	</target>
