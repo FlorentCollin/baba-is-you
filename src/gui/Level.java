@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 
@@ -237,6 +238,12 @@ public class Level extends BabaIsYouApp {
 						Menu.loadMenu();
 						return;
 					}
+					ImageView gif = new ImageView(new Image("file:ressources/GoldenCupAnimation.gif"));
+//					gif.setX(725);
+//					gif.setY(725);
+					gif.setX(750);
+					gif.setY(30);
+					root.getChildren().add(gif);
 					//Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1], true);
 					board = LevelManager.getActivesBoards().get(0); //Charge le prochain niveau

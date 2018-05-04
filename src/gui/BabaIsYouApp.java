@@ -55,6 +55,7 @@ public class BabaIsYouApp extends Application {
 			//Chargement du Menu principal
 			Menu.loadMenu();
 			
+			
 			//Ouverture de l'application
 			primaryStage.show();
 	}

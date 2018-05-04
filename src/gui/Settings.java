@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class Settings extends Menu{
@@ -63,12 +65,29 @@ public class Settings extends Menu{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-//			setSettingsImages();
-			
 			menu = new Scene(root, 960, 960);
 			primaryStage.setScene(menu);
+			//TODO Mettre le bouton close dans une classer supérieur pour ne pas devoir l'initialiser plusieurs fois
+			//Bouton qui permet de revenir au menu principal
+			close = new Text("X");
+			close.setFont(fontMadness);
+			close.setFill(Color.WHITE);
+			close.setOpacity(0.5 );
+			close.setScaleX(3);
+			close.setScaleY(3);
+			close.setX(910);
+			close.setY(45);
+			close.setOnMouseClicked((MouseEvent event) -> {
+				loadMenu();
+			});
+			//Gestion de l'effet lorsqu'on passe sur le bouton
+			close.setOnMouseEntered((MouseEvent event) -> {
+				close.setOpacity(1);
+			});
+			close.setOnMouseExited((MouseEvent event) -> {
+				close.setOpacity(0.5);
+			});
 		
-//			upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("UP").toString()+".png"));
 			
 			menu.setOnKeyPressed((KeyEvent event) -> {
 				if(event.getCode().toString().equals("ESCAPE"))
@@ -210,8 +229,7 @@ public class Settings extends Menu{
 		musicOn.setOpacity(1);
 		musicOff.setOpacity(0.5);
 		settings.replace("MUSIC", true);
-//			playerMusic.setVolume(0.05);
-//			playerMusic.play();
+		musicMenu.setVolumeON();
 	}
 	@SuppressWarnings("unchecked")
 	@FXML
@@ -219,8 +237,7 @@ public class Settings extends Menu{
 		musicOff.setOpacity(1);
 		musicOn.setOpacity(0.5);
 		settings.replace("MUSIC", false);
-//			playerMusic.setVolume(0);
-//			playerMusic.stop();
+		musicMenu.setVolumeOFF();
 	}
 	@SuppressWarnings("unchecked")
 	@FXML

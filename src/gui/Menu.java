@@ -35,6 +35,8 @@ public class Menu extends BabaIsYouApp {
 	private ImageView cadreExit;
 	@FXML
 	private ImageView cadreSettings;
+	@FXML
+	private ImageView cadreSuccess;
 	
 	/**
 	 * Méthode qui va charger le menu principal 
@@ -95,6 +97,11 @@ public class Menu extends BabaIsYouApp {
 		}
 		else //On charge l'éditeur de base
 			Editor.loadEditor("levels"+File.separator+"cleanEditor", true);
+	}
+	
+	@FXML
+	public void successButtonClicked() {
+		//TODO
 	}
 	
 	@FXML
@@ -166,5 +173,15 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void cadreSettingsMouseExited() {
 		cadreSettings.setOpacity(0);
+	}
+	
+	@FXML
+	public void cadreSuccessMouseEntered() {
+		cadreSuccess.setOpacity(1);
+	}
+	
+	@FXML
+	public void cadreSuccessMouseExited() {
+		cadreSuccess.setOpacity(0);
 	}
 }

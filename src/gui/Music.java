@@ -20,7 +20,7 @@ public class Music extends BabaIsYouApp {
 	}
 
 	public void play() {
-		if(! playerMusic.getStatus().equals(Status.PLAYING)) {
+		if(! playerMusic.getStatus().equals(Status.PLAYING) && (boolean)settings.get("MUSIC")==true) {
 		playerMusic.play();
 		}
 	}
@@ -33,9 +33,11 @@ public class Music extends BabaIsYouApp {
 	
 	public void setVolumeON() {
 		playerMusic.setVolume(0.05);
+		play();
 	}
 	
 	public void setVolumeOFF() {
 		playerMusic.setVolume(0);
+		stop();
 	}
 }

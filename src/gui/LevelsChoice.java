@@ -65,6 +65,7 @@ public class LevelsChoice extends Menu{
 		close.setOnMouseExited((MouseEvent event) -> {
 			close.setOpacity(0.5);
 		});
+		
 	}
 	/**
 	 * Méthode qui va afficher le menu des niveaux où l'utilisateur pourra choisir le niveau qu'il désire

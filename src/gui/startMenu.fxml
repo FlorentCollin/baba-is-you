@@ -29,7 +29,7 @@
             <Image url="@../../ressources/cadre.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cadreExit" fitHeight="150.0" fitWidth="200.0" layoutX="747.0" layoutY="829.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="0.7" scaleY="0.5">
+      <ImageView fx:id="cadreExit" fitHeight="150.0" fitWidth="200.0" layoutX="747.0" layoutY="864.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="0.7" scaleY="0.5">
          <image>
             <Image url="@../../ressources/cadre.png" />
          </image>
@@ -64,19 +64,29 @@
             <Image url="@../../ressources/BabaIsYou.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="850.0" onMouseClicked="#exitButtonClicked" onMouseEntered="#cadreExitMouseEntered" onMouseExited="#cadreExitMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.6" scaleY="0.6">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="885.0" onMouseClicked="#exitButtonClicked" onMouseEntered="#cadreExitMouseEntered" onMouseExited="#cadreExitMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.6" scaleY="0.6">
          <image>
             <Image url="@../../ressources/exit.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cadreSettings" fitHeight="125.0" fitWidth="368.0" layoutX="125.0" layoutY="757.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.2" scaleY="0.9">
+      <ImageView fx:id="cadreSettings" fitHeight="125.0" fitWidth="368.0" layoutX="615.0" layoutY="757.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.2" scaleY="0.9">
          <image>
             <Image url="@../../ressources/cadre.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="176.0" fitWidth="485.0" layoutX="-15.0" layoutY="743.0" onMouseClicked="#settingsButtonClicked" onMouseEntered="#cadreSettingsMouseEntered" onMouseExited="#cadreSettingsMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.8">
+      <ImageView fitHeight="176.0" fitWidth="485.0" layoutX="475.0" layoutY="743.0" onMouseClicked="#settingsButtonClicked" onMouseEntered="#cadreSettingsMouseEntered" onMouseExited="#cadreSettingsMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.8">
          <image>
             <Image url="@../../ressources/settings.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreSuccess" fitHeight="125.0" fitWidth="368.0" layoutX="125.0" layoutY="757.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.2" scaleY="0.9">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="176.0" fitWidth="485.0" layoutX="-15.0" layoutY="743.0" onMouseClicked="#successButtonClicked" onMouseEntered="#cadreSuccessMouseEntered" onMouseExited="#cadreSuccessMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.9">
+         <image>
+            <Image url="@../../ressources/succes.png" />
          </image>
       </ImageView>
    </children>
