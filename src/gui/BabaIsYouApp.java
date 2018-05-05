@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -102,14 +103,17 @@ public class BabaIsYouApp extends Application {
 		fc.setTitle("Choose level to load :");
 		// Le code ci-dessous provient de : "https://stackoverflow.com/questions/13634576/javafx-filechooser-how-to-set-file-filters"
 		// Il permet de définir les extensions de fichier autorisées. Ici, on n'autorise que les fichiers textes (".txt")
-		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".TXT", "*.txt");
+		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".txt", "*.txt");
 		fc.getExtensionFilters().add(fileExtensions);
 		fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
 		File fileChoose = fc.showOpenDialog(primaryStage);
 		if(fileChoose != null) {
-			//Code pour split le path trouvé sur : "https://stackoverflow.com/questions/1099859/how-to-split-a-path-platform-independent"
-			String[] nameFileSplit = fileChoose.toString().split(Pattern.quote(File.separator));
-			if(nameFileSplit[nameFileSplit.length-1].equals("cleanEditor.txt")) {
+			//Si jamais l'utilisateur choisi un fichier qu'il n'est pas sensé pouvoir charger
+			if(fileChoose.getName().equals("cleanEditor.txt") || fileChoose.getName().equals("testEditor.txt")) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("This file is reserved for the game engine, please choose an other file");
+				alert.setHeaderText("You can't load this file");
+				alert.show();
 				return null;
 			}
 		}

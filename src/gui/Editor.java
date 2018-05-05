@@ -96,6 +96,7 @@ public class Editor extends Level {
 	public static void loadEditor(String levelName, boolean eraseBoards) {
 		if(!wasInit)
 			initButton();
+		
 		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22*22
 		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
 		loadLevel(levelName, eraseBoards, false);
