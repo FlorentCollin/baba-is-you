@@ -23,7 +23,8 @@ public class Level extends BabaIsYouApp {
 	protected static Board board;
 	protected static Scene game;
 	protected static Canvas canvas = new Canvas(960, 960);
-	protected static Group root;
+	protected static StackPane holder;
+	protected static Group root = new Group();
 	protected static double CELL_SIZE = 48;
 	
 	/**
@@ -33,14 +34,7 @@ public class Level extends BabaIsYouApp {
 	 */
 	public static void loadLevel(String name, boolean eraseActivesBoards, boolean activateInputs)
 	{
-		//TEST
-//		Media t1 = new Media(new File("ressources/test.mp4").toURI().toString());
-//		MediaPlayer t2 = new MediaPlayer(t1);
-//		MediaView t3 = new MediaView(t2);
-//		root.getChildren().add(t3);
-//		t2.play();
-		//Initialisation
-//		playerMusic.stop();
+		
 		
 		if(name.equals("save")) //Chargement du niveau sauvegardé
 			LevelManager.loadSaveLvl();
@@ -54,10 +48,11 @@ public class Level extends BabaIsYouApp {
 		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows()); //De combien doit être la taille d'une cellule
 		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
 		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
-		StackPane holder = new StackPane();
+		holder = new StackPane();
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		holder.setStyle("-fx-background-color: #1c1f22");
+		
 		drawBoard(); //Affichage du niveau dans le canvas
 		if(board.getLevelNumber() == 0)
 			Advice.loadAdviceStage("advice1");
@@ -156,7 +151,8 @@ public class Level extends BabaIsYouApp {
 					return;
 				case "RESTART": //Reinitialise le niveau en cours
 					if(board.getLevelNumber() == -1) {
-						LevelManager.readLevel("levels"+File.separator+"editor"+File.separator+"testEditor_0", true);
+						if((new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt").exists()));
+							LevelManager.readLevel("levels"+File.separator+"editor"+File.separator+"testEditor", true);
 					}
 					else {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()], true);
@@ -218,12 +214,15 @@ public class Level extends BabaIsYouApp {
 					return;
 				default : return; // Si une autre touche est pressée une ne fait rien
 				}
+				
 				//Itération sur la liste des joueurs pour les déplacer
 				for(Tuple player: board.getPlayers())
 				{
 					//Déplacement d'un joueur en fonction de la direction
 					MoveController.move(board, player.getX(), player.getY(), player.getZ(), direction);
 				}
+				//Son lors du déplacement
+				
 				//On redessine les cellules qui ont été modifiées
 				for(Tuple cellChanged : board.getAndResetChangedCells())
 				{

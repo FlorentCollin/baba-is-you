@@ -91,5 +91,10 @@
             <Font name="8-Bit Madness" size="63.0" />
          </font>
       </Text>
+      <Text fx:id="closeButton" fill="WHITE" layoutX="910.0" layoutY="45.0" onMouseClicked="#closeButtonMouseClicked" onMouseEntered="#closeButtonMouseEntered" onMouseExited="#closeButtonMouseExited" opacity="0.5" pickOnBounds="true" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X">
+         <font>
+            <Font name="8-Bit Madness" size="21.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

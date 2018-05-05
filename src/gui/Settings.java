@@ -13,8 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class Settings extends Menu{
@@ -49,6 +47,8 @@ public class Settings extends Menu{
 	    private ImageView soundOff;
 	    @FXML
 	    private Text resetText;
+	    @FXML
+	    private Text closeButton;
 	   
 	    //METHODES
 	    
@@ -67,27 +67,6 @@ public class Settings extends Menu{
 			}
 			menu = new Scene(root, 960, 960);
 			primaryStage.setScene(menu);
-			//TODO Mettre le bouton close dans une classer supérieur pour ne pas devoir l'initialiser plusieurs fois
-			//Bouton qui permet de revenir au menu principal
-			close = new Text("X");
-			close.setFont(fontMadness);
-			close.setFill(Color.WHITE);
-			close.setOpacity(0.5 );
-			close.setScaleX(3);
-			close.setScaleY(3);
-			close.setX(910);
-			close.setY(45);
-			close.setOnMouseClicked((MouseEvent event) -> {
-				loadMenu();
-			});
-			//Gestion de l'effet lorsqu'on passe sur le bouton
-			close.setOnMouseEntered((MouseEvent event) -> {
-				close.setOpacity(1);
-			});
-			close.setOnMouseExited((MouseEvent event) -> {
-				close.setOpacity(0.5);
-			});
-		
 			
 			menu.setOnKeyPressed((KeyEvent event) -> {
 				if(event.getCode().toString().equals("ESCAPE"))
@@ -245,6 +224,7 @@ public class Settings extends Menu{
 		soundOn.setOpacity(1);
 		soundOff.setOpacity(0.5);
 		settings.replace("SOUNDFX", true);
+		SoundFX.setVolumeON();
 	}
 	@SuppressWarnings("unchecked")
 	@FXML
@@ -252,6 +232,7 @@ public class Settings extends Menu{
 		soundOff.setOpacity(1);
 		soundOn.setOpacity(0.5);
 		settings.replace("SOUNDFX", false);
+		SoundFX.setVolumeOFF();
 	}
 	@FXML
 	public void resetTextClicked() {
@@ -267,5 +248,17 @@ public class Settings extends Menu{
 	}
 	public void resetTextMouseExited() {
 		resetText.setOpacity(0.5);
+	}
+	@FXML
+	public void closeButtonMouseClicked() {
+		Menu.loadMenu();
+	}
+	@FXML
+	public void closeButtonMouseEntered() {
+		closeButton.setOpacity(1);
+	}
+	@FXML
+	public void closeButtonMouseExited() {
+		closeButton.setOpacity(0.5);
 	}
 }

@@ -1,4 +1,4 @@
-<project name="Baba is You (Florent COLLIN et Valentin ANTOINE)">
+<project name="Baba is You (Florent COLLIN)">
 
 	  <path id="classpath.test">
 	    <pathelement location="lib/junit-4.12.jar"/>

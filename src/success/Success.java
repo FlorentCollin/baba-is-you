@@ -1,5 +1,5 @@
 package success;
 
-public class Success {
+public class Success  {
 
 }

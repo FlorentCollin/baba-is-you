@@ -1,0 +1,9 @@
+LVL -1 0
+18 18
+TextBaba 1 1
+TextIs 2 1
+TextYou 3 1
+TextFlag 10 4
+TextIs 11 4
+TextWin 12 4
+Baba 10 5

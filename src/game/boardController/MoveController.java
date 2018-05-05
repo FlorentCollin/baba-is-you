@@ -7,6 +7,7 @@ import game.element.TpBlue;
 import game.element.TpRed;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
+import gui.SoundFX;
 /**
  * Classe qui va controller tous les déplacements dans chaque Board
  *
@@ -86,6 +87,7 @@ public class MoveController {
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
 						activesBoard.get(board.getDepthOfLevel()+1).getCell(x2, y2).add(itemToAdd);
+						SoundFX.play("tpUsed.wav");
 						return true;
 					}
 					if(element instanceof TpRed && board.getDepthOfLevel()-1>=0 && board.isAnActiveTp(element))
@@ -94,6 +96,7 @@ public class MoveController {
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
 						activesBoard.get(board.getDepthOfLevel()-1).getCell(x2, y2).add(itemToAdd);
+						SoundFX.play("tpUsed.wav");
 						return true;
 					}
 				}

@@ -1,0 +1,14 @@
+LVL -1 0
+18 18
+TextGoop 7 4
+Water 8 4
+Water 9 4
+TextIs 7 5
+Baba 8 5
+Water 9 5
+TextSink 7 6
+Water 8 6
+Water 9 6
+TextBaba 7 7
+TextIs 8 7
+TextYou 9 7

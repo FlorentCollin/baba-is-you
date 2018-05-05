@@ -13,14 +13,14 @@ public class Music extends BabaIsYouApp {
 	private MediaPlayer playerMusic;
 	
 	public Music(int musicNumber) {
-		musicFile = new Media(new File("ressources"+File.separator+listOfMusic[musicNumber]).toURI().toString());
+		musicFile = new Media(new File("ressources"+File.separator+"music"+File.separator+listOfMusic[musicNumber]).toURI().toString());
 		playerMusic = new MediaPlayer(musicFile);
-		playerMusic.setVolume(0.05);
+		playerMusic.setVolume(0.2);
 		playerMusic.setCycleCount(MediaPlayer.INDEFINITE);
 	}
 
 	public void play() {
-		if(! playerMusic.getStatus().equals(Status.PLAYING) && (boolean)settings.get("MUSIC")==true) {
+		if(/*! playerMusic.getStatus().equals(Status.PLAYING) &&*/ (boolean)settings.get("MUSIC")==true) {
 		playerMusic.play();
 		}
 	}
@@ -32,7 +32,7 @@ public class Music extends BabaIsYouApp {
 	}
 	
 	public void setVolumeON() {
-		playerMusic.setVolume(0.05);
+		playerMusic.setVolume(0.2);
 		play();
 	}
 	

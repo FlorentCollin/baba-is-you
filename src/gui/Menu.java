@@ -20,7 +20,6 @@ public class Menu extends BabaIsYouApp {
 	protected static Canvas canvas = new Canvas(960, 960);
 	protected static Group root;
 	protected static Text close;
-	protected static Music musicMenu = new Music(0);
 	
 	// START MENU
 	@FXML
@@ -67,12 +66,14 @@ public class Menu extends BabaIsYouApp {
 					musicMenu.stop(); // Arrêt de la musique
 				}
 		});
+		
 	}
 	
 	@FXML
 	public void playButtonClicked() {
-		Level.loadLevel(LevelManager.getListOfLevels()[0], true, true);
+		SoundFX.play("selected.mp3");
 		musicMenu.stop();
+		Level.loadLevel(LevelManager.getListOfLevels()[0], true, true);
 	}
 	
 	@FXML
@@ -83,12 +84,14 @@ public class Menu extends BabaIsYouApp {
 	
 	@FXML
 	public void loadSaveButtonClicked() {
+		SoundFX.play("selected.mp3");
 		musicMenu.stop();
 		Level.loadLevel("save", true, true); //Chargement du niveau sauvegardé
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
+		SoundFX.play("selected.mp3");
 		musicMenu.stop();
 		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
 		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
@@ -102,15 +105,18 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void successButtonClicked() {
 		//TODO
+		SoundFX.play("selected.mp3");
 	}
 	
 	@FXML
 	public void levelsButtonClicked() {
+		SoundFX.play("selected.mp3");
 		LevelsChoice.loadLevelsMenu();
 	}
 	
 	@FXML
 	public void settingsButtonClicked() {
+		SoundFX.play("selected.mp3");
 		Settings.loadSettingsMenu();
 	}
 	

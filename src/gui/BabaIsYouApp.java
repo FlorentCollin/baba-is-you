@@ -32,6 +32,8 @@ public class BabaIsYouApp extends Application {
 	protected static Font fontMadness; //Police d'écriture
 	// AUTRE
 	protected static JSONObject settings;
+	protected static Music musicMenu = new Music(0);
+	protected static SoundFX sound;
 
 	
 	@Override
@@ -62,12 +64,9 @@ public class BabaIsYouApp extends Application {
 	
 	public void init() {
 		initJson();
-//		if((boolean) settings.get("MUSIC"))
-//			playerMusic.setVolume(0.05);
-//		else 
-//			playerMusic.setVolume(0);
-//		playerMusic.setCycleCount(MediaPlayer.INDEFINITE); //Pour jouer en boucle la musique
+		sound = new SoundFX();
 	}
+
 	
 	private void initJson() {
 		//Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
