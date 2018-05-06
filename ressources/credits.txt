@@ -1,9 +1,10 @@
-TELPORT : https://android272.deviantart.com/art/Teeworlds-Teleport-570298308*
+This game was created for a course of the UMons university and was inspired by the game "Baba is You"
+originally created by Arvi Teikari for the Nordic Game Jam 2017. You can donwload the original game on https://hempuli.itch.io/baba-is-you 
+TELPORT : Designed by android272 (https://android272.deviantart.com/art/Teeworlds-Teleport-570298308)
 BABA : Hetalia (c) Himaruya Hidekazu. Sprites by chi17812 (c) 2015.https://chi171812.deviantart.com/art/2p-Hetalia-RPG-Maker-2p-Russia-sprite-554701472
 WATER :	Platformer Art Complete Pack by Kenney Vleugels (www.kenney.nl)	License (CC0) http://creativecommons.org/publicdomain/zero/1.0/
 FLAG : http://www.8bit.cool/wp-content/uploads/gem-flag.png
-ROCK : Author = FunwithPixels https://opengameart.org/content/rock-pile
-BEST : 
+ROCK : Designed by FunwithPixels https://opengameart.org/content/rock-pile 
 ERASER : Icone made by Pixel Buddha (https://www.flaticon.com/free-icon/eraser_179530)
 CUP : Designed by Freepik (https://www.freepik.com/free-vector/flat-trophy-collection_843005.htm#term=flat%20trophy%20collection&page=1&position=0)
 

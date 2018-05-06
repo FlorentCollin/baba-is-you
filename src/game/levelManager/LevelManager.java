@@ -87,7 +87,6 @@ public class LevelManager {
 				try {
 					levelNumber = Integer.parseInt(line.split(" ")[1]);
 					depthOfLevel = activesBoards.size();
-//					depthOfLevel = Integer.parseInt(line.split(" ")[2]);
 					line = br.readLine();
 					rowsOfBoard = Integer.parseInt(line.split(" ")[0])+2; // +2 pour rajouter les frontières/bordures de la map
 					colsOfBoard = Integer.parseInt(line.split(" ")[1])+2; 
@@ -131,9 +130,10 @@ public class LevelManager {
 				activesBoards.add(new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard));
 			}
 		} catch (NumberFormatException e) {
+			System.out.println("Des erreurs se trouvent dans le fichier texte.");
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		Rules.scanRules(activesBoards);
 		//On recherche les différents joueurs sur tous les boards et on en profite pour mettre à jour les règles sur l'ensemble des boards actifs
@@ -145,7 +145,7 @@ public class LevelManager {
 		try {
 			br.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -165,6 +165,7 @@ public class LevelManager {
 		try {
 			return Class.forName("game.element."+str); //Come les Class Item sont dans un autre package on doit indiquer où les trouver
 		} catch (ClassNotFoundException e) {
+			System.out.println("ERREUR : Un nom d'Item n'a pas bien été écrit dans le fichier");
 			e.printStackTrace();
 		}
 		return null;
@@ -206,11 +207,12 @@ public class LevelManager {
 					
 					
 				} catch (FileNotFoundException e) {
+					System.out.println("Some files are missing, please reinstall the game");
 					e.printStackTrace();
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				} catch (ParseException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 				
 			}
@@ -218,17 +220,17 @@ public class LevelManager {
 				try {
 					itemToReturn = (Item) strConstructor.newInstance();
 				} catch (InstantiationException e) {
-					e.printStackTrace();
+					e.printStackTrace(); //TODO A modifier
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					e.printStackTrace(); //TODO
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					e.printStackTrace(); //TODO
 				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+					e.printStackTrace(); //TODO
 				}
 			}
 		} catch (SecurityException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(); //TODO
 		}
 		return itemToReturn;
 	}
@@ -249,11 +251,12 @@ public class LevelManager {
 				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 				return jsonObject.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 			} catch (FileNotFoundException e) {
+				System.out.println("Some files are missing, please reinstall the game");
 				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			return null;
 	}
@@ -282,7 +285,7 @@ public class LevelManager {
 		try {
 			bw = new BufferedWriter(new FileWriter(save));
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			throw new RuntimeException(e1);
 		}
 		for(int index = 0; index<activesBoards.size(); index++)
 		{
@@ -310,17 +313,13 @@ public class LevelManager {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally {
-				try {
-				}
-				catch (Exception e) {}
-			}
+			} 
 		}
 		//Fermeture du BufferedWriter
 		try {
 			bw.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -362,7 +361,6 @@ public class LevelManager {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally {
 			}
 		}
 		//Fermeture du BufferedWriter

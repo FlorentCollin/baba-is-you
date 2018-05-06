@@ -35,6 +35,7 @@ public class BabaIsYouApp extends Application {
 	protected static JSONObject settings;
 	protected static Music musicMenu = new Music(0);
 	protected static SoundFX sound;
+	protected static Alert alert = new Alert(AlertType.ERROR);
 
 	
 	@Override
@@ -77,27 +78,27 @@ public class BabaIsYouApp extends Application {
 			Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"UserSettings.json"));
 			settings = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			alertFilesMissing();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
-	public static void close() {
+	protected static void close() {
 		try {
 			FileWriter file = new FileWriter("settings"+File.separator+"UserSettings.json");
 			file.write(settings.toJSONString());
 			file.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			primaryStage.close();
 		}
 		secondaryStage.close();
 		primaryStage.close();
 	}
 	
-	public static File FileChooserLvl() {
+	protected static File FileChooserLvl() {
 		//On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le niveau qu'il veut charger dans l'éditeur de niveau
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Choose level to load :");
@@ -110,14 +111,22 @@ public class BabaIsYouApp extends Application {
 		if(fileChoose != null) {
 			//Si jamais l'utilisateur choisi un fichier qu'il n'est pas sensé pouvoir charger
 			if(fileChoose.getName().equals("cleanEditor.txt") || fileChoose.getName().equals("testEditor.txt")) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("This file is reserved for the game engine, please choose an other file");
+				alert.setTitle("ERROR");
 				alert.setHeaderText("You can't load this file");
+				alert.setContentText("This file is reserved for the game engine, please choose an other file");
 				alert.show();
 				return null;
 			}
 		}
 		return fileChoose;
+	}
+	
+	protected void alertFilesMissing() {
+		alert.setTitle("ERROR");
+		alert.setHeaderText("Some files are missing");
+		alert.setContentText("Some file used for the game are missing, please reinstall the game.");
+		alert.show();
+		primaryStage.close();
 	}
 	
 	public static void main(String[] args)

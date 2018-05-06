@@ -14,6 +14,8 @@
     "TpRed" : "TextTpRed",
     "TextTpRed" : "TpRed",
     "Best" : "TextBest",
-    "TextBest" : "Best"
+    "TextBest" : "Best",
+    "Lava" : "TextLava",
+    "TextLava" : "Lava"
 
 }

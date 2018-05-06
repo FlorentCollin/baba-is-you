@@ -11,7 +11,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Settings">
    <children>
-      <ImageView fitHeight="960.0" fitWidth="1032.0" onMouseEntered="#setSettingsImages" onMouseMoved="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="960.0" fitWidth="1032.0" layoutX="-7.0" onMouseEntered="#setSettingsImages" onMouseMoved="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../ressources/settingsMenu.png" />
          </image>

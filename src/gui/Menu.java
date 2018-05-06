@@ -48,7 +48,7 @@ public class Menu extends BabaIsYouApp {
 		try {
 			root = FXMLLoader.load(thisClass.getResource("startMenu.fxml"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			primaryStage.close(); // Si le fichier du menu n'existe pas on fait crash l'application car rien ne fonctionnerai.
 		}
 		menu = new Scene(root, 960, 960);
 		primaryStage.setScene(menu);
@@ -63,7 +63,7 @@ public class Menu extends BabaIsYouApp {
 				}
 				else if(event.getCode().toString().equals("ENTER")) {
 					Level.loadLevel(LevelManager.getListOfLevels()[0], true, true); //Chargement du premier niveau
-					musicMenu.stop(); // Arrêt de la musique
+					musicMenu.fadeVolume();; // Arrêt de la musique
 				}
 		});
 		
@@ -72,7 +72,7 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void playButtonClicked() {
 		SoundFX.play("selected.mp3");
-		musicMenu.stop();
+		musicMenu.fadeVolume();
 		Level.loadLevel(LevelManager.getListOfLevels()[0], true, true);
 	}
 	
@@ -85,14 +85,14 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void loadSaveButtonClicked() {
 		SoundFX.play("selected.mp3");
-		musicMenu.stop();
+		musicMenu.fadeVolume();
 		Level.loadLevel("save", true, true); //Chargement du niveau sauvegardé
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
 		SoundFX.play("selected.mp3");
-		musicMenu.stop();
+		musicMenu.fadeVolume();
 		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
 		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
 			String name = LevelManager.loadUserLvl(file);

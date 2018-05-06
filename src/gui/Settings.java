@@ -63,7 +63,7 @@ public class Settings extends Menu{
 			try {
 				root = FXMLLoader.load(thisClass.getResource("settingsMenu.fxml"));
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			menu = new Scene(root, 960, 960);
 			primaryStage.setScene(menu);
@@ -126,7 +126,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("UP", upKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e); // Ici cela n'a pas d'importance car si "upkey" n'a pas été chargé on aurait déjà eu une erreur plus tôt
 		}
 	}
 	
@@ -135,7 +135,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("DOWN", downKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -143,7 +143,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("RIGHT", rightKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -151,7 +151,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("LEFT", leftKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -159,7 +159,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("RESTART", restartKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -167,7 +167,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("NEXT_WORLD", nextWorldKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -175,7 +175,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("PREVIOUS_WORLD", previousWorldKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -183,7 +183,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("NEXT_WORLD_MOD", nextWorldModKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -191,7 +191,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("SAVE", saveKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@FXML
@@ -199,7 +199,7 @@ public class Settings extends Menu{
 		try {
 			changeSettings("LOAD_SAVE", loadSaveKey);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	@SuppressWarnings("unchecked")
@@ -239,7 +239,7 @@ public class Settings extends Menu{
 		try {
 			FileUtils.copyFile(new File("settings"+File.separator+"UserSettingsReset.json"), new File("settings"+File.separator+"UserSettings.json"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			alertFilesMissing();
 		}
 		init(); //On recharge le fichier contenant les raccourcis car on vient de reset ceux-ci et on recharge par la même occasion la musique
 	}
