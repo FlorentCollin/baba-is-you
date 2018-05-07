@@ -286,7 +286,6 @@ public class Board {
 		// Si un item de Régle est bougé alors on rescan les régles et on applique les modifications sur le board
 		if(itemChange instanceof IRule) {
 			Rules.scanRules(LevelManager.getActivesBoards());
-			scanRules();
 		}
 	}
 

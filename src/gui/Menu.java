@@ -6,6 +6,7 @@ import java.io.IOException;
 import game.levelManager.LevelManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -71,7 +72,7 @@ public class Menu extends BabaIsYouApp {
 	
 	@FXML
 	public void playButtonClicked() {
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 		musicMenu.fadeVolume();
 		Level.loadLevel(LevelManager.getListOfLevels()[0], true, true);
 	}
@@ -84,14 +85,14 @@ public class Menu extends BabaIsYouApp {
 	
 	@FXML
 	public void loadSaveButtonClicked() {
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 		musicMenu.fadeVolume();
 		Level.loadLevel("save", true, true); //Chargement du niveau sauvegardé
 	}
 	
 	@FXML
 	public void editorButtonClicked() {
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 		musicMenu.fadeVolume();
 		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
 		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
@@ -105,18 +106,18 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void successButtonClicked() {
 		//TODO
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 	}
 	
 	@FXML
 	public void levelsButtonClicked() {
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 		LevelsChoice.loadLevelsMenu();
 	}
 	
 	@FXML
 	public void settingsButtonClicked() {
-		SoundFX.play("selected.mp3");
+		SoundFX.play(SELECTED_SOUND);
 		Settings.loadSettingsMenu();
 	}
 	

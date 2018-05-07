@@ -106,16 +106,16 @@ public class Settings extends Menu{
 	    
 	@FXML
 	public void setSettingsImages() {
-		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("UP")+".png"));
-		downKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("DOWN")+".png"));
-		rightKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("RIGHT")+".png"));
-		leftKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("LEFT")+".png"));
-		restartKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("RESTART")+".png"));
-		saveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("SAVE")+".png"));
-		loadSaveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("LOAD_SAVE")+".png"));
-		nextWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("NEXT_WORLD")+".png"));
-		nextWorldModKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("NEXT_WORLD_MOD")+".png"));
-		previousWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("PREVIOUS_WORLD")+".png"));
+		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("up")+".png"));
+		downKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("down")+".png"));
+		rightKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("right")+".png"));
+		leftKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("left")+".png"));
+		restartKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("restart")+".png"));
+		saveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("save")+".png"));
+		loadSaveKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("load_save")+".png"));
+		nextWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("next_world")+".png"));
+		nextWorldModKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("next_world_mod")+".png"));
+		previousWorldKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("previous_world")+".png"));
 		if((boolean) settings.get("MUSIC")) { musicOn.setOpacity(1); musicOff.setOpacity(0.5);}
 		else { musicOn.setOpacity(0.5); musicOff.setOpacity(1);}
 		if((boolean) settings.get("SOUNDFX")) { soundOn.setOpacity(1); soundOff.setOpacity(0.5);}
@@ -124,7 +124,7 @@ public class Settings extends Menu{
 	@FXML
 	public void upPressed() {
 		try {
-			changeSettings("UP", upKey);
+			changeSettings("up", upKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e); // Ici cela n'a pas d'importance car si "upkey" n'a pas été chargé on aurait déjà eu une erreur plus tôt
 		}
@@ -133,7 +133,7 @@ public class Settings extends Menu{
 	@FXML
 	public void downPressed() {
 		try {
-			changeSettings("DOWN", downKey);
+			changeSettings("down", downKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -141,7 +141,7 @@ public class Settings extends Menu{
 	@FXML
 	public void rightPressed() {
 		try {
-			changeSettings("RIGHT", rightKey);
+			changeSettings("right", rightKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -149,7 +149,7 @@ public class Settings extends Menu{
 	@FXML
 	public void leftPressed() {
 		try {
-			changeSettings("LEFT", leftKey);
+			changeSettings("left", leftKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -157,7 +157,7 @@ public class Settings extends Menu{
 	@FXML
 	public void restartPressed() {
 		try {
-			changeSettings("RESTART", restartKey);
+			changeSettings("restart", restartKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -165,7 +165,7 @@ public class Settings extends Menu{
 	@FXML
 	public void nextWorldPressed() {
 		try {
-			changeSettings("NEXT_WORLD", nextWorldKey);
+			changeSettings("next_world", nextWorldKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -173,7 +173,7 @@ public class Settings extends Menu{
 	@FXML
 	public void previousWorldPressed() {
 		try {
-			changeSettings("PREVIOUS_WORLD", previousWorldKey);
+			changeSettings("previous_world", previousWorldKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -181,7 +181,7 @@ public class Settings extends Menu{
 	@FXML
 	public void nextWorldModPressed() {
 		try {
-			changeSettings("NEXT_WORLD_MOD", nextWorldModKey);
+			changeSettings("next_world_mod", nextWorldModKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -189,7 +189,7 @@ public class Settings extends Menu{
 	@FXML
 	public void savePressed() {
 		try {
-			changeSettings("SAVE", saveKey);
+			changeSettings("save", saveKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -197,7 +197,7 @@ public class Settings extends Menu{
 	@FXML
 	public void loadSavePressed() {
 		try {
-			changeSettings("LOAD_SAVE", loadSaveKey);
+			changeSettings("load_save", loadSaveKey);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

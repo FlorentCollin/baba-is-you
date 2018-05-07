@@ -35,6 +35,7 @@ public class BabaIsYouApp extends Application {
 	protected static JSONObject settings;
 	protected static Music musicMenu = new Music(0);
 	protected static SoundFX sound;
+	protected final static String SELECTED_SOUND = "selected.wav";
 	protected static Alert alert = new Alert(AlertType.ERROR);
 
 	

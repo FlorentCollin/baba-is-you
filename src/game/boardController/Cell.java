@@ -91,4 +91,20 @@ public class Cell {
 	{
 		return list.get(list.size()-1);
 	}
+	
+	public boolean oneItemIsSink() {
+		for(Item item : list) {
+			if(item.isSink()) 
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean oneItemIsKill(boolean isPlayer) {
+		for(Item item : list) {
+			if(item.isKill(isPlayer)) 
+				return true;
+		}
+		return false;
+	}
 }

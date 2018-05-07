@@ -83,20 +83,36 @@ public abstract class Item {
 	}
 	
 	/**
-	 * Méthode qui indique si un Item signifie la mort de cette Item (ie quand l'Item va sur la case il disparrait)
+	 * Méthode qui indique si un Item signifie la "noyade" de cette Item (ie quand l'Item va sur la case il disparrait)
 	 * @return true si l'Item est mortelle false sinon
 	 */
-	public boolean isDeadly()
+	public boolean isSink()
 	{
 		for(IRule[] element : Rules.getListOfRulesActives())
 		{
-			if(element[2] instanceof TextSink && isRepresentedBy(element[0]))
-			{
+			if(element[2] instanceof TextSink && isRepresentedBy(element[0])) {
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	/**
+	 * Méthode qui indique si un Item signifie la "mort" de cette Item (ie quand l'Item va sur la case il disparrait)
+	 * A la différence de isSink() seuls les joueurs peuvent mourrir
+	 * @return true si l'Item est mortelle false sinon
+	 */
+	public boolean isKill(boolean isPlayer)
+	{
+		for(IRule[] element : Rules.getListOfRulesActives())
+		{
+			if(isPlayer && element[2] instanceof TextKill && isRepresentedBy(element[0])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	public ArrayList<Item> getEffects() {
 		return effects;

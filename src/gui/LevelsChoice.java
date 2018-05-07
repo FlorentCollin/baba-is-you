@@ -32,6 +32,7 @@ public class LevelsChoice extends Menu{
 		loadImage.setLayoutX(750);
 		loadImage.setLayoutY(690);
 		loadImage.setOnMouseClicked((MouseEvent e) -> {
+			SoundFX.play(SELECTED_SOUND);
 			File fileChoose = FileChooserLvl();
 			if(fileChoose == null)
 				return;
@@ -104,6 +105,7 @@ public class LevelsChoice extends Menu{
 			final int i = index;
 			levelImage.setOnMouseClicked((MouseEvent e) -> {
 				musicMenu.stop();
+				SoundFX.play(SELECTED_SOUND);
 				Level.loadLevel(LevelManager.getListOfLevels()[i-1], true, true);
 			});
 			//Réglage de l'effet lorsqu'on passe sur l'image

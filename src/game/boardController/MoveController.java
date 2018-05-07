@@ -2,6 +2,7 @@ package game.boardController;
 
 import java.util.ArrayList;
 
+import game.element.IRule;
 import game.element.Item;
 import game.element.TpBlue;
 import game.element.TpRed;
@@ -33,6 +34,11 @@ public class MoveController {
 		{
 			return true;
 		}
+		boolean isPlayer = false;
+		for(IRule player : board.whoIsPlayer()) { //A améliorer en utilisant une variable de classe pour ne pas devoir le refaire à chaque fois
+			if(cellToMove.getLastItem().isRepresentedBy(player))
+				isPlayer = true;
+		}
 		if(z == -1 || z > cellToMove.getList().size()-1) //On remet l'index de la liste de la Cellule s'il est trop loin au dernier élement
 		{
 			z = cellToMove.getList().size()-1;
@@ -48,12 +54,11 @@ public class MoveController {
 		if(! nextCell.isEmpty())
 		{
 			//On vérifie en premier si le prochain item est sous la règle "STOP", si c'est le cas cela indique qu'on ne peut pas bouger cellToMove
-			if(nextCell.lastItem().isStop())
-			{
+			if(nextCell.lastItem().isStop()) {
 				return false;
 			}
-			else if(nextCell.lastItem().isDeadly())
-			{
+			//Si la prochaine cellule est "SINK" alors on supprime ce l'item qui devait être bougé et le cellule SINK
+			else if(nextCell.oneItemIsSink()) {
 				//Ajout des cellules qui doivent être repeinte par la partie graphique
 				board.addChangedCell(new Tuple(x1,y1,0));
 				board.addChangedCell(new Tuple(x2,y2,0));
@@ -61,28 +66,30 @@ public class MoveController {
 				nextCell.removeItem(nextCell.lastItem()); //On retire la cellule qui "tue"
 				return true;
 			}
+			//Si la prochaine cellule est "Kill" et que c'est un joueur qui va dessus alors on supprime le joueur car il est "mort"
+			else if(nextCell.oneItemIsKill(isPlayer)) {
+				//Ajout des cellules qui doivent être repeinte par la partie graphique
+				board.addChangedCell(new Tuple(x1,y1,0));
+				cellToMove.remove(z);
+				return true;
+			}
 			//PARTIE RECURSIVE ! 
 			//Si le prochain item est sous la règle "PUSH" alors on applique la méthode "move" au prochain item
-			else if(nextCell.lastItem().isPushable())
-			{
-				if(move(board, x2, y2, -1, direction)) //Comme "move" est une fonction booléenne si l'item suivant à été bouger alors cellToMove peut aussi bouger 
-				{
+			else if(nextCell.lastItem().isPushable()) {
+				if(move(board, x2, y2, -1, direction)) { //Comme "move" est une fonction booléenne si l'item suivant à été bouger alors cellToMove peut aussi bouger 
 					board.changeItemCell(x1, y1, x2, y2, z);
 					return true;
 				}
 			}
 			//Si la prochaine case n'est pas vide mais qu'aucune des règles qui modifient "move" ne sont actives dessus alors on peut bouger cellToMove
-			else
-			{
+			else {
 				/* ICI on doit vérifier si la prochaine cellule est un téléporteur actif
 				 * Si c'est le cas alors on retire l'item de cellToMove dans le board et on ajoute dans le board suivant ou précédent
 				 * l'item que l'on vient de retirer (en fonction de si c'est un TP bleue ou un TP rouge)
 				 */
 				Item itemToAdd;
-				for(Item element : nextCell.getList())
-				{
-					if(element instanceof TpBlue && board.getDepthOfLevel()+1<activesBoard.size() && board.isAnActiveTp(element))
-					{
+				for(Item element : nextCell.getList()) {
+					if(element instanceof TpBlue && board.getDepthOfLevel()+1<activesBoard.size() && board.isAnActiveTp(element)) {
 						board.addChangedCell(new Tuple(x1,y1,0));
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
@@ -90,8 +97,7 @@ public class MoveController {
 						SoundFX.play("tpUsed.wav");
 						return true;
 					}
-					if(element instanceof TpRed && board.getDepthOfLevel()-1>=0 && board.isAnActiveTp(element))
-					{
+					if(element instanceof TpRed && board.getDepthOfLevel()-1>=0 && board.isAnActiveTp(element)) {
 						board.addChangedCell(new Tuple(x1,y1,0));
 						board.addChangedCell(new Tuple(x2,y2,0));
 						itemToAdd = cellToMove.remove(z);
@@ -105,8 +111,7 @@ public class MoveController {
 			}
 		}
 		//Si la prochaine case est vide alors on peut forcément bouger cellToMove
-		else
-		{
+		else {
 			board.changeItemCell(x1, y1, x2, y2, z);
 			return true;
 		}

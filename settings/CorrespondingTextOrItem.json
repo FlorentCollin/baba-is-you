@@ -16,6 +16,8 @@
     "Best" : "TextBest",
     "TextBest" : "Best",
     "Lava" : "TextLava",
-    "TextLava" : "Lava"
+    "TextLava" : "Lava",
+    "Grass" : "TextGrass",
+    "TextGrass" : "Grass"
 
 }

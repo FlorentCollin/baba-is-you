@@ -29,7 +29,9 @@ import game.element.Item;
 public class LevelManager {
 //	private static String[][] listOfLevels = {{"editor/test_0"}};
 	//A MODIFIER POUR RAJOUTER DES NIVEAUX !
-	private static String[] listOfLevels = {"levels"+File.separator+"lvl0","levels"+File.separator+"lvl1","levels"+File.separator+"lvl2","levels"+File.separator+"lvl3","levels"+File.separator+"lvl4"};
+	private static String[] listOfLevels = {"levels"+File.separator+"lvl0","levels"+File.separator+"lvl1",
+			"levels"+File.separator+"lvl2","levels"+File.separator+"lvl3","levels"+File.separator+"lvl4",
+			"levels"+File.separator+"lvl5"};
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static ArrayList<Board> activesBoards;
@@ -130,8 +132,9 @@ public class LevelManager {
 				activesBoards.add(new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard));
 			}
 		} catch (NumberFormatException e) {
-			System.out.println("Des erreurs se trouvent dans le fichier texte.");
-			e.printStackTrace();
+			System.out.println("Your file does not meet standards. Please read the guide to create your own level in text file.");
+			System.out.println("When a file does not meet standards, the program will load automatically the first level.");
+			readLevel(listOfLevels[0], true);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -163,9 +166,9 @@ public class LevelManager {
 		 * Source : https://stackoverflow.com/questions/22439436/loading-a-class-from-a-different-package
 		 */
 		try {
-			return Class.forName("game.element."+str); //Come les Class Item sont dans un autre package on doit indiquer où les trouver
+			return Class.forName("game.element."+str); //Comme les Class Item sont dans un autre package on doit indiquer où les trouver
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERREUR : Un nom d'Item n'a pas bien été écrit dans le fichier");
+			System.out.println("ERROR : A name of an Item is wrong in the text file!");
 			e.printStackTrace();
 		}
 		return null;
@@ -392,7 +395,6 @@ public class LevelManager {
 		// 2) On lit le fichier de l'utilisateur
 		String nameLevel = fileName.getAbsolutePath().substring(0, fileName.getAbsolutePath().length()-4); 
 		readLevel(nameLevel, true);
-	
 		
 		// 3) On reécrit le niveau sous la forme propre à l'éditeur de niveau
 		BufferedReader br = null;
@@ -404,6 +406,10 @@ public class LevelManager {
 			e2.printStackTrace();
 		}
 		for(Board board : activesBoards) { //Itération sur l'ensemble des boards actifs (des mondes parrallèles actifs)
+			if(! fileName.getName().equals("testEditor.txt") && (board.getRows()!=18 || board.getCols()!=18)) {
+				System.out.println("Your file does not have the correct dimensions for the editor (the right dimensions are 18x18). "
+						+ "The program will automatically load the first level.");
+			}
 			//Copie de l'éditeur vierge
 			try {
 				br = new BufferedReader(new FileReader("levels"+File.separator+"cleanEditor.txt"));
@@ -429,7 +435,7 @@ public class LevelManager {
 						{
 							if(!(element3 instanceof Boundary))
 							{
-								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()+4)); //Ajout dans le fichier des items
+								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()+4)); //Ajout dans le fichier des items. +4 pour faire correspondre par rapport à la map
 								bw.newLine();
 							}
 						}

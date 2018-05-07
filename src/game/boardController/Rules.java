@@ -66,6 +66,7 @@ public class Rules {
 					}
 				}
 			}
+			oneBoard.scanRules(); //On applique les nouvelles règles à chaque board
 		}
 		return listOfRulesActives;
 	}

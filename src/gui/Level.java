@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.MediaPlayer;
 
 public class Level extends BabaIsYouApp {
 	
@@ -26,6 +27,7 @@ public class Level extends BabaIsYouApp {
 	protected static StackPane holder;
 	protected static Group root = new Group();
 	protected static double CELL_SIZE = 48;
+	protected static MediaPlayer soundfx;
 	
 	/**
 	 * Méthode qui va charger un niveau et l'afficher
@@ -137,19 +139,19 @@ public class Level extends BabaIsYouApp {
 					code = "Not a shortcut"; //Pour pouvoir tout de même rentrer dans le switch
 				switch(code)
 				{
-				case "UP": direction = 0 ; break;
-				case "RIGHT": direction = 1 ; break;
-				case "DOWN": direction = 2 ; break;
-				case "LEFT": direction = 3 ; break;
-				case "SAVE": LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save"); 
+				case "up": direction = 0 ; break;
+				case "right": direction = 1 ; break;
+				case "down": direction = 2 ; break;
+				case "left": direction = 3 ; break;
+				case "save": LevelManager.saveLvl("levels"+File.separator+"saves"+File.separator+"save"); 
 					return; //Sauvegarde le niveau en cours
-				case "LOAD_SAVE": //Charge la sauvegarde
+				case "load_save": //Charge la sauvegarde
 					LevelManager.loadSaveLvl();
 					board = LevelManager.getActivesBoards().get(0); 
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "RESTART": //Reinitialise le niveau en cours
+				case "restart": //Reinitialise le niveau en cours
 					if(board.getLevelNumber() == -1) {
 						if((new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt").exists()));
 							LevelManager.readLevel("levels"+File.separator+"editor"+File.separator+"testEditor", true);
@@ -161,7 +163,7 @@ public class Level extends BabaIsYouApp {
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "PREVIOUS_WORLD": //Charge la prondeur précédente
+				case "previous_world": //Charge la prondeur précédente
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
@@ -170,7 +172,7 @@ public class Level extends BabaIsYouApp {
 						drawBoard();
 					}
 					return;
-				case "NEXT_WORLD": //Charge la pronfondeur suivante
+				case "next_world": //Charge la pronfondeur suivante
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().size()-1)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()+1);
@@ -179,13 +181,13 @@ public class Level extends BabaIsYouApp {
 						drawBoard();
 					}
 					return;
-				case "NEXT_WORLD_MOD": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
+				case "next_world_mod": //Charge la pronfondeur suivante et si elle n'existe pas alors on charge la première profondeur
 					board = LevelManager.getActivesBoards().get((board.getDepthOfLevel()+1)%LevelManager.getActivesBoards().size());
 					board.searchPlayers();
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
 					return;
-				case "PREVIOUS_LEVEL": //Charge le niveau précédent
+				case "previous_level": //Charge le niveau précédent
 					if(board.getLevelNumber()-1>=0) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()-1], true);
 						board = LevelManager.getActivesBoards().get(0);
@@ -193,7 +195,7 @@ public class Level extends BabaIsYouApp {
 						drawBoard();
 					}
 					return;
-				case "NEXT_LEVEL": //Charge le niveau suivant
+				case "next_level": //Charge le niveau suivant
 					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1], true);
 						board = LevelManager.getActivesBoards().get(0);
@@ -214,7 +216,6 @@ public class Level extends BabaIsYouApp {
 					return;
 				default : return; // Si une autre touche est pressée une ne fait rien
 				}
-				
 				//Itération sur la liste des joueurs pour les déplacer
 				for(Tuple player: board.getPlayers())
 				{
@@ -238,10 +239,9 @@ public class Level extends BabaIsYouApp {
 						return;
 					}
 					ImageView gif = new ImageView(new Image("file:ressources/GoldenCupAnimation.gif"));
-//					gif.setX(725);
-//					gif.setY(725);
 					gif.setX(750);
 					gif.setY(30);
+					SoundFX.play("success.wav");
 					root.getChildren().add(gif);
 					//Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1], true);

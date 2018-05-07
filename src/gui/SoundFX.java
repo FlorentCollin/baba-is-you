@@ -15,16 +15,22 @@ public class SoundFX extends BabaIsYouApp {
 		soundOn = trueOrFalse;
 	}
 	
-	public static void play(String soundName) {
+	public static MediaPlayer play(String soundName) {
 		if(soundOn) {
 			file = new File("ressources"+File.separator+"soundFX"+File.separator+soundName);
 			soundMedia = new Media(file.toURI().toString());
 			soundPlayer = new MediaPlayer(soundMedia);
 			soundPlayer.setVolume(0.2);
 			soundPlayer.play();
+			return soundPlayer;
 		}
+		return null;
 	}
 	
+	public static boolean isSoundOn() {
+		return soundOn;
+	}
+
 	public static void setVolumeON() {
 		soundOn = true;
 	}

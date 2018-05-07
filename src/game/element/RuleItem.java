@@ -43,9 +43,9 @@ public abstract class RuleItem extends Item implements IRule {
 	{
 		return false; 
 	}
-	// Retourne "false" car un objet "règle" n'est pas un objet qui peut mourir
+	// Retourne "false" car un objet "règle" n'est pas un objet qui peut pas faire mourir un autre Item
 	@Override
-	public boolean isDeadly()
+	public boolean isSink()
 	{
 		return false; 
 	}
