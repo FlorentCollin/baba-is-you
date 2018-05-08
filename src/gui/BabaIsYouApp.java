@@ -22,7 +22,7 @@ import javafx.stage.WindowEvent;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
- * 
+ * @author Florent Collin
  */
 public class BabaIsYouApp extends Application {
 	
@@ -38,7 +38,9 @@ public class BabaIsYouApp extends Application {
 	protected final static String SELECTED_SOUND = "selected.wav";
 	protected static Alert alert = new Alert(AlertType.ERROR);
 
-	
+	/**
+	 * Méthode principale de l'application
+	 */
 	@Override
 	public void start(Stage Stage) throws Exception {
 			primaryStage = Stage;
@@ -64,13 +66,19 @@ public class BabaIsYouApp extends Application {
 			//Ouverture de l'application
 			primaryStage.show();
 	}
-	
+	/**
+	 * Méthode qui va initialiser ce que l'applicationà besoin pour fonctionner
+	 * Cette méthode ne sera utilisé que lors de l'appel de la fonction "start"
+	 */
 	public void init() {
 		initJson();
 		sound = new SoundFX();
 	}
 
-	
+	/**
+	 * Chargement des paramètres 
+	 * 
+	 */
 	private void initJson() {
 		//Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
 		JSONParser parser = new JSONParser();
@@ -86,19 +94,26 @@ public class BabaIsYouApp extends Application {
 			throw new RuntimeException(e);
 		}
 	}
-	
+	/**
+	 * Méthode qui va se charger de fermer l'application tout en enregistrant les paramètres
+	 */
 	protected static void close() {
 		try {
 			FileWriter file = new FileWriter("settings"+File.separator+"UserSettings.json");
-			file.write(settings.toJSONString());
+			file.write(settings.toJSONString()); //Ecriture des paramètres dans le fichier JSON correspondant
 			file.close();
 		} catch (IOException e) {
 			primaryStage.close();
 		}
+		//Fermeture de l'application
 		secondaryStage.close();
 		primaryStage.close();
 	}
 	
+	/**
+	 * Méthode qui va ouvrir un explorateur permettant ainsi à l'utilisateur de choisir un fichier .txt contenant un niveau
+	 * @return le fichier choisi par l'utilisisateur ou null si c'est un fichier nécessaire au bon fonctionnement du jeu
+	 */
 	protected static File FileChooserLvl() {
 		//On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le niveau qu'il veut charger dans l'éditeur de niveau
 		FileChooser fc = new FileChooser();
@@ -108,10 +123,11 @@ public class BabaIsYouApp extends Application {
 		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter(".txt", "*.txt");
 		fc.getExtensionFilters().add(fileExtensions);
 		fc.setInitialDirectory(new File("levels"+File.separator+"editor")); //On définit l'endroit où le FileChooser va s'ouvrir
-		File fileChoose = fc.showOpenDialog(primaryStage);
+		File fileChoose = fc.showOpenDialog(primaryStage); //Ouverture de l'explorateur
 		if(fileChoose != null) {
 			//Si jamais l'utilisateur choisi un fichier qu'il n'est pas sensé pouvoir charger
 			if(fileChoose.getName().equals("cleanEditor.txt") || fileChoose.getName().equals("testEditor.txt")) {
+				//Pop up d'une erreur
 				alert.setTitle("ERROR");
 				alert.setHeaderText("You can't load this file");
 				alert.setContentText("This file is reserved for the game engine, please choose an other file");
@@ -122,6 +138,9 @@ public class BabaIsYouApp extends Application {
 		return fileChoose;
 	}
 	
+	/**
+	 * Méthode qui va charger une fenêtre "pop up" d'erreur pour indiquer des fichiers nécessaire au bon fonctionnement du jeu sont manquants
+	 */
 	protected void alertFilesMissing() {
 		alert.setTitle("ERROR");
 		alert.setHeaderText("Some files are missing");

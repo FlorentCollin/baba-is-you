@@ -113,4 +113,7 @@ public class Rules {
 			}
 		}
 	}
+	public static void cleanRules() {
+		listOfRulesActives = new ArrayList<>();	
+	}
 }

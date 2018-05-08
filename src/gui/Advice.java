@@ -12,6 +12,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * Sous classe de l'application principale qui va gérer l'affichage des différent(e)s conseils/astuces durant la partie
+ *
+ */
 public class Advice extends BabaIsYouApp {
 
 	//Fenêtre secondaire (d'astuces)
@@ -21,6 +25,9 @@ public class Advice extends BabaIsYouApp {
 	private static Text close;
 	private static boolean wasInit = false;
 	
+	/**
+	 * Méthode qui va initialiser l'ensemble de la fenêtre
+	 */
 	private static void initAll() {
 		wasInit = true;
 		//Initialisation de la stage

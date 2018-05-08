@@ -17,6 +17,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * Sous classe de level qui va charger l'éditeur de niveau
+ *
+ */
 public class Editor extends Level {
 
 	private static Item selectedItem;
@@ -28,10 +32,15 @@ public class Editor extends Level {
 	private static Button loadButton;
 	private static Text textZone;
 	private static Text textSelectedItem;
-	
+	private static Text buttonText;
+	private static Text numberBoardText;
+	//Variable servant à savoir si l'éditeur à été chargé au moins une fois depuis le lancement de l'application
 	private static boolean wasInit = false;
-	
-	
+
+	/**
+	 * Méthode qui va initialiser l'ensemble des bouttons et textes présents sur l'éditeur
+	 * (pour ne pas les reinitilaliser dès que l'utilisateur veut accéder à l'éditeur)
+	 */
 	private static void initButton() {
 		wasInit = true; //Permet de ne pas recharger les boutons à chaque fois qu'on accède à l'éditeur
 		//On initialise l'entièreté des bouttons et zone de textes qui permettent de charger, tester, sauvegarder un niveau
@@ -71,7 +80,7 @@ public class Editor extends Level {
 		testButton.setLayoutX(500);
 		testButton.setLayoutY(45);
 		
-		//Text qui va indiquer si le niveau à bien été sauvegarder
+		//Texte qui va indiquer si le niveau à bien été sauvegarder
 		textZone = new Text("");
 		textZone.setFont(fontMadness);
 		textZone.setFill(Color.WHITE);
@@ -79,6 +88,23 @@ public class Editor extends Level {
 		textZone.setScaleY(1.5);
 		textZone.setLayoutX(80);
 		textZone.setLayoutY(110);
+		
+		//Texte qui va dire à quel monde parallèle se trouve le joueur (ex: 2/3)
+		numberBoardText = new Text();
+		numberBoardText.setFont(fontMadness);
+		numberBoardText.setFill(Color.WHITE);
+		numberBoardText.setLayoutX(60);
+		numberBoardText.setLayoutY(145);
+		numberBoardText.setScaleX(1.3);
+		numberBoardText.setScaleX(1.3);
+		
+		
+		//Texte qui va donner des informations sur les bouttons qui permettent d'ajouter/supprimer des mondes parallèles
+		buttonText = new Text();
+		buttonText.setLayoutX(280);
+		buttonText.setLayoutY(145);
+		buttonText.setFont(fontMadness);
+		buttonText.setFill(Color.WHITE);
 		
 		//Text "Selected Item : " (en haut à droite) 
 		textSelectedItem = new Text("SELECTED  ITEM  : ");
@@ -94,19 +120,27 @@ public class Editor extends Level {
 	 * @param levelName Nom du niveau à charger
 	 */
 	public static void loadEditor(String levelName, boolean eraseBoards) {
-		if(!wasInit)
+		if(!wasInit) //Initilisation des bouttons et des textes présents dans l'éditeur
 			initButton();
 		
-		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22*22
+		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22x22
 		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
-		loadLevel(levelName, eraseBoards, false);
+		loadLevel(levelName, eraseBoards, false); //Le false indique qu'on n'active pas les inputs clavier de l'utilisateur
+		//On met à jour
+		numberBoardText.setText(board.getDepthOfLevel()+1 + " | " + LevelManager.getActivesBoards().size());
 		
-		//Image qui permet de rajouter une pronfondeur de niveau supplémentaire
+		//Images qui permettent de rajouter/supprimer une pronfondeur de niveau
 		String[] imagesToLoad = {"file:ressources"+File.separator+"+.png", "file:ressources"+File.separator+"-.png",
 				"file:ressources"+File.separator+"leftArrow.png","file:ressources"+File.separator+"rightArrow.png"};
-		int x1 = 100;
+		//Texte qui va correspondre à l'image ci-dessus
+		String[] textCorresonding = {
+				"Add one parralel world",
+				"Delete the last parralel world",
+				"Show the previous parralel world",
+				"Show the next parralel world"};
+		int x1 = 80;
 		//Boucle qui affiche les boutons  "+  -  -->  <--"
-		for(int index = 0; index<4; index++) {
+		for(int index = 0; index<imagesToLoad.length; index++) {
 			ImageView image = new ImageView(new Image(imagesToLoad[index]));
 			image.setX(x1);
 			image.setY(90);
@@ -114,22 +148,27 @@ public class Editor extends Level {
 			image.setScaleY(0.3);
 			image.setOpacity(0.5);
 			image.setPickOnBounds(true);
-			final int i = index;
-			//TODO
+			
+			final int i = index; // permet d'utiliser i dans la fonction ci-dessous
+
 			image.setOnMousePressed((MouseEvent event) -> {
 				switch(i) {
 				case 0:
 					loadEditor("levels"+File.separator+"cleanEditor", false);
-					System.out.println(LevelManager.getActivesBoards().size());
 					break;
 				case 1:
-					System.out.println("-");
+					if(LevelManager.getActivesBoards().size() > 1) {
+						LevelManager.removeLastBoard();
+						if(board.getDepthOfLevel() > 0) {
+							board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
+						}
+						drawBoard();
+					}
 					break;
 				case 2:
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
-						System.out.println(board.getDepthOfLevel());
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
@@ -138,29 +177,29 @@ public class Editor extends Level {
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().size()-1)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()+1);
-						System.out.println(board.getDepthOfLevel());
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
 					break;
-				default: break;
 				}
+				numberBoardText.setText(board.getDepthOfLevel()+1 + " | " + LevelManager.getActivesBoards().size());
 				
 			});
 			image.setOnMouseEntered((MouseEvent event) -> {
 				image.setOpacity(1);
+				buttonText.setText(textCorresonding[i]);
 			});
 			image.setOnMouseExited((MouseEvent event) -> {
 				image.setOpacity(0.5);
+				buttonText.setText("");
 			});
 			
 			x1+=35;
 			root.getChildren().add(image);
 		}
 		
-		
 		//On ajout le tout à la scène
-		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem);
+		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem, numberBoardText,buttonText);
 		
 		/*
 		 * Gestionnaire d'évènements pour la souris qui va permettre de sélectionner un Item et de pouvoir le placer dans le niveau
@@ -219,7 +258,7 @@ public class Editor extends Level {
 		});
 	}
 	
-	// Click boutton
+	// Clic sur les différents bouttons
 	/**
 	 * Méthode qui va changer la zone de texte
 	 * @return ?

@@ -35,10 +35,15 @@ public class LevelManager {
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static ArrayList<Board> activesBoards;
+	private static JSONObject correspondingItem;
 	
 	public static ArrayList<Board> getActivesBoards()
 	{
 		return activesBoards;
+	}
+	
+	public static void removeLastBoard() {
+		activesBoards.remove(activesBoards.size()-1);
 	}
 	
 	public static String[] getListOfLevels()
@@ -247,12 +252,12 @@ public class LevelManager {
 	 */
 	public static String correspondingTextOrItem(String str)
 	{
-		JSONParser parser = new JSONParser();
+		if(correspondingItem == null) { // Si c'est la première fois qu'on crée un Item on doit lire le fichier JSON des correspondances
+			JSONParser parser = new JSONParser();
 			try {
 				
 				Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"CorrespondingTextOrItem.json"));
-				JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
-				return jsonObject.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
+				correspondingItem = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 			} catch (FileNotFoundException e) {
 				System.out.println("Some files are missing, please reinstall the game");
 				e.printStackTrace();
@@ -261,7 +266,9 @@ public class LevelManager {
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}
-			return null;
+			
+		}
+			return correspondingItem.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 	}
 	
 	//TODO Changer la méthode saveLvl pour avoir une méthode unique qui prend en paramètre le nombres de colonnes et de lignes 
