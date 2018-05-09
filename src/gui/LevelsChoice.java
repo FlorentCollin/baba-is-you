@@ -33,11 +33,11 @@ public class LevelsChoice extends Menu{
 		loadImage.setLayoutY(690);
 		loadImage.setOnMouseClicked((MouseEvent e) -> {
 			SoundFX.play(SELECTED_SOUND);
-			File fileChoose = FileChooserLvl();
+			File fileChoose = FileChooserLvl(); //Ouvre l'explorateur
 			if(fileChoose == null)
 				return;
-			musicMenu.stop();
-			Level.loadLevel(fileChoose.getPath().split(Pattern.quote("."))[0], true, true);
+			musicMenu.fadeVolume();
+			Level.loadLevel(fileChoose.getPath().split(Pattern.quote("."))[0], true, true); //le Pattern.quote permet de supprimer le .txt
 		});
 		//Gestion de l'effet lorsqu'on passe sur l'image
 		loadImage.setOnMouseEntered((MouseEvent e) -> {
@@ -82,15 +82,16 @@ public class LevelsChoice extends Menu{
 		menu = new Scene(root, 960, 960);
 		root.getChildren().add(canvas);
 		primaryStage.setScene(menu);
-		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
-		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
+		//Ce StackPane est représente le fond foncé
 		StackPane holder = new StackPane();
 		holder.getChildren().add(canvas);
 		holder.setStyle("-fx-background-color: #1c1f22");
 		root.getChildren().add(holder);
+		
 		//Récupération de l'outil qui va permettre de dessiner sur le canvas
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.drawImage(new Image("file:ressources"+File.separator+"levelsMenu.png"), 0, 0); //Affichage de l'image de fond
+		
 		//Boucle permettant d'afficher et de contrôler les différents bouttons de niveaux (ex : LVL 1, LVL 2,...)
 		int x = -65;
 		for(int index = 0; index<=LevelManager.getListOfLevels().length; index++) {
@@ -103,6 +104,7 @@ public class LevelsChoice extends Menu{
 			levelImage.setScaleY(0.75);
 			x+=100;
 			final int i = index;
+			//Chargeùent du niveau si on clic sur l'image correspondante
 			levelImage.setOnMouseClicked((MouseEvent e) -> {
 				musicMenu.stop();
 				SoundFX.play(SELECTED_SOUND);
@@ -121,7 +123,7 @@ public class LevelsChoice extends Menu{
 		//Permet lorsque la touche "ESCAPE" est pressée de revenir au menu principal
 		menu.setOnKeyPressed((KeyEvent event) -> {
 			if(event.getCode().toString() == "ESCAPE")
-				loadMenu();
+				loadMenu(); 
 		});
 	}
 }

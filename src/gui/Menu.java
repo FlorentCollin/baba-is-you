@@ -69,10 +69,11 @@ public class Menu extends BabaIsYouApp {
 		
 	}
 	
+	//Clic sur les différents bouttons
 	@FXML
 	public void playButtonClicked() {
 		SoundFX.play(SELECTED_SOUND);
-		musicMenu.fadeVolume();
+		musicMenu.fadeVolume(); //Arrêt de la musique
 		Level.loadLevel(LevelManager.getListOfLevels()[0], true, true);
 	}
 	
@@ -96,9 +97,9 @@ public class Menu extends BabaIsYouApp {
 		File file = new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt");
 		if(file.exists()) { //Si le fichier existe c'est que l'utilisateur à déjà commencé à composer un niveau
 			String name = LevelManager.loadUserLvl(file);
-			Editor.loadEditor(name, true); //On retire le ".txt"
+			Editor.loadEditor(name, true); 
 		}
-		else //On charge l'éditeur de base
+		else //On charge l'éditeur de base (sans rien)
 			Editor.loadEditor("levels"+File.separator+"cleanEditor", true);
 	}
 	

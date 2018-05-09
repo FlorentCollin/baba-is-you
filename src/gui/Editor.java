@@ -126,7 +126,7 @@ public class Editor extends Level {
 		/* On charge le niveau comme un niveau normal car l'éditeur est juste une sorte de gros niveau en 22x22
 		 * (voir le fichier "levels/cleanEditor.txt pour mieux comprendre */
 		loadLevel(levelName, eraseBoards, false); //Le false indique qu'on n'active pas les inputs clavier de l'utilisateur
-		//On met à jour
+		//On met à jour le texte qui affiche dans quel monde l'utilisateur se trouve
 		numberBoardText.setText(board.getDepthOfLevel()+1 + " | " + LevelManager.getActivesBoards().size());
 		
 		//Images qui permettent de rajouter/supprimer une pronfondeur de niveau
@@ -152,11 +152,12 @@ public class Editor extends Level {
 			final int i = index; // permet d'utiliser i dans la fonction ci-dessous
 
 			image.setOnMousePressed((MouseEvent event) -> {
+				//Switch qui permet de savoir dans quelle image l'utilisateur à appuyer
 				switch(i) {
-				case 0:
-					loadEditor("levels"+File.separator+"cleanEditor", false);
+				case 0: // + | Ajout d'un monde supplémentaire
+					loadEditor("levels"+File.separator+"cleanEditor", false); 
 					break;
-				case 1:
+				case 1: // - | Retrait du dernier monde
 					if(LevelManager.getActivesBoards().size() > 1) {
 						LevelManager.removeLastBoard();
 						if(board.getDepthOfLevel() > 0) {
@@ -165,40 +166,39 @@ public class Editor extends Level {
 						drawBoard();
 					}
 					break;
-				case 2:
+				case 2: // <-- | Charge le monde précédent
 					if(board.getDepthOfLevel()-1>=0)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()-1);
-						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
-						drawBoard();
+						drawBoard(); // On est obligé de re peintre le niveau car il a complètement changé
 					}
 					break;
-				case 3:
+				case 3: // --> | Charge le monde suivant 
 					if(board.getDepthOfLevel()<LevelManager.getActivesBoards().size()-1)
 					{
 						board = LevelManager.getActivesBoards().get(board.getDepthOfLevel()+1);
-						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 						drawBoard();
 					}
 					break;
 				}
+				//On met à jour le texte qui affiche dans quel monde l'utilisateur se trouve
 				numberBoardText.setText(board.getDepthOfLevel()+1 + " | " + LevelManager.getActivesBoards().size());
 				
 			});
 			image.setOnMouseEntered((MouseEvent event) -> {
 				image.setOpacity(1);
-				buttonText.setText(textCorresonding[i]);
+				buttonText.setText(textCorresonding[i]); // Mise à jour du texte d'information
 			});
 			image.setOnMouseExited((MouseEvent event) -> {
 				image.setOpacity(0.5);
-				buttonText.setText("");
+				buttonText.setText(""); // Mise à jour du texte d'information
 			});
 			
 			x1+=35;
 			root.getChildren().add(image);
 		}
 		
-		//On ajout le tout à la scène
+		//On ajoute le tout à la scène
 		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem, numberBoardText,buttonText);
 		
 		/*
@@ -268,14 +268,14 @@ public class Editor extends Level {
 
 			@Override
 			public void handle(MouseEvent event) {
-				if (saveText.getText().equals("testEditor")) {
+				if (saveText.getText().equals("testEditor")) { //Fichier nécessaire au bon fonctionnement du jeu
 					textZone.setText("ENTER AN OTHER NAME.");
 				}
-				else if(saveText.getText().length()>0) {
+				else if(saveText.getText().length()>0) { // Si la sauvegarde à bien eu lieu
 					LevelManager.saveLvlEditor(saveText.getText());
 					textZone.setText("LEVEL SAVED !");
 				}
-				else {
+				else { //Si la zone de texte est vide
 					textZone.setText("ENTER A NAME !");
 				}
 			}
@@ -293,13 +293,13 @@ public class Editor extends Level {
 			@Override
 			public void handle(MouseEvent event) {
 				//On supprime les niveaux temporaires pour que si l'utilisateur quitte et reviens dans l'éditeur de niveau l'éditeur soit vide
-				File[] files = {new File("levels"+File.separator+"editor"+File.separator+"cleanEditor_0.txt"), 
-						new File("levels"+File.separator+"editor"+File.separator+"testEditor_0.txt")};
+				File[] files = {new File("levels"+File.separator+"editor"+File.separator+"cleanEditor.txt"), 
+						new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt")};
 				for(File file : files) {
 					if(file.exists())
 						file.delete();
 				}
-				loadEditor("levels"+File.separator+"cleanEditor", true);
+				loadEditor("levels"+File.separator+"cleanEditor", true); //Chargement de l'éditeur vide
 			}
 		};
 	}
@@ -322,6 +322,7 @@ public class Editor extends Level {
 			}
 		};
 	}	
+	
 	/**
 	 * Méthode qui va s'occuper de la gestion du boutton "TEST"
 	 * @return

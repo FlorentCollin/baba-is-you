@@ -105,7 +105,7 @@ public class Settings extends Menu{
 	    }
 	    
 	@FXML
-	public void setSettingsImages() {
+	public void setSettingsImages() { //TODO A modifier pour rendre cette méthode modulaire
 		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("up")+".png"));
 		downKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("down")+".png"));
 		rightKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("right")+".png"));

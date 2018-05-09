@@ -10,6 +10,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
+/**
+ * Classe gérant la musique dans l'ensemble du jeu
+ * @author Florent
+ *
+ */
 public class Music extends BabaIsYouApp {
 
 	private static String[] listOfMusic = {"musicMenu.wav"};

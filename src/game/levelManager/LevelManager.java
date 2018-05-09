@@ -32,13 +32,17 @@ public class LevelManager {
 	private static String[] listOfLevels = {"levels"+File.separator+"lvl0","levels"+File.separator+"lvl1",
 			"levels"+File.separator+"lvl2","levels"+File.separator+"lvl3","levels"+File.separator+"lvl4",
 			"levels"+File.separator+"lvl5"};
+	private static String currentLeveLName;
 	/*Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à partir du niveau 5 on découvre un nouvel Item : les portails.
 	 * Quand on emprunte un portail on se rend au Board suivant donc on doit forcément avoir une liste de Board pour gérer les téléportations avec les portails*/
 	private static ArrayList<Board> activesBoards;
 	private static JSONObject correspondingItem;
 	
-	public static ArrayList<Board> getActivesBoards()
-	{
+	public static String getCurrentLeveLName() {
+		return currentLeveLName;
+	}
+
+	public static ArrayList<Board> getActivesBoards() {
 		return activesBoards;
 	}
 	
@@ -46,8 +50,7 @@ public class LevelManager {
 		activesBoards.remove(activesBoards.size()-1);
 	}
 	
-	public static String[] getListOfLevels()
-	{
+	public static String[] getListOfLevels() {
 		return listOfLevels;
 	}
 
@@ -57,8 +60,8 @@ public class LevelManager {
 	 * @return le plateau du jeu généré
 	 * @throws IOException 
 	 */
-	public static void readLevel(String nameLevel, boolean eraseActives)  
-	{
+	public static void readLevel(String nameLevel, boolean eraseActives) {
+		currentLeveLName = nameLevel; //On garde en mémoire le chemin d'accès du niveau pour pouvoir le recharger plus facilement
 		BufferedReader br = null;
 		Cell[][] array = null; //return
 		String line;
@@ -100,23 +103,20 @@ public class LevelManager {
 					array = new Cell[colsOfBoard][rowsOfBoard]; //Initialisation de la map
 					//Pré remplissage de la map avec des cellules vides(ie qui ne contiennent que l'Item Background) ou des frontières/bordures
 					//Itération sur toutes les cellules de la map
-					for(int i = 0; i < colsOfBoard; i++)
-					{
-						for(int j = 0; j< rowsOfBoard; j++)
-						{
+					for(int i = 0; i < colsOfBoard; i++) {
+						for(int j = 0; j< rowsOfBoard; j++) {
 							// Remplissage des frontières, si il n'y a pas de frontières alors on initialise une cellule vide
-							if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1)
-							{
+							if(i == 0 || i == colsOfBoard-1 || j == 0 || j == rowsOfBoard-1) {
 								array[i][j] = new Cell(i,j, new Boundary());
 							}
-							else if(array[i][j] == null)
+							else if(array[i][j] == null) {
 								array[i][j] = new Cell(i,j);
+							}
 						}
 					}
 					// Lecture du reste du fichier
 					line = br.readLine();
-					while(line != null && ! (line.split(" ")[0].equals("LVL")))
-					{
+					while(line != null && ! (line.split(" ")[0].equals("LVL"))) {
 						list = line.split(" ");
 						cols = Integer.parseInt(list[1]);
 						rows = Integer.parseInt(list[2]);
@@ -130,7 +130,6 @@ public class LevelManager {
 						array[rows][cols] = cellToChange;
 						line = br.readLine();
 					}
-//					line = br.readLine(); //Pour continuer dans le premier while()
 				} catch (IOException ioex) {
 					System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
 				} 
@@ -145,8 +144,7 @@ public class LevelManager {
 		}
 		Rules.scanRules(activesBoards);
 		//On recherche les différents joueurs sur tous les boards et on en profite pour mettre à jour les règles sur l'ensemble des boards actifs
-		for(Board board : activesBoards)
-		{
+		for(Board board : activesBoards) {
 			board.scanRules();
 			board.searchPlayers();
 		}
@@ -162,8 +160,7 @@ public class LevelManager {
 	 * @param str le string sur lequel on veut trouver l'item
 	 * @return la classe d'un Item
 	 */
-	public static Class<?> getClassFromString(String str)
-	{
+	public static Class<?> getClassFromString(String str) {
 		/* Ici on va utiliser le principe de réfléction
 		 * Ce principe va nous permettre de trouver une class à partir d'un String
 		 * Et donc d'éviter de devoir placer un switch(str) qui aurait du énumérer tous les éléments possible
@@ -187,17 +184,14 @@ public class LevelManager {
 	 * @author Le code de la lecture du JSON vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
 	 * Et on utilise la lib "json-simple-1.1"
 	 */
-	public static Item createItem(String str)
-	{
+	public static Item createItem(String str) {
 		Item itemToReturn = null;
 		Class<?> strClass = getClassFromString(str);
 		try {
 			Constructor<?> strConstructor = strClass.getConstructors()[0];
-			if(strConstructor.getParameterTypes().length != 0) //Si le constructeur demande un paramètre "Class" alors on recherche la classe associé à l'Item
-			{
+			if(strConstructor.getParameterTypes().length != 0) { //Si le constructeur demande un paramètre "Class" alors on recherche la classe associé à l'Item
 				JSONParser parser = new JSONParser();
 				try {
-					
 					Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"CorrespondingTextOrItem.json"));
 					JSONObject jsonObject = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString()); //Récupération de la class correspondante à l'Item (ex : wall --> TextWall.class)
@@ -213,7 +207,6 @@ public class LevelManager {
 						e.printStackTrace();
 					}
 					
-					
 				} catch (FileNotFoundException e) {
 					System.out.println("Some files are missing, please reinstall the game");
 					e.printStackTrace();
@@ -222,7 +215,6 @@ public class LevelManager {
 				} catch (ParseException e) {
 					throw new RuntimeException(e);
 				}
-				
 			}
 			else {
 				try {
@@ -250,12 +242,10 @@ public class LevelManager {
 	 * @return la valeur de la clé donnée en paramètre
 	 * @author Le code de la lecture du json vient de Mkyong ref : "https://www.mkyong.com/java/json-simple-example-read-and-write-json/"
 	 */
-	public static String correspondingTextOrItem(String str)
-	{
+	public static String correspondingTextOrItem(String str){
 		if(correspondingItem == null) { // Si c'est la première fois qu'on crée un Item on doit lire le fichier JSON des correspondances
 			JSONParser parser = new JSONParser();
 			try {
-				
 				Object obj = parser.parse(new FileReader("settings"+File.separatorChar+"CorrespondingTextOrItem.json"));
 				correspondingItem = (JSONObject) obj; //Ouverture du fichier JSON et lecture
 			} catch (FileNotFoundException e) {
@@ -266,7 +256,6 @@ public class LevelManager {
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}
-			
 		}
 			return correspondingItem.get(str).toString(); //On retourne la valeur de la clé donnée en paramètre sous la forme d'un String			
 	}
@@ -465,18 +454,14 @@ public class LevelManager {
 	/**
 	 * Méthode qui va charger la sauvegarde, si elle n'existe pas alors on charge le premier niveau
 	 */
-	public static void loadSaveLvl()
-	{
+	public static void loadSaveLvl() {
 		File file = new File("levels"+File.separatorChar+"saves"+File.separator+"save.txt");
-		if(! file.exists()) //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
-		{
+		if(! file.exists()) { //S'il n'y a pas de sauvegardes on charge le premier niveau par défaut
 			readLevel(getListOfLevels()[0], true);
 			return;
 		}
 		else {
 			readLevel("levels"+File.separator+"saves"+File.separator+"save", true);
 		}
-		
 	}
-	
 }

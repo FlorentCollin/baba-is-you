@@ -31,31 +31,36 @@ public class Level extends BabaIsYouApp {
 	
 	/**
 	 * Méthode qui va charger un niveau et l'afficher
-	 * @param names les noms des fichiers des différentes pronfondeur d'un niveau
+	 * @param name le nom du fichier à charger
+	 * @param eraseActivesBoards Est ce qu'on doit supprimer les boards actives ou juste rajouter le niveau à la suite de ceux-ci
 	 * @param activateInputs Est ce que les "Inputs" du clavier peuvent être utilisé
 	 */
 	public static void loadLevel(String name, boolean eraseActivesBoards, boolean activateInputs)
 	{
 		
 		
-		if(name.equals("save")) //Chargement du niveau sauvegardé
+		if(name.equals("save")) //Chargement de la sauvegarde
 			LevelManager.loadSaveLvl();
 		else
 			LevelManager.readLevel(name, eraseActivesBoards); //Chargement normal du niveau donné en paramètre
 		board = LevelManager.getActivesBoards().get(0); //Récupération de la première pronfondeur du niveau
+		//Initialisation
 		root = new Group();
 		game = new Scene(root, 960, 960);
 		primaryStage.setScene(game);
 		root.getChildren().add(canvas);
 		CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows()); //De combien doit être la taille d'une cellule
-		//Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
-		//Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
+		/*
+		 * Ce StackPane est représente le fond foncé qu'il y a sur les différents niveaux
+		 *	Cela permet de ne pas devoir afficher un fond de cette couleur à chaque fois qu'on redessine une cellule
+		 */
 		holder = new StackPane();
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
 		holder.setStyle("-fx-background-color: #1c1f22");
 		
 		drawBoard(); //Affichage du niveau dans le canvas
+		//Chargement de la fenêtre d'astuce
 		if(board.getLevelNumber() == 0)
 			Advice.loadAdviceStage("advice1");
 		else if (board.getLevelNumber() == 4)
@@ -72,7 +77,7 @@ public class Level extends BabaIsYouApp {
 	{
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image imageItem;
-		//Vidage de la cellule dans le canvas
+		//Reinitialisation (ie : on supprime tout ce qui avait été dessiné)
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
 		//Itération sur l'entièreté du Board pour afficher tous les Items
@@ -87,10 +92,10 @@ public class Level extends BabaIsYouApp {
 					imageItem = new Image("file:ressources"+File.separatorChar+element3.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 					//On dessine l'Item en fonction de la taille d'une cellule
 					gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
-					for(Item element4 : element3.getEffects()) {
-						imageItem = new Image("file:ressources"+File.separatorChar+element4.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
-						gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
-					}
+//					for(Item element4 : element3.getEffects()) {
+//						imageItem = new Image("file:ressources"+File.separatorChar+element4.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+//						gc.drawImage(imageItem, element2.getY()*CELL_SIZE, element2.getX()*CELL_SIZE);
+//					}
 				}
 			}
 		}
@@ -106,7 +111,7 @@ public class Level extends BabaIsYouApp {
 		//Récupération des coordonnées de la cellule
 		int x = oneCell.getX();
 		int y = oneCell.getY();	
-		//Vidage de la cellule dans le canvas
+		//Reinitialisation de la cellule dans le canvas
 		gc.clearRect(y*CELL_SIZE, x*CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		//Itération sur tous les Items de la cellule
 		for(Item element1 : oneCell.getList())
@@ -115,10 +120,10 @@ public class Level extends BabaIsYouApp {
 			imageItem = new Image("file:ressources"+File.separatorChar+element1.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
 			//On dessine l'Item en fonction de la taille d'une cellule
 			gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
-			for(Item element2 : element1.getEffects()) {
-				imageItem = new Image("file:ressources"+File.separatorChar+element2.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
-				gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
-			}
+//			for(Item element2 : element1.getEffects()) {
+//				imageItem = new Image("file:ressources"+File.separatorChar+element2.getName()+".png", CELL_SIZE, CELL_SIZE, true, true);
+//				gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
+//			}
 		}
 	}
 	
@@ -137,8 +142,7 @@ public class Level extends BabaIsYouApp {
 				String code = (String) settings.get(event.getCode().toString()); //Récupération de la touche pressée
 				if(code == null)
 					code = "Not a shortcut"; //Pour pouvoir tout de même rentrer dans le switch
-				switch(code)
-				{
+				switch(code) {
 				case "up": direction = 0 ; break;
 				case "right": direction = 1 ; break;
 				case "down": direction = 2 ; break;
@@ -152,13 +156,7 @@ public class Level extends BabaIsYouApp {
 					drawBoard();
 					return;
 				case "restart": //Reinitialise le niveau en cours
-					if(board.getLevelNumber() == -1) {
-						if((new File("levels"+File.separator+"editor"+File.separator+"testEditor.txt").exists()));
-							LevelManager.readLevel("levels"+File.separator+"editor"+File.separator+"testEditor", true);
-					}
-					else {
-						LevelManager.readLevel(listOfLevels[board.getLevelNumber()], true);
-					}
+					LevelManager.readLevel(LevelManager.getCurrentLeveLName(), true);
 					board = LevelManager.getActivesBoards().get(0);
 					CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
 					drawBoard();
@@ -199,10 +197,10 @@ public class Level extends BabaIsYouApp {
 					if(board.getLevelNumber()<listOfLevels.length-1 && board.getLevelNumber() != -1) {
 						LevelManager.readLevel(listOfLevels[board.getLevelNumber()+1], true);
 						board = LevelManager.getActivesBoards().get(0);
-						if(board.getLevelNumber() == 4)
+						if(board.getLevelNumber() == 4) //Affichage des astuces
 							Advice.loadAdviceStage("advice2");
 						CELL_SIZE = canvas.getHeight()/Math.max(board.getCols(), board.getRows());
-						drawBoard();
+						drawBoard(); //Reaffichage du jeu
 					}
 					return;
 				case "F1": //Affiche les astuces
@@ -214,30 +212,28 @@ public class Level extends BabaIsYouApp {
 				case "ESCAPE": //Retourne au menu principal
 					Menu.loadMenu();
 					return;
-				default : return; // Si une autre touche est pressée une ne fait rien
+				default : return; // Si une autre touche est pressée on ne fait rien
 				}
+				
 				//Itération sur la liste des joueurs pour les déplacer
 				for(Tuple player: board.getPlayers())
 				{
-					//Déplacement d'un joueur en fonction de la direction
+					//Déplacement d'un joueur des joueurs en fonction de la direction
 					MoveController.move(board, player.getX(), player.getY(), player.getZ(), direction);
 				}
-				//Son lors du déplacement
 				
 				//On redessine les cellules qui ont été modifiées
-				for(Tuple cellChanged : board.getAndResetChangedCells())
-				{
+				for(Tuple cellChanged : board.getAndResetChangedCells()) {
 					drawCell(board.getBoard()[cellChanged.getY()][cellChanged.getX()]);
 				}
 				board.searchPlayers(); //On recherche les nouveaux joueurs
-				if(board.isWin())
-				{
+				if(board.isWin()) {
 					//Si le prochain niveau n'existe pas alors on charge le menu
-					if(board.getLevelNumber()>=listOfLevels.length-1 || board.getLevelNumber() == -1)
-					{
+					if(board.getLevelNumber()>=listOfLevels.length-1 || board.getLevelNumber() == -1) {
 						Menu.loadMenu();
 						return;
 					}
+					//TODO
 					ImageView gif = new ImageView(new Image("file:ressources/GoldenCupAnimation.gif"));
 					gif.setX(750);
 					gif.setY(30);
