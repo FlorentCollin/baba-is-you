@@ -146,11 +146,9 @@ public class Board {
 		// Ici on change l'Item mais comme on veut passer d'un Item de régle à un "vrai"
 		// item on doit chercher sa correspondance
 		// Dans le fichier JSON des correspondances
-		String endItemStr = LevelManager.correspondingTextOrItem(((Item) endItem).getName()); // Pour pouvoir utiliser
-																								// .getName() aucune
-																								// erreur possible car
-																								// IRule n'est implanté
-																								// que dans Item
+		
+		// Pour pouvoir utiliser .getName() aucune erreur possible car IRule n'est implanté que dans Item
+		String endItemStr = LevelManager.correspondingTextOrItem(((Item) endItem).getName());
 		// Itération sur l'entiéreté de la map
 		for (int i = 0; i < cols; i++) {
 			for (int j = 0; j < rows; j++) {

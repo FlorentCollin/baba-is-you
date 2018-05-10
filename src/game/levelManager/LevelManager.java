@@ -101,11 +101,12 @@ public class LevelManager {
 		try {
 			line = br.readLine(); // Lecture de la première ligne du fichier pour rentrer dans la boucle
 			while (line != null) {
-				// Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et
-				// du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
-				// Instanciation de tableau en récupérant le nombre de colonnes et de lignes
-				// grâce à la première ligne du fichier
-				// Et pré remplissage de la map
+				/*
+				 * Récupération du LevelNumber (ie du numéro du niveau, ex LVL 1, LVL 2,...) et
+				 * du DepthOfLevel (ie de la prondeur du niveau, ex LVL5_1, LVL5_2, LVL5_3,...)
+				 * Instanciation de tableau en récupérant le nombre de colonnes et de lignes
+				 * grâce à la première ligne du fichier et pré remplissage de la map
+				 */
 				try {
 					levelNumber = Integer.parseInt(line.split(" ")[1]);
 					depthOfLevel = activesBoards.size();
@@ -223,14 +224,8 @@ public class LevelManager {
 					Object obj = parser
 							.parse(new FileReader("settings" + File.separatorChar + "CorrespondingTextOrItem.json"));
 					JSONObject jsonObject = (JSONObject) obj; // Ouverture du fichier JSON et lecture
-					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString()); // Récupération
-																											// de la
-																											// class
-																											// correspondante
-																											// à l'Item
-																											// (ex :
-																											// wall -->
-																											// TextWall.class)
+					// Récupération de la class correspondante à l'Item (ex : wall --> TextWall.class)
+					Class<?> CorrespondingItemClass = getClassFromString(jsonObject.get(str).toString());
 					try {
 						itemToReturn = (Item) strConstructor.newInstance(CorrespondingItemClass);
 					} catch (InstantiationException e) {
@@ -336,13 +331,11 @@ public class LevelManager {
 		for (int index = 0; index < activesBoards.size(); index++) {
 			try {
 				Board board = activesBoards.get(index);
-				bw.write("LVL " + board.getLevelNumber() + " " + board.getDepthOfLevel()); // Ajout de la première ligne
-																							// qui désigne le numéro du
-																							// niveau
+				// Ajout de la première ligne qui désigne le numéro du niveau
+				bw.write("LVL " + board.getLevelNumber() + " " + board.getDepthOfLevel()); 
 				bw.newLine();
-				bw.write((board.getRows() - 2) + " " + (board.getCols() - 2)); // Ajout de la deuxième ligne qui désigne
-																				// le nombre de lignes et de colonnes de
-																				// la map
+				// Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
+				bw.write((board.getRows() - 2) + " " + (board.getCols() - 2)); 
 				// On retire -2 pour ne pas prendre en compte les bordures (frontières)
 				bw.newLine(); // = "\n"
 				// Itération sur toute la map pour récupérer les Items
@@ -374,21 +367,10 @@ public class LevelManager {
 		BufferedWriter bw = null;
 		// On clean le fichier temporaire
 		try {
-			File saveFile = new File("levels" + File.separator + "editor" + File.separator + "testEditor.txt");
-			File save = new File("levels" + File.separatorChar + "editor" + File.separatorChar + name + ".txt"); // Nom
-																													// du
-																													// fichier
-																													// dans
-																													// lequel
-																													// on
-																													// va
-																													// sauvegarder
-																													// le
-																													// niveau
+//			File saveFile = new File("levels" + File.separator + "editor" + File.separator + "testEditor.txt");
+			// Nom du fichier dans lequel on va sauvegarder le niveau
+			File save = new File("levels" + File.separatorChar + "editor" + File.separatorChar + name + ".txt"); 
 			bw = new BufferedWriter(new FileWriter(save));
-			if (saveFile.exists()) {
-			}
-			// FileUtils.forceDelete(saveFile);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -407,15 +389,8 @@ public class LevelManager {
 				for (Cell[] element1 : board.getBoard()) {
 					for (Cell element2 : element1) {
 						for (Item element3 : element2.getList()) {
-							if (!(element3 instanceof Boundary) && element2.getX() > 4 && element2.getY() < 20) // On
-																												// pourrait
-																												// optimiser
-																												// en
-																												// supprimant
-																												// directement
-																												// les
-																												// colonnes
-																												// concernées
+							// On pourrait optimiser en supprimant directement les colonnes concernées
+							if (!(element3 instanceof Boundary) && element2.getX() > 4 && element2.getY() < 20) 
 							{
 								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX() - 4));
 								bw.newLine();
@@ -452,8 +427,7 @@ public class LevelManager {
 	 */
 	public static String loadUserLvl(File fileName) {
 		// TODO Améliorer cette méthode car elle est fort compliqué, il doit sûrement y
-		// avoir un moyen beaucoup plus simple :) mais au moins
-		// Elle fonctionne
+		// avoir un moyen beaucoup plus simple :) mais au moins elle fonctionne
 		// 1) On copier le fichier "cleanEditor"
 		File newCleanEditor = new File("levels" + File.separator + "editor" + File.separator + "cleanEditor.txt");
 
@@ -498,21 +472,8 @@ public class LevelManager {
 					for (Cell element2 : element1) {
 						for (Item element3 : element2.getList()) {
 							if (!(element3 instanceof Boundary)) {
-								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX() + 4)); // Ajout
-																														// dans
-																														// le
-																														// fichier
-																														// des
-																														// items.
-																														// +4
-																														// pour
-																														// faire
-																														// correspondre
-																														// par
-																														// rapport
-																														// à
-																														// la
-																														// map
+								// Ajout dans le fichier des items. +4 pour faire correspondre par rapport à la map
+								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX() + 4));
 								bw.newLine();
 							}
 						}

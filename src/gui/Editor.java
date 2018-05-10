@@ -360,14 +360,8 @@ public class Editor extends Level {
 			@Override
 			public void handle(MouseEvent event) {
 				LevelManager.saveLvlEditor("testEditor"); // On sauvegarde le fichier dans le bon format
-				loadLevel("levels" + File.separator + "editor" + File.separatorChar + "testEditor", true, true); // On
-																													// charge
-																													// le
-																													// fichier
-																													// qu'on
-																													// vient
-																													// de
-																													// sauvegarder
+				// On charge le fichier qu'on vient de sauvegarder
+				loadLevel("levels" + File.separator + "editor" + File.separatorChar + "testEditor", true, true);
 			}
 		};
 	}
