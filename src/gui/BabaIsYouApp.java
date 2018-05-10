@@ -47,7 +47,7 @@ public class BabaIsYouApp extends Application {
 			thisClass = getClass(); // On en a besoin d'en d'autres méthodes et on ne peut pas y accéder par un getClass()
 			primaryStage.setTitle("BABA IS YOU");
 			primaryStage.getIcons().add(new Image("file:ressources"+File.separatorChar+"baba.png"));
-//			primaryStage.initStyle(StageStyle.UNDECORATED);
+			primaryStage.initStyle(StageStyle.UNDECORATED);
 			secondaryStage.initStyle(StageStyle.UNDECORATED);
 			
 			//Changement de la police d'écriture en 8_Bit_Madness qui est une police d'écriture gratuite d'utilisation sauf pour une utilisation commerciale
@@ -61,7 +61,6 @@ public class BabaIsYouApp extends Application {
 			init();
 			//Chargement du Menu principal
 			Menu.loadMenu();
-			
 			
 			//Ouverture de l'application
 			primaryStage.show();

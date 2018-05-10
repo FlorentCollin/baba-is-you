@@ -122,11 +122,18 @@ public class Board {
 	{
 		if(Rules.getListOfRulesActives() == null)
 			Rules.scanRules(LevelManager.getActivesBoards());
-		//Itération sur la liste des régles Actives pour savoir si il y a une régle du type "WALL is ROCK", "WALL IS BABA", etc,...
-		for(IRule[] element : Rules.getListOfRulesActives()) {
-			if(element[0].isWord() && element[2].isWord()) {
-				//On change tous les items qui correspondent é element1 en item element2
-				changeAllItemsforAnOtherItem(element[0], element[2]);
+		/*
+		 * Ici on regarde si le niveau qu'on a chargé est différent de "cleanEditor" car lorsqu'on lançait l'éditeur et qu'une règle
+		 * du style "ROCK IS WALL" était actives on avait le rocher (où se trouve les items sélectionnables) qui se transformait en mur
+		 * Ce qu'on veut éviter pour pouvoir toujours choisir le rocher
+		 */
+		if(! LevelManager.getCurrentLeveLName().substring(LevelManager.getCurrentLeveLName().length()-11).equals("cleanEditor")) {
+			// Itération sur la liste des régles Actives pour savoir si il y a une régle du type "WALL is ROCK", "WALL IS BABA", etc,...
+			for(IRule[] element : Rules.getListOfRulesActives()) {
+				if(element[0].isWord() && element[2].isWord()) {
+					//On change tous les items qui correspondent é element1 en item element2
+					changeAllItemsforAnOtherItem(element[0], element[2]);
+				}
 			}
 		}
 	}

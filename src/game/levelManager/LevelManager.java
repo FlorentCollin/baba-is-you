@@ -448,7 +448,8 @@ public class LevelManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		return newCleanEditor.getAbsolutePath().substring(0 ,newCleanEditor.getAbsolutePath().length()-4);
+		// On retourne le string modifier pour supprimer le .txt
+		return newCleanEditor.getAbsolutePath().substring(0 , newCleanEditor.getAbsolutePath().length()-4);
 	}
 	
 	/**

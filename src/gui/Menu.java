@@ -118,7 +118,7 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void settingsButtonClicked() {
 		SoundFX.play(SELECTED_SOUND);
-		Settings.loadSettingsMenu();
+		SettingsMenu.loadSettingsMenu();
 	}
 	
 	//Gestion des animations dans le menu principal

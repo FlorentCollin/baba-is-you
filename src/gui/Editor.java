@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -208,11 +209,17 @@ public class Editor extends Level {
 				//On récupère la position en X et en Y de la souris
 				double mouseX = event.getX();
 				double mouseY = event.getY();
+				//Si le boutton droit de la souris est pressé on simule un clic sur la gomme
+				if(event.getButton() == MouseButton.SECONDARY) {
+					selectedItem = new Eraser();
+					board.setCell(22, 1, new Cell(1, 22, selectedItem));
+					drawCell(board.getCell(22, 1));
+				}
 				/*
 				 * Si la souris se situe dans la zone des items sélectionnables (voir en jeu pour mieux comprendre)
 				 * alors on cherche l'item dans le board. S'il existe on le place dans la variable Item selectedItem
 				 */
-				if(mouseX >= 20*CELL_SIZE && mouseX<= 23*CELL_SIZE && mouseY >= 4*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
+				if(mouseX >= 20*CELL_SIZE && mouseX<= 23*CELL_SIZE && mouseY >= 4*CELL_SIZE && mouseY <= 23*CELL_SIZE) { //Définit un rectangle de pixels
 					selectedItem = board.getBoard()[(int)(mouseY/CELL_SIZE)][(int)(mouseX/CELL_SIZE)].getLastItem();
 					if(selectedItem != null) {
 						board.setCell(22, 1, new Cell(1, 22, selectedItem));
@@ -223,7 +230,7 @@ public class Editor extends Level {
 				/*
 				 * Si la souris se trouve dans la zone où l'utilisateur peut composer son propre niveau alors l'utilisateur peut intéragir avec lui
 				 */
-				else if(mouseX >= 1*CELL_SIZE && mouseX < 19*CELL_SIZE && mouseY >= 5*CELL_SIZE && mouseY <= 23*CELL_SIZE) {
+				else if(mouseX >= 1*CELL_SIZE && mouseX < 19*CELL_SIZE && mouseY >= 5*CELL_SIZE && mouseY <= 23*CELL_SIZE) { //Définit un rectangle de pixels
 					if(selectedItem == null) { // On vérifie tout de même s'il a bien sélectionner un Item à placer
 						return;
 					}

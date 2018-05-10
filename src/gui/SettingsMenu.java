@@ -10,12 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
-public class Settings extends Menu{
+public class SettingsMenu extends Menu{
 	// SETTINGS MENU
 		@FXML
 	    private ImageView upKey;
@@ -82,30 +84,40 @@ public class Settings extends Menu{
 	     * @throws IOException Au cas où le fichier json n'est pas trouvé
 	     */
 	    @SuppressWarnings("unchecked")
-	    public static void changeSettings(String key, ImageView keyImage) throws IOException {
+	    private static void changeSettings(String key, ImageView keyImage) throws IOException {
 	    	keyImage.setOpacity(1);
 	    	menu.setOnKeyPressed(new EventHandler<KeyEvent>() {
 	    		@Override
 	    		public void handle(KeyEvent event) {
-	    			Image imageToLoad = new Image("file:ressources"+File.separator+"Key_images"+File.separator+event.getCode()+".png");
-	    			if(!imageToLoad.isError()) {
-	    				keyImage.setImage(imageToLoad);
-	    				settings.remove(settings.get(key).toString());
-	    				settings.put(event.getCode().toString(), key);
-	    				settings.replace(key, event.getCode().toString());
+	    			if(settings.get(event.getCode().toString()) != null) {
+	    				Alert alert = new Alert(AlertType.WARNING);
+	    				alert.setTitle("WARNING");
+	    				alert.setHeaderText("Warning ! This shortcut is already used");
+	    				alert.show();
 	    				
-	    				menu.setOnKeyPressed((KeyEvent e) -> {
-	    					if(e.getCode().toString().equals("ESCAPE"))
-	    						loadMenu();
-	    				});
 	    			}
+	    			else {
+	    				Image imageToLoad = new Image("file:ressources"+File.separator+"Key_images"+File.separator+event.getCode()+".png");
+	    				if(!imageToLoad.isError()) {
+	    					keyImage.setImage(imageToLoad);
+	    					settings.remove(settings.get(key).toString());
+	    					settings.put(event.getCode().toString(), key);
+	    					settings.replace(key, event.getCode().toString());
+	    				}
+	    				
+	    			}
+	    			menu.setOnKeyPressed((KeyEvent e) -> {
+	    				if(e.getCode().toString().equals("ESCAPE"))
+	    					loadMenu();
+	    			});
 	    			keyImage.setOpacity(0.5);
 	    		}
 	    	});
+	    	
 	    }
 	    
 	@FXML
-	public void setSettingsImages() { //TODO A modifier pour rendre cette méthode modulaire
+	private void setSettingsImages() { //TODO A modifier pour rendre cette méthode modulaire
 		upKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("up")+".png"));
 		downKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("down")+".png"));
 		rightKey.setImage(new Image("file:ressources"+File.separator+"Key_images"+File.separator+settings.get("right")+".png"));

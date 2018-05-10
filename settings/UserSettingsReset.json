@@ -23,7 +23,7 @@
     "restart" : "R",
     "save" : "X",
     "load_save" : "L",
-    "newt_world" : "E",
+    "next_world" : "E",
     "previous_world" : "A",
     "next_world_mod" : "SPACE",
     "previous_level" : "P",
