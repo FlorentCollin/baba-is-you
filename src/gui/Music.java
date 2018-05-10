@@ -41,7 +41,7 @@ public class Music extends BabaIsYouApp {
 			timeline.stop();
 			playerMusic.setVolume(NORMAL_VOLUME);
 		}
-		if (!playerMusic.getStatus().equals(Status.PLAYING) && (boolean) settings.get("MUSIC") == true) {
+		if (!playerMusic.getStatus().equals(Status.PLAYING) && (boolean) settings.getSoundSettings().get("MUSIC") == true) {
 			playerMusic.setVolume(NORMAL_VOLUME);
 			playerMusic.play();
 		}

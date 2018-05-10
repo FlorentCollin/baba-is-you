@@ -380,8 +380,9 @@ public class LevelManager {
 				bw.write("LVL" + " " + "-1" + " " + board.getDepthOfLevel()); // Ajout de la première ligne qui désigne
 																				// le numéro du niveau
 				bw.newLine();
-				bw.write(18 + " " + 18); // Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de
-											// la map (Comme on est dans l'éditeur de niveau
+				// Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de
+				// la map (Comme on est dans l'éditeur de niveau
+				bw.write(18 + " " + 18); 
 				// L'utilisateur ne peut pas choisir la taille du niveau et le taile imposée est
 				// de 18x18 cases
 				bw.newLine(); // = "\n"

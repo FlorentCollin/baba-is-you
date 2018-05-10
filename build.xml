@@ -57,7 +57,7 @@
 		<mkdir dir="levels/editor"/>
 	</target>
 	<target name="delete_settings">
-		<copy file="settings/UserSettingsReset.json" tofile="settings/UserSettings.json" overwrite="true"/>
+		<delete file="settings/UserSettings.json"/>
 	</target>
 </project>
 

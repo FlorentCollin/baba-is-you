@@ -6,9 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 import javafx.application.Application;
 import javafx.scene.control.Alert;
@@ -19,6 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import userProfile.Settings;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
@@ -33,7 +34,7 @@ public class BabaIsYouApp extends Application {
 	protected static Class<?> thisClass;
 	protected static Font fontMadness; // Police d'écriture
 	// AUTRE
-	protected static JSONObject settings;
+	protected static Settings settings;
 	protected static Music musicMenu = new Music(0);
 	protected static SoundFX sound;
 	protected final static String SELECTED_SOUND = "selected.wav";
@@ -63,8 +64,11 @@ public class BabaIsYouApp extends Application {
 			close();
 		});
 		init();
+		
 		// Chargement du Menu principal
 		Menu.loadMenu();
+		
+
 
 		// Ouverture de l'application
 		primaryStage.show();
@@ -85,17 +89,25 @@ public class BabaIsYouApp extends Application {
 	 */
 	private void initJson() {
 		// Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
-		JSONParser parser = new JSONParser();
-		try {
-
-			Object obj = parser.parse(new FileReader("settings" + File.separatorChar + "UserSettings.json"));
-			settings = (JSONObject) obj; // Ouverture du fichier JSON et lecture
-		} catch (FileNotFoundException e) {
-			alertFilesMissing();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
+		//TODO TEST
+		File settingsJson = new File("settings"+File.separator+"UserSettings.json");
+		if(settingsJson.exists()) {
+			Gson gson = new Gson();
+			try {
+				settings = gson.fromJson(new FileReader(new File("settings/UserSettings.json")), Settings.class);
+			} catch (JsonSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonIOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			settings = new Settings();
 		}
 	}
 
@@ -105,8 +117,9 @@ public class BabaIsYouApp extends Application {
 	 */
 	protected static void close() {
 		try {
+			Gson gson = new Gson();
 			FileWriter file = new FileWriter("settings" + File.separator + "UserSettings.json");
-			file.write(settings.toJSONString()); // Ecriture des paramètres dans le fichier JSON correspondant
+			file.write(gson.toJson(settings));
 			file.close();
 		} catch (IOException e) {
 			primaryStage.close();

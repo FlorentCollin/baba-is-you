@@ -148,7 +148,7 @@ public class Level extends BabaIsYouApp {
 
 			@Override
 			public void handle(KeyEvent event) {
-				String code = (String) settings.get(event.getCode().toString()); // Récupération de la touche pressée
+				String code = (String) settings.getUserSettings().get((event.getCode().toString())); // Récupération de la touche pressée
 				if (code == null)
 					code = "Not a shortcut"; // Pour pouvoir tout de même rentrer dans le switch
 				switch (code) {
@@ -174,7 +174,10 @@ public class Level extends BabaIsYouApp {
 					drawBoard();
 					return;
 				case "restart": // Reinitialise le niveau en cours
-					LevelManager.readLevel(LevelManager.getCurrentLeveLName(), true);
+					if(board.getLevelNumber() != -1)
+						LevelManager.readLevel(LevelManager.getListOfLevels()[board.getLevelNumber()], true);
+					else
+						LevelManager.readLevel(LevelManager.getCurrentLeveLName(), true);
 					board = LevelManager.getActivesBoards().get(0);
 					CELL_SIZE = canvas.getHeight() / Math.max(board.getCols(), board.getRows());
 					drawBoard();
@@ -252,7 +255,7 @@ public class Level extends BabaIsYouApp {
 						return;
 					}
 					// TODO
-					ImageView gif = new ImageView(new Image("file:ressources/GoldenCupAnimation.gif"));
+					ImageView gif = new ImageView(new Image("file:ressources"+File.separator+"SuccessUnlockedAnimation.gif"));
 					gif.setX(750);
 					gif.setY(30);
 					SoundFX.play("success.wav");
