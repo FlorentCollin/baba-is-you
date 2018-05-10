@@ -11,9 +11,9 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 public class Settings {
-	
+
 	private BiMap<String, String> userSettings = HashBiMap.create();
-	
+
 	public BiMap<String, String> getUserSettings() {
 		return userSettings;
 	}
@@ -33,8 +33,8 @@ public class Settings {
 		userSettings.put("N", "next_level");
 		userSettings.put("F1", "F1");
 		userSettings.put("ESCAPE", "ESCAPE");
-//		userSettings.put("MUSIC", "true");
-//		userSettings.put("SOUNFX", "true");
+		// userSettings.put("MUSIC", "true");
+		// userSettings.put("SOUNFX", "true");
 	}
-	
+
 }

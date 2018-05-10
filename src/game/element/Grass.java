@@ -10,5 +10,3 @@ public class Grass extends RealItem {
 		super(typeText);
 	}
 }
-
-	

@@ -10,5 +10,4 @@ public class Flag extends RealItem {
 		super(typeText);
 	}
 
-	
 }

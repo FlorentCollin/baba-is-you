@@ -6,19 +6,16 @@ package game.element;
  */
 public class Boundary extends Item {
 
-	public Boundary()
-	{
+	public Boundary() {
 		setPriority(0);
 		setName("Boundary");
 	}
-	
-	public boolean isPushable()
-	{
+
+	public boolean isPushable() {
 		return false;
 	}
-	
-	public boolean isStop()
-	{
+
+	public boolean isStop() {
 		return true; // Les bordures stop toujours les Item pour les empêcher de sortir de la map
 	}
 }

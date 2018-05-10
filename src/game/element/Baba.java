@@ -10,5 +10,4 @@ public class Baba extends RealItem {
 		super(typeText);
 	}
 
-
 }

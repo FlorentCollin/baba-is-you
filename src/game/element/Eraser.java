@@ -1,9 +1,8 @@
 package game.element;
 
-public class Eraser extends TextTp{
+public class Eraser extends TextTp {
 
-	public Eraser()
-	{
+	public Eraser() {
 		setPriority(3);
 		setName("Eraser");
 	}

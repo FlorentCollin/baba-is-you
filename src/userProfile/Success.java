@@ -1,5 +1,5 @@
 package userProfile;
 
-public class Success  {
+public class Success {
 
 }

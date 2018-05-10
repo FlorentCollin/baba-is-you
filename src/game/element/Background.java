@@ -6,9 +6,8 @@ package game.element;
  */
 
 public class Background extends Item {
-	
-	public Background()
-	{
+
+	public Background() {
 		setPriority(0);
 		setName("    ");
 	}

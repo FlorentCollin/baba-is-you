@@ -1,16 +1,16 @@
 package game.levelManager;
+
 /**
- * Classe qui réprésente un Triplet d'entier
- * Sert principalement dans la classe Board pour enregistrer les positions des différents Items joueurs.
+ * Classe qui réprésente un Triplet d'entier Sert principalement dans la classe
+ * Board pour enregistrer les positions des différents Items joueurs.
  */
 public class Tuple {
-	
+
 	private int x;
 	private int y;
 	private int z;
-	
-	public Tuple(int x, int y, int z)
-	{
+
+	public Tuple(int x, int y, int z) {
 		this.setX(x);
 		this.setY(y);
 		this.setZ(z);
@@ -39,9 +39,8 @@ public class Tuple {
 	public void setZ(int z) {
 		this.z = z;
 	}
-	
-	public String toString()
-	{
-		return "("+x+","+y+","+z+")";
+
+	public String toString() {
+		return "(" + x + "," + y + "," + z + ")";
 	}
 }
