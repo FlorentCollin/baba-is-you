@@ -13,11 +13,11 @@ public class SettingsInit {
 	 * Chargement des paramètres
 	 * 
 	 */
-	public static Settings init() {
+	public static Settings init(boolean newSettings) {
 		// Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
 		// TODO TEST
 		File settingsJson = new File("settings" + File.separator + "UserSettings.json");
-		if (!settingsJson.exists()) {
+		if (!settingsJson.exists() || newSettings) {
 			settingsJson = new File("settings" + File.separator + "UserSettingsReset.json");
 		}
 		Gson gson = new Gson();

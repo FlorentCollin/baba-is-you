@@ -8,6 +8,7 @@ import game.element.TpBlue;
 import game.element.TpRed;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
+import gui.BabaIsYouApp;
 import gui.SoundFX;
 
 /**
@@ -120,6 +121,8 @@ public class MoveController {
 						itemToAdd = cellToMove.remove(z);
 						activesBoard.get(board.getDepthOfLevel() + 1).getCell(x2, y2).add(itemToAdd);
 						SoundFX.play("tpUsed.wav");
+						if(BabaIsYouApp.success.unlock("DiscoverParallelWorld"))
+							BabaIsYouApp.showSuccessUnlocked();
 						return true;
 					}
 					if (element instanceof TpRed && board.getDepthOfLevel() - 1 >= 0 && board.isAnActiveTp(element)) {
@@ -128,6 +131,8 @@ public class MoveController {
 						itemToAdd = cellToMove.remove(z);
 						activesBoard.get(board.getDepthOfLevel() - 1).getCell(x2, y2).add(itemToAdd);
 						SoundFX.play("tpUsed.wav");
+						if(BabaIsYouApp.success.unlock("DiscoverParallelWorld"))
+							BabaIsYouApp.showSuccessUnlocked();
 						return true;
 					}
 				}

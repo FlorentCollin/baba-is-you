@@ -12,28 +12,16 @@ import game.element.Item;
 public class Cell {
 	// Liste de tous les Item qui sont sur la même cellule
 	private ArrayList<Item> list;
-	// Position
-	private int x;
-	private int y;
 
-	public int getX() {
-		return x;
-	}
+	public Cell() {
 
-	public int getY() {
-		return y;
-	}
-
-	public Cell(int x, int y) {
-		this.x = x;
-		this.y = y;
 		list = new ArrayList<>();
 		// Background back = new Background();
 		// list.add(back);
 	}
 
-	public Cell(int x, int y, Item itemtoAdd) {
-		this(x, y); // Appel le constructeur sans arguments
+	public Cell(Item itemtoAdd) {
+		this(); // Appel le constructeur sans arguments
 		list.add(itemtoAdd);
 	}
 

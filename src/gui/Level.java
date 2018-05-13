@@ -84,15 +84,16 @@ public class Level extends BabaIsYouApp {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
 		// Itération sur l'entièreté du Board pour afficher tous les Items
-		for (Cell[] element1 : board.getBoard()) {
-			for (Cell element2 : element1) {
+		Cell[][] array = board.getBoard();
+		for (int i=0; i<array.length; i++) {
+			for (int j=0; j<array[0].length; j++) {
 				// Itération sur tous les Items de la cellule
-				for (Item element3 : element2.getList()) {
+				for (Item element3 : array[j][i].getList()) {
 					// Récupération de l'image à afficher en fonction de son nom
 					imageItem = new Image("file:ressources" + File.separatorChar + element3.getName() + ".png",
 							CELL_SIZE, CELL_SIZE, true, true);
 					// On dessine l'Item en fonction de la taille d'une cellule
-					gc.drawImage(imageItem, element2.getY() * CELL_SIZE, element2.getX() * CELL_SIZE);
+					gc.drawImage(imageItem, i * CELL_SIZE, j * CELL_SIZE);
 					// for(Item element4 : element3.getEffects()) {
 					// imageItem = new
 					// Image("file:ressources"+File.separatorChar+element4.getName()+".png",
@@ -111,21 +112,18 @@ public class Level extends BabaIsYouApp {
 	 * @param oneCell
 	 *            la cellule à redessiner
 	 */
-	protected static void drawCell(Cell oneCell) {
+	protected static void drawCell(int x, int y) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image imageItem;
-		// Récupération des coordonnées de la cellule
-		int x = oneCell.getX();
-		int y = oneCell.getY();
 		// Reinitialisation de la cellule dans le canvas
-		gc.clearRect(y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+		gc.clearRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 		// Itération sur tous les Items de la cellule
-		for (Item element1 : oneCell.getList()) {
+		for (Item element1 : board.getCell(x, y).getList()) {
 			// Récupération de l'image à afficher en fonction de son nom
 			imageItem = new Image("file:ressources" + File.separatorChar + element1.getName() + ".png", CELL_SIZE,
 					CELL_SIZE, true, true);
 			// On dessine l'Item en fonction de la taille d'une cellule
-			gc.drawImage(imageItem, y * CELL_SIZE, x * CELL_SIZE);
+			gc.drawImage(imageItem, x * CELL_SIZE, y * CELL_SIZE);
 			// for(Item element2 : element1.getEffects()) {
 			// imageItem = new
 			// Image("file:ressources"+File.separatorChar+element2.getName()+".png",
@@ -243,7 +241,7 @@ public class Level extends BabaIsYouApp {
 
 				// On redessine les cellules qui ont été modifiées
 				for (Tuple cellChanged : board.getAndResetChangedCells()) {
-					drawCell(board.getBoard()[cellChanged.getY()][cellChanged.getX()]);
+					drawCell(cellChanged.getX(), cellChanged.getY());
 				}
 				board.searchPlayers(); // On recherche les nouveaux joueurs
 				if (board.isWin()) {
@@ -256,10 +254,10 @@ public class Level extends BabaIsYouApp {
 						if(success.unlock("FinishFirstLevel")) {
 							showSuccessUnlocked();
 						}
-						if(board.getLevelNumber() == listOfLevels.length) {
-							if(success.unlock("BeatTheGame")) {
-								showSuccessUnlocked();
-							}
+					}
+					if(board.getLevelNumber() == listOfLevels.length-1) {
+						if(success.unlock("BeatTheGame")) {
+							showSuccessUnlocked();
 						}
 					}
 					// Si le prochain niveau n'existe pas alors on charge le menu

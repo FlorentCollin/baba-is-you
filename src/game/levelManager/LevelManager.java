@@ -123,9 +123,9 @@ public class LevelManager {
 							// Remplissage des frontières, si il n'y a pas de frontières alors on initialise
 							// une cellule vide
 							if (i == 0 || i == colsOfBoard - 1 || j == 0 || j == rowsOfBoard - 1) {
-								array[i][j] = new Cell(i, j, new Boundary());
+								array[i][j] = new Cell(new Boundary());
 							} else if (array[i][j] == null) {
-								array[i][j] = new Cell(i, j);
+								array[i][j] = new Cell();
 							}
 						}
 					}
@@ -339,13 +339,13 @@ public class LevelManager {
 				// On retire -2 pour ne pas prendre en compte les bordures (frontières)
 				bw.newLine(); // = "\n"
 				// Itération sur toute la map pour récupérer les Items
-				for (Cell[] element1 : board.getBoard()) {
-					for (Cell element2 : element1) {
-						for (Item element3 : element2.getList()) {
+				for (int i=0; i<board.getBoard().length; i++) {
+					for (int j=0; j<board.getBoard()[0].length; j++) {
+						for (Item element3 : board.getBoard()[i][j].getList()) {
 							if (!(element3 instanceof Boundary)) // On pourrait optimiser en supprimant directement les
 																	// colonnes concernées
 							{
-								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX()));
+								bw.write(element3.getName() + " " + j + " " + i);
 								bw.newLine();
 							}
 						}
@@ -387,13 +387,13 @@ public class LevelManager {
 				// de 18x18 cases
 				bw.newLine(); // = "\n"
 				// Itération sur toute la map
-				for (Cell[] element1 : board.getBoard()) {
-					for (Cell element2 : element1) {
-						for (Item element3 : element2.getList()) {
+				for (int i=0; i<board.getBoard().length; i++) {
+					for (int j=0; j<board.getBoard()[0].length; j++) {
+						for (Item element3 : board.getBoard()[i][j].getList()) {
 							// On pourrait optimiser en supprimant directement les colonnes concernées
-							if (!(element3 instanceof Boundary) && element2.getX() > 4 && element2.getY() < 20) 
+							if (!(element3 instanceof Boundary) && i > 4 && j < 20) 
 							{
-								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX() - 4));
+								bw.write(element3.getName() + " " + j + " " + (i - 4));
 								bw.newLine();
 							}
 						}
@@ -447,7 +447,7 @@ public class LevelManager {
 		}
 		for (Board board : activesBoards) { // Itération sur l'ensemble des boards actifs (des mondes parrallèles
 											// actifs)
-			if (!fileName.getName().equals("testEditor.txt") && (board.getRows() != 18 || board.getCols() != 18)) {
+			if (board.getRows() != 20 || board.getCols() != 20) {
 				System.out.println(
 						"Your file does not have the correct dimensions for the editor (the right dimensions are 18x18). "
 								+ "The program will automatically load the first level.");
@@ -469,12 +469,12 @@ public class LevelManager {
 			// Ajout des items sur l'éditeur vierge
 			try {
 				// Itération sur toute la map
-				for (Cell[] element1 : board.getBoard()) {
-					for (Cell element2 : element1) {
-						for (Item element3 : element2.getList()) {
+				for (int i = 0; i<board.getBoard().length; i++) {
+					for (int j = 0; j<board.getBoard()[0].length; j++) {
+						for (Item element3 : board.getBoard()[i][j].getList()) {
 							if (!(element3 instanceof Boundary)) {
 								// Ajout dans le fichier des items. +4 pour faire correspondre par rapport à la map
-								bw.write(element3.getName() + " " + (element2.getY()) + " " + (element2.getX() + 4));
+								bw.write(element3.getName() + " " + j + " " + (i + 4));
 								bw.newLine();
 							}
 						}

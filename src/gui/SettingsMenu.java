@@ -236,7 +236,7 @@ public class SettingsMenu extends Menu {
 
 	@FXML
 	public void resetTextClicked() {
-		settings = SettingsInit.init(); // On écrase les settings 
+		settings = SettingsInit.init(true); // On écrase les settings 
 	}
 
 	public void resetTextMouseEntered() {

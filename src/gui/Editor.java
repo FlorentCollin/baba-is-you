@@ -221,8 +221,8 @@ public class Editor extends Level {
 			// Si le boutton droit de la souris est pressé on simule un clic sur la gomme
 			if (event.getButton() == MouseButton.SECONDARY) {
 				selectedItem = new Eraser();
-				board.setCell(22, 1, new Cell(1, 22, selectedItem));
-				drawCell(board.getCell(22, 1));
+				board.setCell(22, 1, new Cell(selectedItem));
+				drawCell(22, 1);
 			}
 			/*
 			 * Si la souris se situe dans la zone des items sélectionnables (voir en jeu
@@ -233,8 +233,8 @@ public class Editor extends Level {
 					&& mouseY <= 23 * CELL_SIZE) { // Définit un rectangle de pixels
 				selectedItem = board.getBoard()[(int) (mouseY / CELL_SIZE)][(int) (mouseX / CELL_SIZE)].getLastItem();
 				if (selectedItem != null) {
-					board.setCell(22, 1, new Cell(1, 22, selectedItem));
-					drawCell(board.getCell(22, 1));
+					board.setCell(22, 1, new Cell(selectedItem));
+					drawCell(22, 1);
 				}
 				return;
 			}
@@ -254,18 +254,18 @@ public class Editor extends Level {
 				// Si l'utilisateur à sélectionner l'outil gomme alors on supprime ce qui se
 				// trouve dans la cellule
 				if (selectedItem instanceof Eraser) {
-					board.setCell(x, y, new Cell(y, x));
+					board.setCell(x, y, new Cell());
 				}
 				// S'il y a déjà un Item dans la cellule on y ajoute l'Item sélectionné
 				else if (board.getCell(x, y).getList().size() > 0) {
 					board.getCell(x, y).add(selectedItem);
 				} else {
-					board.setCell(x, y, new Cell(y, x, selectedItem)); // On crée une nouvelle cellule qui ne contiendra
+					board.setCell(x, y, new Cell(selectedItem)); // On crée une nouvelle cellule qui ne contiendra
 																		// que l'Item sélectionné
 				}
 				textZone.setText(""); // On met la textZone à "" pour ne pas afficher que le niveau a été sauvegarder
 										// alors qu'il ne l'est pas
-				drawCell(board.getCell(x, y)); // Mise à jour de la cellule qui a été modifiée
+				drawCell(x, y); // Mise à jour de la cellule qui a été modifiée
 			}
 		});
 

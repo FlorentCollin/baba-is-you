@@ -107,8 +107,8 @@ public class Menu extends BabaIsYouApp {
 
 	@FXML
 	public void successButtonClicked() {
-		// TODO
 		SoundFX.play(SELECTED_SOUND);
+		SuccessMenu.loadSuccessMenu();
 	}
 
 	@FXML

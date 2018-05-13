@@ -31,6 +31,7 @@ public class BabaIsYouApp extends Application {
 	protected static Class<?> thisClass;
 	protected static Group root = new Group();
 	protected static Font fontMadness; // Police d'écriture
+	protected static Font fontMadnessBig;
 	// AUTRE
 	protected static Settings settings;
 	public static Success success;
@@ -56,6 +57,8 @@ public class BabaIsYouApp extends Application {
 		// d'écriture gratuite d'utilisation sauf pour une utilisation commerciale
 		fontMadness = Font.loadFont(
 				"file:ressources" + File.separatorChar + "fonts" + File.separatorChar + "8-Bit Madness.ttf", 21);
+		fontMadnessBig = Font.loadFont(
+				"file:ressources" + File.separatorChar + "fonts" + File.separatorChar + "8-Bit Madness.ttf", 30);
 		if (fontMadness == null)
 			throw new IOException("Custom font was not find");
 
@@ -75,7 +78,7 @@ public class BabaIsYouApp extends Application {
 	 * Cette méthode ne sera utilisé que lors de l'appel de la fonction "start"
 	 */
 	public void init() {
-		settings = SettingsInit.init();
+		settings = SettingsInit.init(false);
 		success = new Success();
 		sound = new SoundFX();
 	}

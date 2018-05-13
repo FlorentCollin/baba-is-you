@@ -1,20 +1,23 @@
 <project name="Baba is You (Florent COLLIN)">
-
-	  <path id="classpath.test">
-	    <pathelement location="lib/junit-4.12.jar"/>
+    
+	<!-- Indication du chemein d'accès pour les fichier nécessaires aux test -->
+	<path id="classpath.test">
+		<pathelement location="lib/junit-4.12.jar"/>
 	  	<pathelement location="lib/json-simple-1.1.jar"/>
 	    <pathelement location="lib/hamcrest-core-1.3.jar"/>
 	    <pathelement location="build/tests"/>
-	  </path>
+	</path>
 	<target name="build">
 		<mkdir dir="build"/>
 		<javac srcdir="src:src/tests" destdir="build" encoding="Latin1" includeantruntime="false">
 	        <classpath>
+	        	   <!-- On inclus les librairies -->
 	               <fileset dir="lib">
 	                  <include name="**/*.jar" />
 	               </fileset>
 	         </classpath>
 		</javac>
+		<!-- Copie des fichiers FXML qui servent à certains menu -->
 		<copy todir="build/gui">
 			<fileset dir="src/gui" includes="*.fxml"/>
 		</copy>
@@ -23,6 +26,7 @@
 	<target name="run" depends="build">
 		<java classname="gui.BabaIsYouApp" fork="true" classpath="build">
 	        <classpath>
+	        	   <!-- On inclus les librairies -->
 	               <fileset dir="lib">
 	                  <include name="**/*.jar" />
 	               </fileset>
@@ -33,6 +37,7 @@
 	<target name="test" depends="build">
 		<junit printsummary="yes" showoutput="yes">
 			<classpath>
+	        	<!-- Chemin d'accès des fichiers nécessaires aux tests -->
 				<path refid="classpath.test"/>
 				<pathelement location="build"/>
 			</classpath>
@@ -43,19 +48,27 @@
 		</junit>
 	</target>
 	
+	<!-- Nettoyage simple qui supprime uniquement les fichiers copiés lors du "build" -->
 	<target name="clean">
 		<delete dir="build"/>
 		<delete dir="bin"/>
 	</target>
+	
+	<!-- Nettoyage complet qui supprime les fichiers copiés lors du "build" ainsi que les niveaux crées par l'utilisateur,
+	 ses paramètres et ses succès -->
 	<target name = "clean_all" depends="clean,delete_save,delete_customs_lvls,delete_user_profile"/>
 	<target name="delete_save">
 		<delete dir="levels/saves"/>
 		<mkdir dir="levels/saves"/>
 	</target>
+	
+	<!-- Suppression des niveaux crées par l'utilisateur -->
 	<target name="delete_customs_lvls">
 		<delete dir="levels/editor"/>
 		<mkdir dir="levels/editor"/>
 	</target>
+	
+	<!-- Suppression des paramètres et des succès de l'utilisateur -->
 	<target name="delete_user_profile">
 		<delete file="settings/UserSettings.json"/>
 		<delete file="settings/UserSuccess.json"/>
