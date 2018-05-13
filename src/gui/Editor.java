@@ -296,6 +296,8 @@ public class Editor extends Level {
 				if (saveText.getText().equals("testEditor")) { // Fichier nécessaire au bon fonctionnement du jeu
 					textZone.setText("ENTER AN OTHER NAME.");
 				} else if (saveText.getText().length() > 0) { // Si la sauvegarde à bien eu lieu
+					if(success.unlock("Creator"))
+						showSuccessUnlocked();
 					LevelManager.saveLvlEditor(saveText.getText());
 					textZone.setText("LEVEL SAVED !");
 				} else { // Si la zone de texte est vide

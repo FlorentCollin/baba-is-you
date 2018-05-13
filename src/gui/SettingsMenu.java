@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import userProfile.Settings;
+import userProfile.SettingsInit;
 
 public class SettingsMenu extends Menu {
 	// SETTINGS MENU
@@ -76,7 +76,7 @@ public class SettingsMenu extends Menu {
 	}
 
 	/**
-	 * Méthode qui va changer un raccourci clavier par le choix de l'utilisateur
+	 * Méthode qui va s'occuper de la gestion de l'interface lorsque l'utilisateur veut changer un raccourci
 	 * 
 	 * @param key
 	 *            le raccourci à modifier
@@ -236,7 +236,7 @@ public class SettingsMenu extends Menu {
 
 	@FXML
 	public void resetTextClicked() {
-		settings = new Settings(); // On écrase les settings 
+		settings = SettingsInit.init(); // On écrase les settings 
 	}
 
 	public void resetTextMouseEntered() {

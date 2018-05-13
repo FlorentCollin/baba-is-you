@@ -47,7 +47,7 @@
 		<delete dir="build"/>
 		<delete dir="bin"/>
 	</target>
-	<target name = "clean_all" depends="clean,delete_save,delete_customs_lvls,delete_settings"/>
+	<target name = "clean_all" depends="clean,delete_save,delete_customs_lvls,delete_user_profile"/>
 	<target name="delete_save">
 		<delete dir="levels/saves"/>
 		<mkdir dir="levels/saves"/>
@@ -56,8 +56,9 @@
 		<delete dir="levels/editor"/>
 		<mkdir dir="levels/editor"/>
 	</target>
-	<target name="delete_settings">
+	<target name="delete_user_profile">
 		<delete file="settings/UserSettings.json"/>
+		<delete file="settings/UserSuccess.json"/>
 	</target>
 </project>
 

@@ -112,7 +112,7 @@ public class LevelsChoice extends Menu {
 			final int i = index;
 			// Chargeùent du niveau si on clic sur l'image correspondante
 			levelImage.setOnMouseClicked((MouseEvent e) -> {
-				musicMenu.stop();
+				musicMenu.fadeVolume();
 				SoundFX.play(SELECTED_SOUND);
 				Level.loadLevel(LevelManager.getListOfLevels()[i - 1], true, true);
 			});

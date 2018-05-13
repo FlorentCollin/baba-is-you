@@ -1,25 +1,22 @@
 package gui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import userProfile.Settings;
+import userProfile.SettingsInit;
+import userProfile.Success;
 
 /**
  * Classe principale qui va gérer le jeu en mode interface graphique.
@@ -32,9 +29,11 @@ public class BabaIsYouApp extends Application {
 	protected static Stage primaryStage;
 	protected static Stage secondaryStage = new Stage();
 	protected static Class<?> thisClass;
+	protected static Group root = new Group();
 	protected static Font fontMadness; // Police d'écriture
 	// AUTRE
 	protected static Settings settings;
+	public static Success success;
 	protected static Music musicMenu = new Music(0);
 	protected static SoundFX sound;
 	protected final static String SELECTED_SOUND = "selected.wav";
@@ -64,11 +63,8 @@ public class BabaIsYouApp extends Application {
 			close();
 		});
 		init();
-		
 		// Chargement du Menu principal
 		Menu.loadMenu();
-		
-
 
 		// Ouverture de l'application
 		primaryStage.show();
@@ -79,54 +75,23 @@ public class BabaIsYouApp extends Application {
 	 * Cette méthode ne sera utilisé que lors de l'appel de la fonction "start"
 	 */
 	public void init() {
-		initJson();
+		settings = SettingsInit.init();
+		success = new Success();
 		sound = new SoundFX();
 	}
 
-	/**
-	 * Chargement des paramètres
-	 * 
-	 */
-	private void initJson() {
-		// Ouvertue du fichier JSON contenant les raccourcis clavier de l'utilisateur
-		//TODO TEST
-		File settingsJson = new File("settings"+File.separator+"UserSettings.json");
-		if(settingsJson.exists()) {
-			Gson gson = new Gson();
-			try {
-				settings = gson.fromJson(new FileReader(new File("settings/UserSettings.json")), Settings.class);
-			} catch (JsonSyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonIOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-			settings = new Settings();
-		}
-	}
+
 
 	/**
 	 * Méthode qui va se charger de fermer l'application tout en enregistrant les
 	 * paramètres
 	 */
 	protected static void close() {
-		try {
-			Gson gson = new Gson();
-			FileWriter file = new FileWriter("settings" + File.separator + "UserSettings.json");
-			file.write(gson.toJson(settings));
-			file.close();
-		} catch (IOException e) {
-			primaryStage.close();
-		}
-		// Fermeture de l'application
-		secondaryStage.close();
+		settings.close();
+		success.close();
+		
 		primaryStage.close();
+		secondaryStage.close();
 	}
 
 	/**
@@ -165,6 +130,14 @@ public class BabaIsYouApp extends Application {
 		return fileChoose;
 	}
 
+	public static void showSuccessUnlocked() {
+		ImageView gif = new ImageView(new Image("file:ressources"+File.separator+"SuccessUnlockedAnimation.gif"));
+		gif.setX(750);
+		gif.setY(30);
+		SoundFX.play("success.wav");
+		root.getChildren().add(gif);
+	}
+	
 	/**
 	 * Méthode qui va charger une fenêtre "pop up" d'erreur pour indiquer des
 	 * fichiers nécessaire au bon fonctionnement du jeu sont manquants

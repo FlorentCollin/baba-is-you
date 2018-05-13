@@ -3,14 +3,15 @@ package game.boardController;
 import java.io.File;
 import java.util.ArrayList;
 
-import game.element.RealItem;
 import game.element.IRule;
 import game.element.Item;
+import game.element.RealItem;
 import game.element.TextOn;
 import game.element.TextWin;
 import game.element.TextYou;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
+import gui.BabaIsYouApp;
 
 /**
  * Classe qui va gérer le plateau de jeu.
@@ -146,8 +147,9 @@ public class Board {
 		// Ici on change l'Item mais comme on veut passer d'un Item de régle à un "vrai"
 		// item on doit chercher sa correspondance
 		// Dans le fichier JSON des correspondances
-		
-		// Pour pouvoir utiliser .getName() aucune erreur possible car IRule n'est implanté que dans Item
+
+		// Pour pouvoir utiliser .getName() aucune erreur possible car IRule n'est
+		// implanté que dans Item
 		String endItemStr = LevelManager.correspondingTextOrItem(((Item) endItem).getName());
 		// Itération sur l'entiéreté de la map
 		for (int i = 0; i < cols; i++) {
@@ -155,15 +157,18 @@ public class Board {
 				ArrayList<Item> list = board[i][j].getList();
 				// Itération sur la liste d'Item
 				for (int k = 0; k < list.size(); k++) {
-					if (list.get(k).isRepresentedBy(baseItem)) // Si l'élement correspond é baseItem alors on doit le
-																// changer en endItem
+					if (list.get(k).isRepresentedBy(baseItem)) // Si l'élement correspond au baseItem alors on doit le
+						// changer en endItem
 					{
 						list.set(k, LevelManager.createItem(endItemStr));
 						changedCells.add(new Tuple(j, i, 0)); // On n'oublie pas d'ajouter les cellules changés car
-																// sinon elles ne seront pas repeinte par l'interface
-																// graphique
+						// sinon elles ne seront pas repeinte par l'interface
+						// graphique
 					}
 				}
+			}
+			if (BabaIsYouApp.success.unlock("Wizard")) {
+				BabaIsYouApp.showSuccessUnlocked();
 			}
 		}
 	}
@@ -206,7 +211,7 @@ public class Board {
 	/**
 	 * Méthode qui va rechercher dans la liste de régles actives quel Item "is WIN".
 	 */
-	private IRule whoIsWin() {
+	public IRule whoIsWin() {
 		// Itération sur la liste des régles actives
 		for (IRule[] element : Rules.getListOfRulesActives()) {
 			if (element[2] instanceof TextWin) {

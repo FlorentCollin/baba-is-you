@@ -1,0 +1,34 @@
+{
+    "userSettings": {
+        "A": "previous_world",
+        "D": "right",
+        "E": "next_world",
+        "save": "X",
+        "L": "load_save",
+        "down": "S",
+        "next_world": "E",
+        "N": "next_level",
+        "SPACE": "next_world_mod",
+        "P": "previous_level",
+        "Q": "left",
+        "R": "restart",
+        "S": "down",
+        "next_level": "N",
+        "X": "save",
+        "Z": "up",
+        "up": "Z",
+        "next_world_mod": "SPACE",
+        "load_save": "L",
+        "restart": "R",
+        "previous_world": "A",
+        "right": "D",
+        "F1": "F1",
+        "ESCAPE": "ESCAPE",
+        "left": "Q",
+        "previous_level": "P"
+    },
+    "soundSettings": {
+        "MUSIC": true,
+        "SOUNDFX": true
+    }
+}

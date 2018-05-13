@@ -6,6 +6,7 @@ import game.boardController.Board;
 import game.boardController.Cell;
 import game.boardController.MoveController;
 import game.element.Item;
+import game.element.TextFlag;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import javafx.event.EventHandler;
@@ -14,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
@@ -25,7 +25,6 @@ public class Level extends BabaIsYouApp {
 	protected static Scene game;
 	protected static Canvas canvas = new Canvas(960, 960);
 	protected static StackPane holder;
-	protected static Group root = new Group();
 	protected static double CELL_SIZE = 48;
 	protected static MediaPlayer soundfx;
 
@@ -236,7 +235,6 @@ public class Level extends BabaIsYouApp {
 				default:
 					return; // Si une autre touche est pressée on ne fait rien
 				}
-
 				// Itération sur la liste des joueurs pour les déplacer
 				for (Tuple player : board.getPlayers()) {
 					// Déplacement d'un joueur des joueurs en fonction de la direction
@@ -249,17 +247,27 @@ public class Level extends BabaIsYouApp {
 				}
 				board.searchPlayers(); // On recherche les nouveaux joueurs
 				if (board.isWin()) {
+					// SUCCESS
+					if(!(board.whoIsWin() instanceof TextFlag)) {
+						if(success.unlock("DifferentWayToWin"))
+							showSuccessUnlocked();
+					}
+					if(board.getLevelNumber() == 0) {
+						if(success.unlock("FinishFirstLevel")) {
+							showSuccessUnlocked();
+						}
+						if(board.getLevelNumber() == listOfLevels.length) {
+							if(success.unlock("BeatTheGame")) {
+								showSuccessUnlocked();
+							}
+						}
+					}
 					// Si le prochain niveau n'existe pas alors on charge le menu
 					if (board.getLevelNumber() >= listOfLevels.length - 1 || board.getLevelNumber() == -1) {
 						Menu.loadMenu();
 						return;
 					}
-					// TODO
-					ImageView gif = new ImageView(new Image("file:ressources"+File.separator+"SuccessUnlockedAnimation.gif"));
-					gif.setX(750);
-					gif.setY(30);
-					SoundFX.play("success.wav");
-					root.getChildren().add(gif);
+						
 					// Chargement du prochain niveau
 					LevelManager.readLevel(listOfLevels[board.getLevelNumber() + 1], true);
 					board = LevelManager.getActivesBoards().get(0); // Charge le prochain niveau
