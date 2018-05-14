@@ -8,6 +8,11 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+/**
+ * Classe qui va gérer les paramètres de l'utilisateur
+ * @author Florent
+ *
+ */
 public class Settings {
 
 	private Map<String, String> userSettings = new HashMap<>();
@@ -42,13 +47,20 @@ public class Settings {
 		}
 	}
 	
+	/**
+	 * Méthode qui va changer le choix de l'utilisateur au niveaux des sons
+	 * @param key 
+	 * 			  la valeur à modifier
+	 * @param trueOrFalse
+	 * 					le choix de l'utilisateur
+	 */
 	public void replaceSound(String key, Boolean trueOrFalse) {
 		soundSettings.replace(key, trueOrFalse);
 	}
 	
 	/**
 	 * Méthode qui va se charger de fermer l'application tout en enregistrant les
-	 * paramètres
+	 * paramètres dans un fichier JSON
 	 */
 	public void close() {
 		try {

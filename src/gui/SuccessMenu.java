@@ -16,12 +16,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import userProfile.Success;
 
+/**
+ * Classe qui sert à controller le menu des succès
+ * @author Florent
+ *
+ */
 public class SuccessMenu extends Menu {
 
 	private static boolean wasInit = false;
 	private static double unlockRate = 0;
 	private static Text unlockRateText;
 
+	/**
+	 * Initialise l'ensemble des textes et des boutons pour ne pas devoir à
+	 * chaque fois les recharger
+	 */
 	private static void initButton() {
 		wasInit = true;
 
@@ -85,13 +94,15 @@ public class SuccessMenu extends Menu {
 		// Boucle permettant d'afficher les différents succès.
 		Map<String, ArrayList<Object>> allSuccess = Success.getSuccess();
 		int y = 220;
+		//Itération sur l'ensemble des valeurs des succès
 		for (ArrayList<Object> value : allSuccess.values()) {
 			Text successText = new Text("- " + (String) value.get(1));
 			successText.setFill(Color.WHITE);
 			successText.setFont(fontMadnessBig);
+			// Si l'utilisateur à réussi le succès alors on change son opacité
 			if ((boolean) value.get(0)) {
 				successText.setOpacity(1);
-				unlockRate++;
+				unlockRate++; // Incrémentation du compteur de succès débloqués pour pouvoir en faire un pourcentage
 			} else
 				successText.setOpacity(0.5);
 			successText.setLayoutX(35);
@@ -99,8 +110,9 @@ public class SuccessMenu extends Menu {
 			y += 30;
 			root.getChildren().add(successText); // Ajout de l'image à la scène
 		}
+		//Calcul du pourcentage de succès débloqués
 		unlockRateText.setText((int)(unlockRate/allSuccess.size()*100) + "% UNLOCKED");
-		unlockRate = 0;
+		unlockRate = 0; //Re initialisation du pourcentage
 		root.getChildren().addAll(close, unlockRateText); // Ajout du boutton close et du texte qui indique le
 															// pourcentage de succès déjà réalisés
 		// Permet lorsque la touche "ESCAPE" est pressée de revenir au menu principal

@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
- * Sous classe de level qui va charger l'éditeur de niveau
+ * Sous classe de Level qui va charger l'éditeur de niveau
  *
  */
 public class Editor extends Level {
@@ -206,7 +206,7 @@ public class Editor extends Level {
 			root.getChildren().add(image);
 		}
 
-		// On ajoute le tout à la scène
+		// On ajoute tout les bouttons initialisés à la scène
 		root.getChildren().addAll(loadButton, saveText, saveButton, testButton, resetButton, textZone, textSelectedItem,
 				numberBoardText, buttonText);
 
@@ -286,7 +286,7 @@ public class Editor extends Level {
 	/**
 	 * Méthode qui va changer la zone de texte
 	 * 
-	 * @return ?
+	 * @return l'EventHandler qui gère l'appui sur le bouton "save"
 	 */
 	private static EventHandler<MouseEvent> saveButtonClicked() {
 		return new EventHandler<MouseEvent>() {
@@ -311,7 +311,7 @@ public class Editor extends Level {
 	/**
 	 * Méthode qui va s'occuper de la gestion du boutton "Reset"
 	 * 
-	 * @return
+	 * @return l'EventHandler qui gère l'appui sur le bouton "reset"
 	 */
 	private static EventHandler<MouseEvent> resetButtonClicked() {
 		return new EventHandler<MouseEvent>() {
@@ -334,7 +334,7 @@ public class Editor extends Level {
 	/**
 	 * Méthode qui sa s'occuper de la gestion du boutton "LOAD"
 	 * 
-	 * @return
+	 * @return l'EventHandler qui gère l'appui sur le boutton "load"
 	 */
 	private static EventHandler<MouseEvent> loadButtonClicked() {
 		return new EventHandler<MouseEvent>() {
@@ -354,7 +354,7 @@ public class Editor extends Level {
 	/**
 	 * Méthode qui va s'occuper de la gestion du boutton "TEST"
 	 * 
-	 * @return
+	 * @return l'EventHandler qui gère l'appui sur le bouton "test"
 	 */
 	private static EventHandler<MouseEvent> testButtonClicked() {
 		return new EventHandler<MouseEvent>() {

@@ -16,6 +16,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import userProfile.SettingsInit;
 
+/**
+ * Classe qui va gérer le menu des paramètres
+ * @author Florent
+ *
+ */
 public class SettingsMenu extends Menu {
 	// SETTINGS MENU
 	@FXML
@@ -54,6 +59,9 @@ public class SettingsMenu extends Menu {
 	// METHODES
 
 	@FXML
+	/**
+	 * Permet de charger le menu des paramètres
+	 */
 	public static void loadSettingsMenu() {
 		Parent root = null;
 		// if(! playerMusic.getStatus().equals(Status.PLAYING)) {
@@ -93,10 +101,13 @@ public class SettingsMenu extends Menu {
 			public void handle(KeyEvent event) {
 				Image imageToLoad = new Image(
 						"file:ressources" + File.separator + "Key_images" + File.separator + event.getCode() + ".png");
+				// Si l'image n'existe pas alors c'est que c'est un raccourci qui n'est pas géré par le jeu
 				if (!imageToLoad.isError()) {
+					//Si le raccourci a bien été changé alors on peut changer l'image correspondante au raccourci
 					if (settings.changeSettings(key, event.getCode().toString()))
 						keyImage.setImage(imageToLoad);
 					else {
+						// On fait pop une alerte
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("WARNING");
 						alert.setHeaderText("This shortcut is already used, please choose an other one.");
@@ -104,6 +115,7 @@ public class SettingsMenu extends Menu {
 					}
 
 				}
+				// Gestionnaire d'événement du clavier qui permet à l'utilisateur de revenir au menu principal
 				menu.setOnKeyPressed((KeyEvent e) -> {
 					if (e.getCode().toString().equals("ESCAPE"))
 						loadMenu();
@@ -114,6 +126,9 @@ public class SettingsMenu extends Menu {
 	}
 
 	@FXML
+	/**
+	 * Met à jour les images correspondantes aux raccourcis de l'utilisateur
+	 */
 	public void setSettingsImages() { // TODO A modifier pour rendre cette méthode modulaire
 		upKey.setImage(new Image(
 				"file:ressources" + File.separator + "Key_images" + File.separator + settings.getUserSettings().get("up") + ".png"));

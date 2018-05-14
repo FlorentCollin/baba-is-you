@@ -13,6 +13,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * Classe qui va gérer l'entièreté des succès
+ * @author Florent
+ *
+ */
 public class Success {
 	
 	private static Map<String, ArrayList<Object>> success = new HashMap<>();
@@ -24,9 +29,14 @@ public class Success {
 	public static void setSuccess(Map<String, ArrayList<Object>> success) {
 		Success.success = success;
 	}
-
+	
+	/**
+	 * Constructeur qui va soit chargé les succès de l'utilisateur s'ils existent
+	 * Sinon il va charger les succès non débloqués
+	 */
 	@SuppressWarnings("unchecked") // Comme c'est un type générique on ne peut pas utiliser Map<String, ArrayList<Object>>.class
 	public Success() { 
+		//Deserialisation
 		Gson gson = new Gson();
 		File file = new File("settings"+File.separator+"UserSuccess.json");
 		if(! file.exists()) {
@@ -46,6 +56,12 @@ public class Success {
 		}
 	}
 	
+	/**
+	 * Méthode qui indique si un succès à été débloqué ou non
+	 * @param name le nom du succès
+	 * @return true si le succès a été débloqué ou s'il n'existe pas
+	 * false sinon
+	 */
 	public boolean isUnlocked(String name) {
 		if(success.get(name) == null) {
 			return true;
@@ -55,6 +71,11 @@ public class Success {
 		}
 	}
 	
+	/**
+	 * Méthode qui débloque un succès
+	 * @param name le nom du succès
+	 * @return true si le succès a été débloqué, false sinon
+	 */
 	public boolean unlock(String name) {
 		if(success.get(name) == null) {
 			return false;
@@ -62,6 +83,7 @@ public class Success {
 		if((boolean)success.get(name).get(0) == true) {
 			return false;
 		}
+		//Changement false --> true
 		ArrayList<Object> newProprieties = success.get(name);
 		newProprieties.set(0, true);
 		success.replace(name, newProprieties);
@@ -74,6 +96,7 @@ public class Success {
 	 */
 	public void close() {
 		try {
+			//Serialisation
 			Gson gson = new Gson();
 			FileWriter file = new FileWriter("settings" + File.separator + "UserSuccess.json");
 			file.write(gson.toJson(success));

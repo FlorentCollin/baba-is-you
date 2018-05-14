@@ -14,6 +14,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
+/**
+ * Classe qui représente le menu principal de Baba is You
+ * @author Florent
+ *
+ */
 public class Menu extends BabaIsYouApp {
 
 	protected static Scene menu;
@@ -49,13 +54,13 @@ public class Menu extends BabaIsYouApp {
 			root = FXMLLoader.load(thisClass.getResource("startMenu.fxml"));
 		} catch (IOException e) {
 			primaryStage.close(); // Si le fichier du menu n'existe pas on fait crash l'application car rien ne
-									// fonctionnerai.
+									// fonctionnerait.
 		}
 		menu = new Scene(root, 960, 960);
 		primaryStage.setScene(menu);
 		/*
-		 * Gestionnaire d'évènements du clavier, si la touche ESCAPE est pressée alors
-		 * on ferme l'application Sinon si la touche ENTER est pressée alors on charge
+		 * Gestionnaire d'événements du clavier, si la touche ESCAPE est pressée alors
+		 * on ferme l'application, sinon si la touche ENTER est pressée alors on charge
 		 * le premier niveau
 		 */
 		menu.setOnKeyPressed((KeyEvent event) -> {
@@ -65,7 +70,7 @@ public class Menu extends BabaIsYouApp {
 			} else if (event.getCode().toString().equals("ENTER")) {
 				Level.loadLevel(LevelManager.getListOfLevels()[0], true, true); // Chargement du premier niveau
 				musicMenu.fadeVolume();
-				; // Arrêt de la musique
+				 // Arrêt de la musique
 			}
 		});
 
@@ -82,7 +87,6 @@ public class Menu extends BabaIsYouApp {
 	@FXML
 	public void exitButtonClicked() {
 		close();
-		secondaryStage.close();
 	}
 
 	@FXML

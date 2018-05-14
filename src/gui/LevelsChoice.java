@@ -16,11 +16,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * Classe qui représente le menu des niveaux
+ * @author Florent
+ *
+ */
 public class LevelsChoice extends Menu {
 
 	private static ImageView loadImage;
 	private static boolean wasInit = false;
 
+	/**
+	 * Méthode qui va initialiser l'ensembles des bouttons dans le menu
+	 */
 	private static void initButton() {
 		wasInit = true;
 		// Gestion de l'image "LOAD" qui permet de charger un niveau de l'utilisateur
@@ -109,8 +117,8 @@ public class LevelsChoice extends Menu {
 			levelImage.setScaleX(0.75);
 			levelImage.setScaleY(0.75);
 			x += 100;
-			final int i = index;
-			// Chargeùent du niveau si on clic sur l'image correspondante
+			final int i = index; //Permet l'utilisation du i dans les EventHandler
+			// Chargement du niveau si on clic sur l'image correspondante
 			levelImage.setOnMouseClicked((MouseEvent e) -> {
 				musicMenu.fadeVolume();
 				SoundFX.play(SELECTED_SOUND);

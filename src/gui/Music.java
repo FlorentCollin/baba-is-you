@@ -25,7 +25,11 @@ public class Music extends BabaIsYouApp {
 
 	// AUTRE
 	private Timeline timeline;
-
+	
+	/**
+	 * Constructeur qui va créer un nouveau MediaPlayer contenant la musique choisie
+	 * @param musicNumber le numéro de la musique dans listOfMusic
+	 */
 	public Music(int musicNumber) {
 		musicFile = new Media(
 				new File("ressources" + File.separator + "music" + File.separator + listOfMusic[musicNumber]).toURI()
@@ -35,29 +39,42 @@ public class Music extends BabaIsYouApp {
 		playerMusic.setCycleCount(MediaPlayer.INDEFINITE);
 	}
 
+	/**
+	 * Méthode qui va lancer la music
+	 */
 	public void play() {
 		if (timeline != null) { // Corrige un bug qui lorsque le timer était en cours d'exécution et qu'on
 								// revenait au menu, la musique ne se lançait pas
 			timeline.stop();
 			playerMusic.setVolume(NORMAL_VOLUME);
 		}
+		// On vérifie que la musique n'est pas déjà lancée et que l'utilisateur veut que la musique soit jouée
 		if (!playerMusic.getStatus().equals(Status.PLAYING) && (boolean) settings.getSoundSettings().get("MUSIC") == true) {
 			playerMusic.setVolume(NORMAL_VOLUME);
 			playerMusic.play();
 		}
 	}
-
+	
+	/**
+	 * Arrête la musique en cours
+	 */
 	public void stop() {
 		if (playerMusic.getStatus().equals(Status.PLAYING)) {
 			playerMusic.stop();
 		}
 	}
-
+	
+	/**
+	 * Remet le volume à son niveau normal et lance la musique
+	 */
 	public void setVolumeON() {
 		playerMusic.setVolume(NORMAL_VOLUME);
 		play();
 	}
 
+	/**
+	 * Arrête la musique et coupe le volume
+	 */
 	public void setVolumeOFF() {
 		playerMusic.setVolume(0);
 		stop();
@@ -76,8 +93,7 @@ public class Music extends BabaIsYouApp {
 		// les 15ms
 		timeline = new Timeline(new KeyFrame(Duration.millis(15), ae -> {
 			playerMusic.setVolume(playerMusic.getVolume() - 0.001); // Diminution du volume
-			if (playerMusic.getVolume() < 0) { // Si le volume est inférieur à 0 on arrête le timer et on réinitialise
-												// le volume
+			if (playerMusic.getVolume() < 0) { // Si le volume est inférieur à 0 on arrête le timer
 				timeline.stop(); // arrêt de la timeline
 				stop();
 			}

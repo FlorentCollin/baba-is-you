@@ -133,6 +133,9 @@ public class BabaIsYouApp extends Application {
 		return fileChoose;
 	}
 
+	/**
+	 * Affiche l'animation du succès débloqué en haut à droite
+	 */
 	public static void showSuccessUnlocked() {
 		ImageView gif = new ImageView(new Image("file:ressources"+File.separator+"SuccessUnlockedAnimation.gif"));
 		gif.setX(750);

@@ -95,13 +95,6 @@ public class Level extends BabaIsYouApp {
 							CELL_SIZE, CELL_SIZE, true, true);
 					// On dessine l'Item en fonction de la taille d'une cellule
 					gc.drawImage(imageItem, i * CELL_SIZE, j * CELL_SIZE);
-					// for(Item element4 : element3.getEffects()) {
-					// imageItem = new
-					// Image("file:ressources"+File.separatorChar+element4.getName()+".png",
-					// CELL_SIZE, CELL_SIZE, true, true);
-					// gc.drawImage(imageItem, element2.getY()*CELL_SIZE,
-					// element2.getX()*CELL_SIZE);
-					// }
 				}
 			}
 		}
@@ -125,12 +118,6 @@ public class Level extends BabaIsYouApp {
 					CELL_SIZE, true, true);
 			// On dessine l'Item en fonction de la taille d'une cellule
 			gc.drawImage(imageItem, x * CELL_SIZE, y * CELL_SIZE);
-			// for(Item element2 : element1.getEffects()) {
-			// imageItem = new
-			// Image("file:ressources"+File.separatorChar+element2.getName()+".png",
-			// CELL_SIZE, CELL_SIZE, true, true);
-			// gc.drawImage(imageItem, y*CELL_SIZE, x*CELL_SIZE);
-			// }
 		}
 	}
 
@@ -244,6 +231,7 @@ public class Level extends BabaIsYouApp {
 				for (Tuple cellChanged : board.getAndResetChangedCells()) {
 					drawCell(cellChanged.getX(), cellChanged.getY());
 				}
+				// Ici on devrait optimiser pour ne pas devoir chercher les joueurs à chaque fois qu'on appuie sur une toucheS
 				board.searchPlayers(); // On recherche les nouveaux joueurs
 				if (board.isWin()) {
 					// SUCCESS
