@@ -5,6 +5,7 @@ import java.io.File;
 import game.boardController.Board;
 import game.boardController.Cell;
 import game.boardController.MoveController;
+import game.element.IRule;
 import game.element.Item;
 import game.element.TextFlag;
 import game.levelManager.LevelManager;
@@ -246,7 +247,8 @@ public class Level extends BabaIsYouApp {
 				board.searchPlayers(); // On recherche les nouveaux joueurs
 				if (board.isWin()) {
 					// SUCCESS
-					if(!(board.whoIsWin() instanceof TextFlag)) {
+					for(IRule element : board.whoIsWin())
+						if(!(element instanceof TextFlag)) {
 						if(success.unlock("DifferentWayToWin"))
 							showSuccessUnlocked();
 					}

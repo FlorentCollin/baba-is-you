@@ -1,4 +1,4 @@
-LVL 2 0
+LVL 2
 18 18
 TextFlag 12 3
 TextIs 13 3

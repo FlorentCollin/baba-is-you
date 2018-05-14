@@ -1,4 +1,4 @@
-LVL 4 0
+LVL 4
 18 18
 TextBaba 5 1
 TextIs 6 1
@@ -79,7 +79,7 @@ Wall 6 14
 Wall 4 14
 Wall 5 14
 Flag 3 9
-LVL 4 1
+LVL 4
 18 18
 TextWall 5 1
 TextIs 6 1

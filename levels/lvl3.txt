@@ -1,4 +1,4 @@
-LVL 3 0
+LVL 3
 18 18
 TextBaba 1 1
 TextWall 2 1

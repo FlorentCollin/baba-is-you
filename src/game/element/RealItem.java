@@ -27,14 +27,12 @@ public abstract class RealItem extends Item {
 		return effects;
 	}
 
-	@Override
 	public void addEffects(Item effect) {
 		if (effects == null)
 			effects = new ArrayList<>();
 		effects.add(effect);
 	}
 
-	@Override
 	public boolean removeEffects(Item effect) {
 		if (effects != null)
 			return effects.remove(effect);

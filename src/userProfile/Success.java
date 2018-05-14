@@ -26,7 +26,7 @@ public class Success {
 	}
 
 	@SuppressWarnings("unchecked") // Comme c'est un type générique on ne peut pas utiliser Map<String, ArrayList<Object>>.class
-	public Success() { //ICI pour ajouter des succès
+	public Success() { 
 		Gson gson = new Gson();
 		File file = new File("settings"+File.separator+"UserSuccess.json");
 		if(! file.exists()) {
@@ -44,13 +44,6 @@ public class Success {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		success.put("FinishFirstLevel", new Object[] {false, "Finish the first level"});
-//		success.put("BeatTheGame", new Object[] {false, "You beat this game"}); // Avoir fini le jeu
-//		success.put("Dead", new Object[] {false, "You are dead, at least one time !"});
-//		success.put("UseTeleport", new Object[] {false, ""});
-//		success.put("Wizard", new Object[] {false, "You are a wizard! Weclcome to Hogwarts(change you in an other object"});
-//		success.put("DifferentWayToWin", new Object[] {false, "Find a different way than flag to win a level"});
-//		success.put("DiscoverParallelWorld", new Object[] {false, "Discover parallel world"}); //TODO
 	}
 	
 	public boolean isUnlocked(String name) {

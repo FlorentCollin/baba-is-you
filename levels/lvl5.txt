@@ -1,4 +1,4 @@
-LVL 5 0
+LVL 5
 18 18
 TextRock 16 1
 TextIs 17 1
@@ -73,7 +73,7 @@ Lava 14 13
 Grass 16 15
 Grass 4 16
 Grass 12 16
-LVL 5 1
+LVL 5
 18 18
 Grass 3 2
 Grass 12 2

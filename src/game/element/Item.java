@@ -61,21 +61,6 @@ public abstract class Item {
 	}
 
 	/**
-	 * Méthode booléenne qui indique si un Item signifie la victoire
-	 * 
-	 * @return true si l'objet est "win" false sinon
-	 * 
-	 */
-	public boolean isWin() {
-		for (IRule[] element : Rules.getListOfRulesActives()) {
-			if (element[2] instanceof TextWin && isRepresentedBy(element[0])) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Méthode qui indique si un Item signifie la "noyade" de cette Item (ie quand
 	 * l'Item va sur la case il disparrait)
 	 * 
@@ -108,15 +93,6 @@ public abstract class Item {
 
 	public ArrayList<Item> getEffects() {
 		return effects;
-	}
-
-	public void addEffects(Item effect) {
-		// Implémenté uniquement sur les RealsItems (cfr RealItem)
-	}
-
-	public boolean removeEffects(Item effect) {
-		// Implémenté uniquement sur les RealsItems (cfr RealItem)
-		return false;
 	}
 
 	public boolean isRepresentedBy(IRule wordInRule) {

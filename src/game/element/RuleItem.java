@@ -42,13 +42,6 @@ public abstract class RuleItem extends Item implements IRule {
 		return false;
 	}
 
-	// Retourne "false" car un objet "règle" n'est pas un objet qui permet de
-	// réussir le niveau en cours
-	@Override
-	public boolean isWin() {
-		return false;
-	}
-
 	// Retourne "false" car un objet "règle" n'est pas un objet qui peut pas faire
 	// mourir un autre Item
 	@Override

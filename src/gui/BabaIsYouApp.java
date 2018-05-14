@@ -108,7 +108,7 @@ public class BabaIsYouApp extends Application {
 		// On ouvre l'explorateur de fichier pour que l'utilisateur puisse choisir le
 		// niveau qu'il veut charger dans l'éditeur de niveau
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Choose level to load :");
+		fc.setTitle("Choose a level to load :");
 		// Le code ci-dessous provient de :
 		// "https://stackoverflow.com/questions/13634576/javafx-filechooser-how-to-set-file-filters"
 		// Il permet de définir les extensions de fichier autorisées. Ici, on n'autorise

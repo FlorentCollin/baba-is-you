@@ -34,7 +34,7 @@ public class Board {
 		this.rows = rows;
 		this.cols = cols;
 	}
-
+	// Getteurs et setteurs
 	public Cell[][] getBoard() {
 		return board;
 	}
@@ -71,28 +71,39 @@ public class Board {
 		return players;
 	}
 
+	/**
+	 * Ajoute un tuple contenant les positions d'une cellule qui a été modifié pour pouvoir la redessiner
+	 * via l'interface graphique
+	 * @param changedCell La tuple contenant la position de la cellule qui a été changée
+	 */
 	public void addChangedCell(Tuple changedCell) {
 		this.changedCells.add(changedCell);
 	}
 
 	/**
-	 * Méthode qui va renvoyer l'ensemble des cellules changées et qui va remettre é
+	 * Méthode qui va renvoyer l'ensemble des cellules changées et qui va remettre à
 	 * 0 cette liste
 	 * 
 	 * @return Les cellules changées
 	 */
 	public ArrayList<Tuple> getAndResetChangedCells() {
+		// On crée une variable temporaire contenant la liste des cellules changées
 		ArrayList<Tuple> temp = changedCells;
+		/*
+		 * Ici on va nettoyer les cellules en retirer les items dupliqués (ex : Si la cellule contient
+		 * 2 Walls alors on retire un des deux Walls pour qu'il n'en reste plus qu'un seul.
+		 * Cela permet d'optimiser les prochains déplacements et ainsi on optimise la vitesse d'exéction du programme
+		 */
 		for (Tuple element : changedCells) {
 			removeAllOccurenceInACell(board[element.getY()][element.getX()]);
 		}
 		changedCells = new ArrayList<>();
-		return temp;
+		return temp; 
 	}
 
 	/**
 	 * Méthode qui va supprimer tous les doublons d'Item dans une cellule, par
-	 * exemple [Wall, Wall, Wall] --> [Wall] Cette méthode va étre trés utile pour
+	 * exemple [Wall, Wall, Wall] --> [Wall] Cette méthode va étre très utile pour
 	 * optimiser la vitesse du programme
 	 * 
 	 * @param cellToChange
@@ -100,6 +111,11 @@ public class Board {
 	 */
 	public void removeAllOccurenceInACell(Cell cellToChange) {
 		ArrayList<Item> list = cellToChange.getList();
+		// Itération sur la liste
+		/*
+		 * TODO améliorer cette méthode pour qu'elle supprime vraiment l'entirèreté des doublons 
+		 * Pour le moment si on a [WALL, BABA, WALL] la méthode ne supprime pas les deux walls
+		 */
 		for (int index = 0; index < list.size() - 1; index++) {
 			if (list.get(index).equals(list.get(index + 1))) {
 				list.remove(index + 1);
@@ -117,12 +133,12 @@ public class Board {
 		/*
 		 * Ici on regarde si le niveau qu'on a chargé est différent de "cleanEditor" car
 		 * lorsqu'on lançait l'éditeur et qu'une règle du style "ROCK IS WALL" était
-		 * actives on avait le rocher (où se trouve les items sélectionnables) qui se
+		 * active on avait le rocher (où se trouve les items sélectionnables) qui se
 		 * transformait en mur Ce qu'on veut éviter pour pouvoir toujours choisir le
 		 * rocher
 		 */
 		if (!LevelManager.getCurrentLeveLName().substring(LevelManager.getCurrentLeveLName().length() - 11)
-				.equals("cleanEditor")) {
+				.equals("cleanEditor")) { // -11 = "cleanEditor".length()
 			// Itération sur la liste des régles Actives pour savoir si il y a une régle du
 			// type "WALL is ROCK", "WALL IS BABA", etc,...
 			for (IRule[] element : Rules.getListOfRulesActives()) {
@@ -141,14 +157,14 @@ public class Board {
 	 * @param baseItem
 	 *            L'item qu'on doit changer
 	 * @param endItem
-	 *            Ce en quoi baseItem doit étre changé
+	 *            Ce en quoi baseItem doit être changé
 	 */
 	private void changeAllItemsforAnOtherItem(IRule baseItem, IRule endItem) {
 		// Ici on change l'Item mais comme on veut passer d'un Item de régle à un "vrai"
 		// item on doit chercher sa correspondance
 		// Dans le fichier JSON des correspondances
 
-		// Pour pouvoir utiliser .getName() aucune erreur possible car IRule n'est
+		// Pour pouvoir utiliser .getName() on doit cast (Item), aucune erreur possible car IRule n'est
 		// implanté que dans Item
 		String endItemStr = LevelManager.correspondingTextOrItem(((Item) endItem).getName());
 		// Itération sur l'entiéreté de la map
@@ -161,18 +177,24 @@ public class Board {
 						// changer en endItem
 					{
 						list.set(k, LevelManager.createItem(endItemStr));
-						changedCells.add(new Tuple(j, i, 0)); // On n'oublie pas d'ajouter les cellules changés car
+						changedCells.add(new Tuple(j, i, 0)); // On n'oublie pas d'ajouter les cellules changées car
 						// sinon elles ne seront pas repeinte par l'interface
 						// graphique
 					}
 				}
 			}
+			//Gestion d'un succès
 			if (BabaIsYouApp.success.unlock("Wizard")) {
 				BabaIsYouApp.showSuccessUnlocked();
 			}
 		}
 	}
 
+	/**
+	 * Regarde si l'item passé en paramètre est bien un TP actif
+	 * @param tp 
+	 * @return true si l'item est bien un Tp actif, false sinon
+	 */
 	public boolean isAnActiveTp(Item tp) {
 		for (IRule[] element : Rules.getListOfRulesActives()) {
 			if (element[2] instanceof TextOn && tp.isRepresentedBy(element[0]))
@@ -188,20 +210,21 @@ public class Board {
 	 * @return true si le niveau est gagné, false sinon
 	 */
 	public boolean isWin() {
-		IRule wordInRule = whoIsWin(); // Récupération de l'item gagnant
+		ArrayList<IRule> winIs = whoIsWin(); // Récupération des Items gagnants
 		// Optimisation de l'algo pour éviter d'itérer sur l'entiéreté des joueurs si il
 		// n'y a pas d'item gagnant
-		if (wordInRule == null) {
+		if (winIs == null) {
 			return false;
 		}
 		for (Tuple player : players) {
 			// Itération sur chaque cellule contenant un joueur pour voir si le joueur est
 			// sur l'item qui permet de réussir le niveau
 			for (Item element : board[player.getY()][player.getX()].getList()) {
-				if (element.isRepresentedBy(wordInRule)) // Regarde si l'item correspond é l'Item permettant de réussir
-															// le niveau
-				{
-					return true;
+				for(IRule word : winIs) {
+					if (element.isRepresentedBy(word)) { // Regarde si l'item correspond à un des Item permettant de réussir
+						// le niveau
+						return true;
+					}
 				}
 			}
 		}
@@ -209,16 +232,20 @@ public class Board {
 	}
 
 	/**
-	 * Méthode qui va rechercher dans la liste de régles actives quel Item "is WIN".
+	 * Méthode qui va rechercher dans la liste de régles actives quel Item "is WIN"
+	 * @return l'IRule qui signifie la victoire
 	 */
-	public IRule whoIsWin() {
+	public ArrayList<IRule> whoIsWin() {
+		ArrayList<IRule> winIs = new ArrayList<>();
 		// Itération sur la liste des régles actives
 		for (IRule[] element : Rules.getListOfRulesActives()) {
 			if (element[2] instanceof TextWin) {
-				return element[0];
+				winIs.add(element[0]);
 			}
 		}
-		return null;
+		if(winIs.size() == 0)
+			return null;
+		return winIs;
 	}
 
 	/**
@@ -227,10 +254,11 @@ public class Board {
 	 *
 	 */
 	public void searchPlayers() {
-		players = new ArrayList<>();
+		// Une optimisation possible est de changer les positions des joueurs dès qu'ils ont bougé
+		players = new ArrayList<>(); // Clean des anciens joueurs
 		ArrayList<IRule> playerIs = whoIsPlayer();
 		// Optimisation de l'algo qui évite de parcourir l'entiéreté de la map si il n'y
-		// a aucun joueur
+		// a aucune règle "is YOU"
 		if (playerIs.size() == 0) {
 			return;
 		}
@@ -238,13 +266,13 @@ public class Board {
 		for (int y = 0; y < cols; y++) {
 			for (int x = 0; x < rows; x++) {
 				ArrayList<Item> list = board[y][x].getList();
-				// Le z correspond é l'index dans la liste d'Item de la cellule et ici on itére
+				// Le z correspond à l'index dans la liste d'Item de la cellule et ici on itére
 				// sur la liste d'Item
 				for (int z = 0; z < list.size(); z++) {
-					// Itération sur la list des joueurs
+					// Itération sur la liste des joueurs
 					for (IRule OnePlayer : playerIs) {
 						// Si l'Item est un joueur alors on ajoute un Tuple(x,y,z) qui correspond au
-						// coordonnées du joueur dans la map
+						// coordonnées du joueur sur le plateau
 						if (list.get(z) instanceof RealItem && ((RealItem) list.get(z)).isRepresentedBy(OnePlayer)) {
 							players.add(new Tuple(x, y, z));
 						}
@@ -276,9 +304,9 @@ public class Board {
 	 * Méthode qui va changer de cellule un item
 	 * 
 	 * @param x1
-	 *            position en x de l'item é changer de cellule
+	 *            position en x de l'item à changer de cellule
 	 * @param y1
-	 *            position en y de l'item é changer de cellule
+	 *            position en y de l'item à changer de cellule
 	 * @param x2
 	 *            nouvelle position en x de l'item
 	 * @param y2

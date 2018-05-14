@@ -72,7 +72,7 @@ public class MoveController {
 		if (!nextCell.isEmpty()) {
 			// On vérifie en premier si le prochain item est sous la règle "STOP", si c'est
 			// le cas cela indique qu'on ne peut pas bouger cellToMove
-			if (nextCell.lastItem().isStop()) {
+			if (nextCell.getLastItem().isStop()) {
 				return false;
 			}
 			// Si la prochaine cellule est "SINK" alors on supprime ce l'item qui devait
@@ -82,7 +82,7 @@ public class MoveController {
 				board.addChangedCell(new Tuple(x1, y1, 0));
 				board.addChangedCell(new Tuple(x2, y2, 0));
 				cellToMove.remove(z); // On "tue" la cellule à bouger
-				nextCell.removeItem(nextCell.lastItem()); // On retire la cellule qui "tue"
+				nextCell.removeItem(nextCell.getLastItem()); // On retire la cellule qui "tue"
 				return true;
 			}
 			// Si la prochaine cellule est "Kill" et que c'est un joueur qui va dessus alors
@@ -96,7 +96,7 @@ public class MoveController {
 			// PARTIE RECURSIVE !
 			// Si le prochain item est sous la règle "PUSH" alors on applique la méthode
 			// "move" au prochain item
-			else if (nextCell.lastItem().isPushable()) {
+			else if (nextCell.getLastItem().isPushable()) {
 				if (move(board, x2, y2, -1, direction)) { // Comme "move" est une fonction booléenne si l'item suivant à
 															// été bouger alors cellToMove peut aussi bouger
 					board.changeItemCell(x1, y1, x2, y2, z);

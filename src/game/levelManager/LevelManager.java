@@ -133,16 +133,16 @@ public class LevelManager {
 					line = br.readLine();
 					while (line != null && !(line.split(" ")[0].equals("LVL"))) {
 						list = line.split(" ");
-						cols = Integer.parseInt(list[1]);
-						rows = Integer.parseInt(list[2]);
+						rows = Integer.parseInt(list[1]);
+						cols = Integer.parseInt(list[2]);
 						word = list[0];
 
 						// Choix de l'Item à ajouter en fonction du mot
 						itemToAdd = createItem(word);
 						// Ajout de l'item dans sa cellule
-						cellToChange = array[rows][cols];
+						cellToChange = array[cols][rows];
 						cellToChange.add(itemToAdd);
-						array[rows][cols] = cellToChange;
+						array[cols][rows] = cellToChange;
 						line = br.readLine();
 					}
 				} catch (IOException ioex) {

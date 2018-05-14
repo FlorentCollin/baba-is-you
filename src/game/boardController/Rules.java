@@ -27,7 +27,7 @@ public class Rules {
 	 *            La map.
 	 */
 	public static ArrayList<IRule[]> scanRules(ArrayList<Board> boards) {
-		listOfRulesActives = new ArrayList<>();
+		listOfRulesActives = new ArrayList<>(); //Clean des règles déjà existantes
 		Cell[][] array;
 		for (Board oneBoard : boards) {
 			array = oneBoard.getBoard();
@@ -49,8 +49,8 @@ public class Rules {
 							if (iRuleElement.isWord()) // Si l'élement est un nom commun alors c'est peut être le début
 														// d'une règle
 							{
-								ruleToAdd = new IRule[3];
-								ruleToAdd[0] = iRuleElement;
+								ruleToAdd = new IRule[3]; //Création d'une nouvelle règle
+								ruleToAdd[0] = iRuleElement; //Ajout du premier élément de la règle
 								if (i <= cols - 2) {
 									scanInOneDirection(array, j, i, "RIGHT"); // Ajout de la règle horizontal si elle
 																				// existe
@@ -111,18 +111,14 @@ public class Rules {
 							// Si l'élément est un mot ou ue action on a une nouvelle règle
 							if (iRuleElement2.isWord() || iRuleElement2.isAction() || iRuleElement2.isEffect())
 							{
-								ruleToAdd[1] = iRuleElement1;
+								ruleToAdd[1] = iRuleElement1; //Ajout des élément dans la règle
 								ruleToAdd[2] = iRuleElement2;
-								listOfRulesActives.add(ruleToAdd);
+								listOfRulesActives.add(ruleToAdd); //Ajout de la règle à la liste des règles actives
 							}
 						}
 					}
 				}
 			}
 		}
-	}
-
-	public static void cleanRules() {
-		listOfRulesActives = new ArrayList<>();
 	}
 }

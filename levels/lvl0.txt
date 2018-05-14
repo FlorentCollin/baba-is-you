@@ -1,4 +1,4 @@
-LVL 0 0
+LVL 0 
 18 18
 TextWall 5 5
 TextIs 6 5

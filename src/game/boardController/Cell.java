@@ -14,10 +14,7 @@ public class Cell {
 	private ArrayList<Item> list;
 
 	public Cell() {
-
 		list = new ArrayList<>();
-		// Background back = new Background();
-		// list.add(back);
 	}
 
 	public Cell(Item itemtoAdd) {
@@ -32,13 +29,19 @@ public class Cell {
 	public Item getItem(int index) {
 		return list.get(index);
 	}
-
+	/**
+	 * Retourne le dernier item de la liste
+	 * @return le dernier item
+	 */
 	public Item getLastItem() {
-		if (list.size() > 0)
-			return list.get(list.size() - 1);
-		return null;
+		return list.get(list.size() - 1);
 	}
 
+	/**
+	 * Ajoute un item dans la liste
+	 * @param itemToAdd l'item a ajouter
+	 * @return true si l'item a été ajouté, false sinon
+	 */
 	public boolean add(Item itemToAdd) {
 		Item itemOfIndex;
 		for (int i = 0; i < list.size(); i++) // Place l'item en fonction de sa priorité d'affichage
@@ -67,10 +70,10 @@ public class Cell {
 		return list.size() <= 0;
 	}
 
-	public Item lastItem() {
-		return list.get(list.size() - 1);
-	}
-
+	/**
+	 * Regarde dans la liste si un item "isSink"
+	 * @return true s'il existe un item, false sinon
+	 */
 	public boolean oneItemIsSink() {
 		for (Item item : list) {
 			if (item.isSink())
@@ -79,6 +82,11 @@ public class Cell {
 		return false;
 	}
 
+	/**
+	 * Regarde dans la liste si in item "isKill"
+	 * @param isPlayer Utilisé dans item.isKill(isPlayer)
+	 * @return vrai si un item "isKill", false sinon
+	 */
 	public boolean oneItemIsKill(boolean isPlayer) {
 		for (Item item : list) {
 			if (item.isKill(isPlayer))
