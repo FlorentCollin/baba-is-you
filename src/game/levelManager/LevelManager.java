@@ -32,7 +32,7 @@ public class LevelManager {
 	// A MODIFIER POUR RAJOUTER DES NIVEAUX !
 	private static String[] listOfLevels = { "levels" + File.separator + "lvl0", "levels" + File.separator + "lvl1",
 			"levels" + File.separator + "lvl2", "levels" + File.separator + "lvl3", "levels" + File.separator + "lvl4",
-			"levels" + File.separator + "lvl5" };
+			"levels" + File.separator + "lvl5", "levels" + File.separator + "lvl6" };
 	private static String currentLeveLName;
 	/*
 	 * Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à
@@ -332,7 +332,7 @@ public class LevelManager {
 			try {
 				Board board = activesBoards.get(index);
 				// Ajout de la première ligne qui désigne le numéro du niveau
-				bw.write("LVL " + board.getLevelNumber() + " " + board.getDepthOfLevel()); 
+				bw.write("LVL " + board.getLevelNumber()); 
 				bw.newLine();
 				// Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de la map
 				bw.write((board.getRows() - 2) + " " + (board.getCols() - 2)); 
@@ -377,7 +377,7 @@ public class LevelManager {
 		for (int index = 0; index < activesBoards.size(); index++) {
 			try {
 				Board board = activesBoards.get(index);
-				bw.write("LVL" + " " + "-1" + " " + board.getDepthOfLevel()); // Ajout de la première ligne qui désigne
+				bw.write("LVL" + " " + "-1"); // Ajout de la première ligne qui désigne
 																				// le numéro du niveau
 				bw.newLine();
 				// Ajout de la deuxième ligne qui désigne le nombre de lignes et de colonnes de
@@ -456,7 +456,7 @@ public class LevelManager {
 			try {
 				br = new BufferedReader(new FileReader("levels" + File.separator + "cleanEditor.txt"));
 				String line = br.readLine();
-				bw.write("LVL -1 " + board.getDepthOfLevel());
+				bw.write("LVL -1");
 				bw.newLine();
 				while ((line = br.readLine()) != null) {
 					bw.write(line);
