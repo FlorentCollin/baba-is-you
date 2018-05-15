@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.media.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Menu">
+   <children>
+      <ImageView fitHeight="999.0" fitWidth="992.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/BackgroundMenu.PNG" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadrePlay" fitHeight="135.0" fitWidth="577.0" layoutX="367.0" layoutY="213.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="1.9">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreLoadSave" fitHeight="197.0" fitWidth="312.0" layoutX="323.0" layoutY="378.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreEditor" fitHeight="125.0" fitWidth="368.0" layoutX="626.0" layoutY="588.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.0">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreExit" fitHeight="150.0" fitWidth="200.0" layoutX="747.0" layoutY="864.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="0.7" scaleY="0.5">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreLevels" fitHeight="125.0" fitWidth="368.0" layoutX="128.0" layoutY="588.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.1">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="167.0" fitWidth="359.0" layoutX="301.0" layoutY="204.0" onMouseEntered="#cadrePlayMouseEntered" onMouseExited="#cadrePlayMouseExited" onMousePressed="#playButtonClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/play.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="223.0" fitWidth="487.0" layoutX="302.0" layoutY="377.0" onMouseClicked="#loadSaveButtonClicked" onMouseEntered="#cadreLoadSaveMouseEntered" onMouseExited="#cadreLoadSaveMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/loadSave.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="166.0" fitWidth="347.0" layoutX="558.0" layoutY="598.0" onMouseClicked="#editorButtonClicked" onMouseEntered="#cadreEditorMouseEntered" onMouseExited="#cadreEditorMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/editor.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="115.0" fitWidth="357.0" layoutX="52.0" layoutY="595.0" onMouseClicked="#levelsButtonClicked" onMouseEntered="#cadreLevelsMouseEntered" onMouseExited="#cadreLevelsMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/levels.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="BabaIsYouText" fitHeight="189.0" fitWidth="966.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/BabaIsYou.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="750.0" layoutY="885.0" onMouseClicked="#exitButtonClicked" onMouseEntered="#cadreExitMouseEntered" onMouseExited="#cadreExitMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.6" scaleY="0.6">
+         <image>
+            <Image url="@../../ressources/exit.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreSettings" fitHeight="125.0" fitWidth="368.0" layoutX="640.0" layoutY="757.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.2" scaleY="0.9">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="176.0" fitWidth="485.0" layoutX="500.0" layoutY="743.0" onMouseClicked="#settingsButtonClicked" onMouseEntered="#cadreSettingsMouseEntered" onMouseExited="#cadreSettingsMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.8">
+         <image>
+            <Image url="@../../ressources/settings.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cadreSuccess" fitHeight="125.0" fitWidth="368.0" layoutX="125.0" layoutY="757.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" scaleX="2.2" scaleY="0.9">
+         <image>
+            <Image url="@../../ressources/cadre.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="176.0" fitWidth="485.0" layoutX="-15.0" layoutY="743.0" onMouseClicked="#successButtonClicked" onMouseEntered="#cadreSuccessMouseEntered" onMouseExited="#cadreSuccessMouseExited" pickOnBounds="true" preserveRatio="true" scaleX="0.9">
+         <image>
+            <Image url="@../../ressources/succes.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
