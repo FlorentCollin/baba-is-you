@@ -1,0 +1,6 @@
+lvl -1
+200 200
+TextBaba 1 1
+TextIs 1 2
+TextYou 1 3
+Baba 50 50

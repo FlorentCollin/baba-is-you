@@ -1,0 +1,10 @@
+LVL -1
+18 18
+TextBaba 13 1
+TextLava 14 1
+Lava 6 2
+TextIs 13 2
+TextIs 14 2
+Baba 6 3
+TextYou 13 3
+TextKill 14 3

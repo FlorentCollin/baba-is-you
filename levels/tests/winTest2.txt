@@ -1,0 +1,16 @@
+LVL -1
+18 18
+Baba 1 1
+Baba 2 1
+Flag 3 1
+TextRock 16 1
+TextBaba 17 1
+TextFlag 18 1
+Rock 1 2
+Rock 2 2
+TextIs 16 2
+TextIs 17 2
+TextIs 18 2
+TextWin 16 3
+TextYou 17 3
+TextWin 18 3

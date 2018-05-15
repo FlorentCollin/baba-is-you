@@ -72,7 +72,7 @@ public class LevelManager {
 										// plus facilement
 		BufferedReader br = null;
 		Cell[][] array = null; // return
-		String line;
+		String line = null;
 		String word;
 		String[] list;
 		Cell cellToChange;
@@ -147,7 +147,7 @@ public class LevelManager {
 					}
 				} catch (IOException ioex) {
 					System.out.println(ioex.getMessage() + " Error reading file"); // A MODIFIER
-				}
+				} 
 				activesBoards.add(new Board(array, levelNumber, depthOfLevel, rowsOfBoard, colsOfBoard));
 			}
 		} catch (NumberFormatException e) {
@@ -158,6 +158,10 @@ public class LevelManager {
 			readLevel(listOfLevels[0], true);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		} catch (ArrayIndexOutOfBoundsException e1) {
+			System.out.println("One item is out of bands : " + line );
+			System.out.println("The program will load automatically the first level");
+			readLevel(listOfLevels[0], true);
 		}
 		Rules.scanRules(activesBoards);
 		// On recherche les différents joueurs sur tous les boards et on en profite pour
@@ -193,8 +197,7 @@ public class LevelManager {
 			return Class.forName("game.element." + str); // Comme les Class Item sont dans un autre package on doit
 															// indiquer où les trouver
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERROR : A name of an Item is wrong in the text file!");
-			e.printStackTrace();
+			System.out.println("ERROR : A name of an Item is wrong in the text file : " + str);
 		}
 		return null;
 	}

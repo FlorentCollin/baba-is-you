@@ -78,12 +78,23 @@ public class MoveTest {
 	}
 
 	@Test
-	public void winTest() {
-		LevelManager.readLevel("levels" + File.separator + "tests" + File.separator + "winTest", true);
+	public void winTest1() {
+		LevelManager.readLevel("levels" + File.separator + "tests" + File.separator + "winTest1", true);
 		board = LevelManager.getActivesBoards().get(0);
+		Assert.assertFalse(board.isWin());
 		move(1); // On fait bouger les joueurs à droite
 		Assert.assertTrue(board.isWin());
-
+	}
+	
+	@Test
+	public void winTest2() {
+		LevelManager.readLevel("levels" + File.separator + "tests" + File.separator + "winTest2", true);
+		board = LevelManager.getActivesBoards().get(0);
+		Assert.assertFalse(board.isWin());
+		move(1); // On fait bouger les joueurs à droite
+		Assert.assertTrue(board.isWin());
+		move(2); // On fait bouger les joueurs en bas
+		Assert.assertTrue(board.isWin());
 	}
 
 	@Test
@@ -97,6 +108,14 @@ public class MoveTest {
 	@Test
 	public void loseTest2() {
 		LevelManager.readLevel("levels" + File.separator + "tests" + File.separator + "loseTest2", true);
+		board = LevelManager.getActivesBoards().get(0);
+		move(0); // On fait bouger les joueurs en haut
+		Assert.assertTrue(board.getPlayers().size() == 0); // S'il n'y a plus de joueurs en a perdu
+	}
+	
+	@Test
+	public void loseTest3() {
+		LevelManager.readLevel("levels" + File.separator + "tests" + File.separator + "loseTest3", true);
 		board = LevelManager.getActivesBoards().get(0);
 		move(0); // On fait bouger les joueurs en haut
 		Assert.assertTrue(board.getPlayers().size() == 0); // S'il n'y a plus de joueurs en a perdu
