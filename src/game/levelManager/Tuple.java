@@ -39,6 +39,17 @@ public class Tuple {
 	public void setZ(int z) {
 		this.z = z;
 	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Tuple))return false;
+	    Tuple otherTuple = (Tuple)other;
+	    if(otherTuple.getX() == x && otherTuple.getY() == y && otherTuple.getZ() == z)
+	    	return true;
+	   return false;
+	}
 
 	public String toString() {
 		return "(" + x + "," + y + "," + z + ")";

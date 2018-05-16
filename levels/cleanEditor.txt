@@ -46,6 +46,7 @@ Lava 21 9
 Grass 21 10
 TpBlue 21 11
 TpRed 21 12
+TpGreen 21 13
 TextBaba 20 4
 TextFlag 20 5
 TextRock 20 6
@@ -55,6 +56,7 @@ TextLava 20 9
 TextGrass 20 10
 TextTpBlue 20 11
 TextTpRed 20 12
+TextTpGreen 20 13
 TextIs 22 4
 TextYou 22 5
 TextWin 22 6

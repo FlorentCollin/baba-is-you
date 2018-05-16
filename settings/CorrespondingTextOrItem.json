@@ -18,6 +18,8 @@
     "Lava" : "TextLava",
     "TextLava" : "Lava",
     "Grass" : "TextGrass",
-    "TextGrass" : "Grass"
+    "TextGrass" : "Grass",
+    "TpGreen" : "TextTpGreen",
+    "TextTpGreen" : "TpGreen"
 
 }

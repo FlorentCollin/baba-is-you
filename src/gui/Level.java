@@ -62,7 +62,8 @@ public class Level extends BabaIsYouApp {
 		holder = new StackPane();
 		holder.getChildren().add(canvas);
 		root.getChildren().add(holder);
-		holder.setStyle("-fx-background-color: #1c1f22");
+//		holder.setStyle("-fx-background-color: #1c1f22");
+		holder.setStyle("-fx-background-color: #15171a");
 
 		drawBoard(); // Affichage du niveau dans le canvas
 		// Chargement de la fenêtre d'astuce
@@ -70,7 +71,8 @@ public class Level extends BabaIsYouApp {
 			Advice.loadAdviceStage("advice1");
 		else if (board.getLevelNumber() == 4)
 			Advice.loadAdviceStage("advice2");
-
+		else if (board.getLevelNumber() == 7)
+			Advice.loadAdviceStage("advice3");
 		if (activateInputs) // On autorise ou non les "Inputs" clavier
 			activateKeyInputs();
 	}
@@ -261,6 +263,8 @@ public class Level extends BabaIsYouApp {
 					board = LevelManager.getActivesBoards().get(0); // Charge le prochain niveau
 					if (board.getLevelNumber() == 4)
 						Advice.loadAdviceStage("advice2");
+					else if (board.getLevelNumber() == 7)
+						Advice.loadAdviceStage("advice3");
 					CELL_SIZE = canvas.getHeight() / Math.max(board.getCols(), board.getRows());
 					drawBoard();
 				}

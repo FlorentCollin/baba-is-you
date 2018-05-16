@@ -9,6 +9,7 @@ import game.element.RealItem;
 import game.element.TextOn;
 import game.element.TextWin;
 import game.element.TextYou;
+import game.element.TpGreen;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
 import gui.BabaIsYouApp;
@@ -26,6 +27,7 @@ public class Board {
 	private int depthOfLevel; // Numéro de la profondeur de niveau (ex LVL5_1, LVL5_2,...)
 	private ArrayList<Tuple> players;
 	private ArrayList<Tuple> changedCells = new ArrayList<>();
+	private Tuple[] correspondingTp;
 
 	public Board(Cell[][] board, int LevelNumber, int depthOfLevel, int rows, int cols) {
 		this.board = board;
@@ -69,6 +71,10 @@ public class Board {
 
 	public ArrayList<Tuple> getPlayers() {
 		return players;
+	}
+
+	public Tuple[] getCorrespondingTp() {
+		return correspondingTp;
 	}
 
 	/**
@@ -324,8 +330,34 @@ public class Board {
 		if (itemChange instanceof IRule) {
 			Rules.scanRules(LevelManager.getActivesBoards());
 		}
+		else if (itemChange instanceof TpGreen) {
+			scanTpGreen();
+		}
 	}
 
+	/**
+	 * Méthode qui va rechercher les tp verts qui permettent de déplacer un item jusqu'à l'autre tp vert
+	 */
+	public void scanTpGreen() {
+		if (!LevelManager.getCurrentLeveLName().substring(LevelManager.getCurrentLeveLName().length() - 11)
+				.equals("cleanEditor")) { // -11 = "cleanEditor".length()
+			correspondingTp = new Tuple[2];
+			int index = 0;
+			for (int i = 0; i < cols; i++) {
+				for (int j = 0; j < rows; j++) {
+					for (Item element : board[i][j].getList()) {
+						if (element instanceof TpGreen) {
+							if(index>1) {
+								return;
+							}
+							correspondingTp[index] = new Tuple(j, i, 0);
+							index++; 
+						}
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * Méthode qui va sauvegarder le niveau en cours dans un fichier .txt
 	 */

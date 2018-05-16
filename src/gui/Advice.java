@@ -78,7 +78,7 @@ public class Advice extends BabaIsYouApp {
 			initAll();
 		// Récupération de l'outil qui va nous permettre de dessinner sur le canvas
 		GraphicsContext gc = canvasAdvice.getGraphicsContext2D();
-		gc.drawImage(new Image("file:ressources" + File.separator + name + ".png"), 0, 0); // Affichage du fond
+		gc.drawImage(new Image("file:ressources" + File.separator + "advices" + File.separator + name + ".png"), 0, 0); // Affichage du fond
 
 		// Permet de fermer la fenêtre lorsque la touche "ESCAPE" est pressée
 		advice.setOnKeyPressed((KeyEvent e) -> {

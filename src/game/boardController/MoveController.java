@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import game.element.IRule;
 import game.element.Item;
 import game.element.TpBlue;
+import game.element.TpGreen;
 import game.element.TpRed;
 import game.levelManager.LevelManager;
 import game.levelManager.Tuple;
@@ -114,6 +115,22 @@ public class MoveController {
 				 */
 				Item itemToAdd;
 				for (Item element : nextCell.getList()) {
+					if (element instanceof TpGreen && board.isAnActiveTp(element)) {
+						board.addChangedCell(board.getCorrespondingTp()[0]);
+						board.addChangedCell(board.getCorrespondingTp()[1]);
+						board.addChangedCell(new Tuple(x1, y1, 0));
+						itemToAdd = cellToMove.remove(z);
+						Tuple[] correspondingTp = board.getCorrespondingTp();
+						if(correspondingTp[0].getX()==x2 && correspondingTp[0].getY()==y2) {
+							nextCell = board.getCell(correspondingTp[1].getX(), correspondingTp[1].getY());
+							nextCell.add(itemToAdd);
+						}
+						else if(correspondingTp[1].getX()==x2 && correspondingTp[1].getY()==y2) {
+							nextCell = board.getCell(correspondingTp[0].getX(), correspondingTp[0].getY());
+							nextCell.add(itemToAdd);
+						}	
+						return true;
+					}
 					if (element instanceof TpBlue && board.getDepthOfLevel() + 1 < activesBoard.size()
 							&& board.isAnActiveTp(element)) {
 						board.addChangedCell(new Tuple(x1, y1, 0));

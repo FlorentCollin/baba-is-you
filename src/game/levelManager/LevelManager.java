@@ -32,7 +32,7 @@ public class LevelManager {
 	// A MODIFIER POUR RAJOUTER DES NIVEAUX !
 	private static String[] listOfLevels = { "levels" + File.separator + "lvl0", "levels" + File.separator + "lvl1",
 			"levels" + File.separator + "lvl2", "levels" + File.separator + "lvl3", "levels" + File.separator + "lvl4",
-			"levels" + File.separator + "lvl5", "levels" + File.separator + "lvl6" };
+			"levels" + File.separator + "lvl5", "levels" + File.separator + "lvl6", "levels" + File.separator + "lvl7" };
 	private static String currentLeveLName;
 	/*
 	 * Pourquoi peut-on avoir plusieurs Boards actifs en même temps ? Dans le jeu à
@@ -136,13 +136,16 @@ public class LevelManager {
 						rows = Integer.parseInt(list[1]);
 						cols = Integer.parseInt(list[2]);
 						word = list[0];
+						//On vérifie que l'item n'est pas sur les bordures
+						if(rows != 0 && rows != rowsOfBoard && cols != 0 && cols != colsOfBoard) {
+							// Choix de l'Item à ajouter en fonction du mot
+							itemToAdd = createItem(word);
+							// Ajout de l'item dans sa cellule
+							cellToChange = array[cols][rows];
+							cellToChange.add(itemToAdd);
+							array[cols][rows] = cellToChange;
+						}
 
-						// Choix de l'Item à ajouter en fonction du mot
-						itemToAdd = createItem(word);
-						// Ajout de l'item dans sa cellule
-						cellToChange = array[cols][rows];
-						cellToChange.add(itemToAdd);
-						array[cols][rows] = cellToChange;
 						line = br.readLine();
 					}
 				} catch (IOException ioex) {
@@ -169,6 +172,7 @@ public class LevelManager {
 		for (Board board : activesBoards) {
 			board.scanRules();
 			board.searchPlayers();
+			board.scanTpGreen();
 		}
 		try {
 			br.close();
@@ -216,6 +220,9 @@ public class LevelManager {
 	 *         Et on utilise la lib "json-simple-1.1"
 	 */
 	public static Item createItem(String str) {
+		/*
+		 * Note : On utilise des fichiers json pour ne pas hard coder les correspondances.
+		 */
 		Item itemToReturn = null;
 		Class<?> strClass = getClassFromString(str);
 		try {
