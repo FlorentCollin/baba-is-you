@@ -1,0 +1,104 @@
+package gui;
+
+import java.io.File;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
+import javafx.util.Duration;
+
+/**
+ * Classe gérant la musique dans l'ensemble du jeu
+ * 
+ * @author Florent
+ *
+ */
+public class Music extends BabaIsYouApp {
+
+	private static String[] listOfMusic = { "musicMenu.wav" };
+	private Media musicFile;
+	private MediaPlayer playerMusic;
+	private final double NORMAL_VOLUME = 0.2;
+
+	// AUTRE
+	private Timeline timeline;
+	
+	/**
+	 * Constructeur qui va créer un nouveau MediaPlayer contenant la musique choisie
+	 * @param musicNumber le numéro de la musique dans listOfMusic
+	 */
+	public Music(int musicNumber) {
+		musicFile = new Media(
+				new File("code" + File.separator + "ressources" + File.separator + "music" + File.separator + listOfMusic[musicNumber]).toURI()
+						.toString());
+		playerMusic = new MediaPlayer(musicFile);
+		playerMusic.setVolume(0.2);
+		playerMusic.setCycleCount(MediaPlayer.INDEFINITE);
+	}
+
+	/**
+	 * Méthode qui va lancer la music
+	 */
+	public void play() {
+		if (timeline != null) { // Corrige un bug qui lorsque le timer était en cours d'exécution et qu'on
+								// revenait au menu, la musique ne se lançait pas
+			timeline.stop();
+			playerMusic.setVolume(NORMAL_VOLUME);
+		}
+		// On vérifie que la musique n'est pas déjà lancée et que l'utilisateur veut que la musique soit jouée
+		if (!playerMusic.getStatus().equals(Status.PLAYING) && (boolean) settings.getSoundSettings().get("MUSIC") == true) {
+			playerMusic.setVolume(NORMAL_VOLUME);
+			playerMusic.play();
+		}
+	}
+	
+	/**
+	 * Arrête la musique en cours
+	 */
+	public void stop() {
+		if (playerMusic.getStatus().equals(Status.PLAYING)) {
+			playerMusic.stop();
+		}
+	}
+	
+	/**
+	 * Remet le volume à son niveau normal et lance la musique
+	 */
+	public void setVolumeON() {
+		playerMusic.setVolume(NORMAL_VOLUME);
+		play();
+	}
+
+	/**
+	 * Arrête la musique et coupe le volume
+	 */
+	public void setVolumeOFF() {
+		playerMusic.setVolume(0);
+		stop();
+	}
+
+	/**
+	 * Le but de cette méthode est de cr&e un fade dans la musique pour que les
+	 * transitions soient plus agr&ables
+	 */
+	public void fadeVolume() {
+		if (timeline != null)
+			timeline.stop(); // Permet de corriger un bug assez sp&cial qui faisait appel à la fonction
+								// fadeVolume() alors qu'il était toujours
+								// en cours d'exécution
+		// On crée un timer qui va permettre de réduire le volume de la musique toutes
+		// les 15ms
+		timeline = new Timeline(new KeyFrame(Duration.millis(15), ae -> {
+			playerMusic.setVolume(playerMusic.getVolume() - 0.001); // Diminution du volume
+			if (playerMusic.getVolume() < 0) { // Si le volume est inférieur à 0 on arrête le timer
+				timeline.stop(); // arrêt de la timeline
+				stop();
+			}
+		}));
+		timeline.setCycleCount(Animation.INDEFINITE); // On remet le timer à zéro (on crée en quelque sorte une boucle)
+		timeline.play();
+	}
+}

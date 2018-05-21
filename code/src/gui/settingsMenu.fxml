@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SettingsMenu">
+   <children>
+      <ImageView fitHeight="960.0" fitWidth="1032.0" onMouseEntered="#setSettingsImages" onMouseMoved="#setSettingsImages" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../ressources/settingsMenu.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="upKey" fitHeight="180.0" fitWidth="230.0" layoutX="105.0" layoutY="123.0" onMouseClicked="#upPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/Z.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="downKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="185.0" onMouseClicked="#downPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/S.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="rightKey" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="246.0" onMouseClicked="#rightPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/D.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="leftKey" fitHeight="180.0" fitWidth="230.0" layoutX="169.0" layoutY="311.0" onMouseClicked="#leftPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/Q.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="restartKey" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="372.0" onMouseClicked="#restartPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/R.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="nextWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="437.0" onMouseClicked="#nextWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/E.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="previousWorldKey" fitHeight="180.0" fitWidth="230.0" layoutX="617.0" layoutY="501.0" onMouseClicked="#previousWorldPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/A.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="nextWorldModKey" fitHeight="180.0" fitWidth="230.0" layoutX="497.0" layoutY="561.0" onMouseClicked="#nextWorldModPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/SPACE.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="saveKey" fitHeight="180.0" fitWidth="230.0" layoutX="151.0" layoutY="623.0" onMouseDragged="#savePressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/X.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="loadSaveKey" fitHeight="180.0" fitWidth="230.0" layoutX="303.0" layoutY="686.0" onMouseClicked="#loadSavePressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/L.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="musicOff" fitHeight="180.0" fitWidth="230.0" layoutX="187.0" layoutY="751.0" onMouseClicked="#musicOffPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/off.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOff" fitHeight="180.0" fitWidth="230.0" layoutX="267.0" layoutY="814.0" onMouseClicked="#soundOffPressed" opacity="0.5" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/off.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="musicOn" fitHeight="180.0" fitWidth="230.0" layoutX="231.0" layoutY="751.0" onMouseClicked="#musicOnPressed" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/on.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="soundOn" fitHeight="180.0" fitWidth="230.0" layoutX="311.0" layoutY="814.0" onMouseClicked="#soundOnPressed" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2">
+         <image>
+            <Image url="@../../ressources/Key_images/on.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="resetText" fill="WHITE" layoutX="788.0" layoutY="938.0" onMouseClicked="#resetTextClicked" onMouseEntered="#resetTextMouseEntered" onMouseExited="#resetTextMouseExited" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="RESET">
+         <font>
+            <Font name="8-Bit Madness" size="63.0" />
+         </font>
+      </Text>
+      <Text fx:id="closeButton" fill="WHITE" layoutX="910.0" layoutY="45.0" onMouseClicked="#closeButtonMouseClicked" onMouseEntered="#closeButtonMouseEntered" onMouseExited="#closeButtonMouseExited" opacity="0.5" pickOnBounds="true" scaleX="3.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="X">
+         <font>
+            <Font name="8-Bit Madness" size="21.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>
