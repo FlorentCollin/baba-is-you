@@ -11,7 +11,6 @@ Here is a non-exhaustive list of implemented features:
 - The user can unlock achievements as he progresses through the game
 - Background music in the main menu
 
-Translated with www.DeepL.com/Translator (free version)
 ## Build
 Note: Java with JavaFx is required.
 ```sh
